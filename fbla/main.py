@@ -14,7 +14,7 @@ class MyWindow(QMainWindow):
 
     def initUI(self):
         self.setGeometry(200, 200, 300, 300)
-        self.setWindowTitle("Tech With Tim")
+        self.setWindowTitle("something.")
 
         self.label = QtWidgets.QLabel(self)
         self.label.setText("my first label!")

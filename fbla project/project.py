@@ -26,7 +26,7 @@ Must have at least five sporting events and five non-sports school events.
 ideas:spelling bee, rrhs musical
 
 1. Attended River Ridge soccer games
-2. Attended River Ridge football games.
+2. Attended River Ridge football games
 3. Attended River Ridge lacross games
 4. Attended River Ridge basketball
 5. Attended River Ridge volleyball
@@ -88,9 +88,11 @@ def inputStudent():
     entry2 = tk.Entry(inputStudent)
     entry2.pack()
 
-    label3 = tk.Label(inputStudent, text="Enter the student's grade")
+    label3 = tk.Label(inputStudent, text="Select the student's grade")
     label3.pack()
-    entry3 = tk.Entry(inputStudent)
+    grade_level = IntVar(inputStudent)
+    grade_level.set("Select a grade")
+    entry3 = OptionMenu(inputStudent, grade_level, 6, 7, 8, 9, 10, 11, 12)
     entry3.pack()
     # Define a function to be called when the "Save" button is clicked
     def save_inputs():
@@ -98,7 +100,7 @@ def inputStudent():
         try:
             input1 = str(entry1.get())
             input2 = str(entry2.get())
-            input3 = int(entry3.get())
+            input3 = int(grade_level.get())
         except ValueError:
             ...
             # do a pop up window telling them its a value error
@@ -129,13 +131,12 @@ root = tk.Tk()
 tk.Label(root, text="FBLA Project").grid(column=0, row=0)
 
 # BUTTONS
-tk.Button(root, text="Add New Student", command=inputStudent).grid(column=1, row=2)
-tk.Button(root, text="Quit", command=root.destroy).grid(column=1, row=0)
-tk.Button(root, text="Open Dialog Box", command=open_dialog_box).grid(column=1,row=3)
+tk.Button(root, text="Add New Student", command=inputStudent).grid(column=1, row=0)
+tk.Button(root, text="Quit", command=root.destroy).grid(column=1, row=2)
+tk.Button(root, text="Open Dialog Box", command=open_dialog_box).grid(column=1,row=1)
 # keeps gui running
 if __name__ == "__main__":
     root.mainloop()
-
 
 
 

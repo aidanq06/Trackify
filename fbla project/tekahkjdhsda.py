@@ -47,7 +47,11 @@ def open_dialog_box():
     dialog_box.title("Dialog Box")
 
     # Create a list of options
-    options = ["Option 1", "Option 2", "Option 3", "Option 4"]
+    conn = sqlite3.connect('mydatabase.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9 OR 8 OR 7 OR 6")
+    options = cursor.fetchall()
+    
 
     # Create a variable to store the selected options
     selected_options = tk.StringVar(value=options)

@@ -46,12 +46,9 @@ def open_dialog_box():
     dialog_box = tk.Toplevel()
     dialog_box.title("Dialog Box")
 
-    # Create a list of options
-    conn = sqlite3.connect('mydatabase.db')
-    cursor = conn.cursor()
+    # Create a list of students
     cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9 OR 8 OR 7 OR 6")
     options = cursor.fetchall()
-    
 
     # Create a variable to store the selected options
     selected_options = tk.StringVar(value=options)
@@ -59,7 +56,8 @@ def open_dialog_box():
     # Create a listbox widget to display the options
     listbox = tk.Listbox(dialog_box, selectmode="multiple", listvariable=selected_options)
     for option in options:
-        listbox.insert("end", option)
+        listbox.insert(END, option)
+    listbox.delete(len(options), len(options)*2)
     listbox.pack()
 
     # Define a function to be called when the "Save" button is clicked
@@ -75,9 +73,20 @@ def open_dialog_box():
         # Close the dialog box
         dialog_box.destroy()
 
+    def remove_student():
+        selection = listbox.curselection()
+        print(selection)
+
+        # Close the dialog box
+        dialog_box.destroy()
+
     # Add a "Save" button to the dialog box
     save_button = tk.Button(dialog_box, text="Save", command=save_selection)
     save_button.pack()
+
+    # Add a "remove student" button to the dialog box
+    remove_button = tk.Button(dialog_box, text="Remove student", command= remove_student)
+    remove_button.pack()
 
 
     
@@ -108,9 +117,7 @@ def inputStudent():
     def save_inputs():
         # Get the values entered in the entry widgets
         try:
-            print(entry1.get())
-            print(entry2.get())
-            print(grade_level.get())
+#            new_student = student(entry1.get(), entry2.get(), grade_level.get())
             new_student = student(entry1.get(), entry2.get(), grade_level.get())
         except ValueError:
             ...
@@ -118,8 +125,6 @@ def inputStudent():
 
 
         # database init
-        conn = sqlite3.connect('mydatabase.db')
-        cursor = conn.cursor()
 #        cursor.execute("""CREATE TABLE students (
 #                            first text,
 #                            last text,
@@ -128,9 +133,9 @@ def inputStudent():
 
         # Save the values to database
         cursor.execute("INSERT INTO students VALUES (?, ?, ?)", (new_student.first, new_student.last, new_student.grade))
-        
         conn.commit()
-        conn.close()
+#        cursor.execute("INSERT INTO students VALUES('haris','rajesh',10)")
+
 
         # Close the input window
         inputStudent.destroy()
@@ -147,6 +152,10 @@ tk.Label(root, text="FBLA Project").grid(column=0, row=0)
 tk.Button(root, text="Add New Student", command=inputStudent).grid(column=1, row=0)
 tk.Button(root, text="Quit", command=root.destroy).grid(column=1, row=2)
 tk.Button(root, text="Open Dialog Box", command=open_dialog_box).grid(column=1,row=1)
+conn = sqlite3.connect('mydatabase.db')
+cursor = conn.cursor()
 # keeps gui running
 if __name__ == "__main__":
     root.mainloop()
+cursor.close()
+conn.close()

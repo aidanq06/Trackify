@@ -31,6 +31,7 @@ ideas:spelling bee, rrhs musical
 4. Attended River Ridge basketball
 5. Attended River Ridge volleyball
 """
+
 #create a student class with the attributes "first" "last" and "grade" correlating to the students first and last name as well as the students grade
 class student():
     def __init__(self, first, last, grade):
@@ -73,11 +74,24 @@ def open_dialog_box():
         # Close the dialog box
         dialog_box.destroy()
 
+    #create a function to remove one or more students using selection
     def remove_student():
         selection = listbox.curselection()
-        print(selection)
+        for i in range(len(selection)):
+            print(options[selection[i]][1])
+            temp_name = options[selection[i]][1]
+            cursor.execute("DELETE FROM students WHERE last = :last",{'last': temp_name})
+            conn.commit()
 
         # Close the dialog box
+        dialog_box.destroy()
+
+    #creates a function to remove all students
+    def remove_everyone():
+        cursor.execute("DELETE FROM students")
+        conn.commit()
+
+        #close the dialog box
         dialog_box.destroy()
 
     # Add a "Save" button to the dialog box
@@ -87,6 +101,10 @@ def open_dialog_box():
     # Add a "remove student" button to the dialog box
     remove_button = tk.Button(dialog_box, text="Remove student", command= remove_student)
     remove_button.pack()
+
+    # add a "remove all" button to the dialog box
+    remove_all = tk.Button(dialog_box, text="Remove all", command= remove_everyone)
+    remove_all.pack()
 
 
     
@@ -139,6 +157,7 @@ def inputStudent():
 
         # Close the input window
         inputStudent.destroy()
+
 
     # Add a "Save" button to the input window
     save_button = tk.Button(inputStudent, text="Submit", command=save_inputs)

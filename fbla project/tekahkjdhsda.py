@@ -4,6 +4,7 @@ from tkinter import *
 import tkinter as tk
 import tkinter.ttk as ttk
 
+
 """
 # Connect to the database
 conn = sqlite3.connect('mydatabase.db')
@@ -86,9 +87,9 @@ def open_dialog_box():
         items = listbox.selection()
         for i in items:
             selection = listbox.item(i, option="values")
-            print(selection)
             temp_name = selection[1]
-            cursor.execute("DELETE FROM students WHERE last = :last",{'last': temp_name})
+            temp_name2 = selection[0]
+            cursor.execute("DELETE FROM students WHERE first = :first AND last = :last",{'first': temp_name2, 'last': temp_name})
         conn.commit()
 
         # Close the dialog box
@@ -101,6 +102,34 @@ def open_dialog_box():
 
         dialog_box.destroy()
 
+    def add_points():
+        def get_value():
+            try:
+                point_value = e1.get()
+                print(point_value)
+                cursor.execute("UPDATE students SET points = :point WHERE first = :first AND last = :last", {'point': point_value, 'first': temp_name2, 'last': temp_name})
+                conn.commit()
+            except ValueError:
+                ...
+            new_points.destroy()
+            dialog_box.destroy()
+        try:
+            items = listbox.selection()
+            selection = listbox.item(items, option="values")
+            temp_name = selection[1]
+            temp_name2 = selection[0]
+        except ValueError:
+            ...
+        new_points= tk.Toplevel()
+        new_points.title("add points to student")
+        l1 = tk.Label(new_points, text= "Please enter the points you would like to assign " + temp_name2 + " " + temp_name)
+        l1.pack()
+        e1 = tk.Entry(new_points)
+        e1.pack()
+        submit = tk.Button(new_points, text="submit", command= get_value)
+        submit.pack()
+
+
     # Add a "Save" button to the dialog box
     save_button = tk.Button(dialog_box, text="Save", command=save_selection)
     save_button.pack()
@@ -112,6 +141,9 @@ def open_dialog_box():
     # add a "remove all" button to the dialog box
     remove_all = tk.Button(dialog_box, text="Remove all", command= remove_everyone)
     remove_all.pack()
+
+    add_points_button = tk.Button(dialog_box, text= "Edit student points", command= add_points)
+    add_points_button.pack()
     
 def inputStudent():
 
@@ -157,7 +189,9 @@ def inputStudent():
 #                            )""")
 
         # Save the values to database
-        cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?)", (new_student.first, new_student.last, new_student.grade, 0))
+        student_first = new_student.first.capitalize()
+        student_last = new_student.last.capitalize()
+        cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0))
         conn.commit()
 
 
@@ -170,13 +204,14 @@ def inputStudent():
     save_button.pack()
 
 root = tk.Tk()
+root.geometry("400x200")
 
 tk.Label(root, text="FBLA Project").grid(column=0, row=0)
 
 # BUTTONS
-tk.Button(root, text="Add New Student", command=inputStudent).grid(column=1, row=0)
-tk.Button(root, text="Quit", command=root.destroy).grid(column=1, row=2)
-tk.Button(root, text="Open Dialog Box", command=open_dialog_box).grid(column=1,row=1)
+tk.Button(root, text="Add New Student",command=inputStudent, width=56).grid(column=0, row=1)
+tk.Button(root, text="Quit", command=root.destroy, width=56).grid(column=0, row=5)
+tk.Button(root, text="View/Edit Students", command=open_dialog_box, width=56).grid(column=0,row=3)
 conn = sqlite3.connect('mydatabase.db')
 cursor = conn.cursor()
 # keeps gui running

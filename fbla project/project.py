@@ -31,6 +31,7 @@ ideas:spelling bee, rrhs musical
 4. Attended River Ridge basketball
 5. Attended River Ridge volleyball
 """
+"""
 
 def error():
     ...
@@ -137,6 +138,6 @@ tk.Button(root, text="Open Dialog Box", command=open_dialog_box).grid(column=1,r
 # keeps gui running
 if __name__ == "__main__":
     root.mainloop()
-
+"""
 
 

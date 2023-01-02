@@ -2,6 +2,7 @@
 import sqlite3
 from tkinter import *
 import tkinter as tk
+import tkinter.ttk as ttk
 
 """
 # Connect to the database
@@ -31,7 +32,6 @@ ideas:spelling bee, rrhs musical
 4. Attended River Ridge basketball
 5. Attended River Ridge volleyball
 """
-
 #create a student class with the attributes "first" "last" and "grade" correlating to the students first and last name as well as the students grade
 class student():
     def __init__(self, first, last, grade):
@@ -55,10 +55,17 @@ def open_dialog_box():
     selected_options = tk.StringVar(value=options)
 
     # Create a listbox widget to display the options
-    listbox = tk.Listbox(dialog_box, selectmode="multiple", listvariable=selected_options)
+    listbox = ttk.Treeview(dialog_box, selectmode="extended",columns=("c1", "c2", "c3", "c4"),show="headings" )
+    listbox.column("# 1", anchor=CENTER)
+    listbox.heading("# 1", text="first name")
+    listbox.column("# 2", anchor=CENTER)
+    listbox.heading("# 2", text="last name")
+    listbox.column("# 3", anchor=CENTER)
+    listbox.heading("# 3", text="grade")
+    listbox.column("# 4", anchor=CENTER)
+    listbox.heading("# 4", text="points")
     for option in options:
-        listbox.insert(END, option)
-    listbox.delete(len(options), len(options)*2)
+        listbox.insert('', 'end', values=(option))
     listbox.pack()
 
     # Define a function to be called when the "Save" button is clicked
@@ -76,12 +83,13 @@ def open_dialog_box():
 
     #create a function to remove one or more students using selection
     def remove_student():
-        selection = listbox.curselection()
-        for i in range(len(selection)):
-            print(options[selection[i]][1])
-            temp_name = options[selection[i]][1]
+        items = listbox.selection()
+        for i in items:
+            selection = listbox.item(i, option="values")
+            print(selection)
+            temp_name = selection[1]
             cursor.execute("DELETE FROM students WHERE last = :last",{'last': temp_name})
-            conn.commit()
+        conn.commit()
 
         # Close the dialog box
         dialog_box.destroy()
@@ -91,7 +99,6 @@ def open_dialog_box():
         cursor.execute("DELETE FROM students")
         conn.commit()
 
-        #close the dialog box
         dialog_box.destroy()
 
     # Add a "Save" button to the dialog box
@@ -105,8 +112,6 @@ def open_dialog_box():
     # add a "remove all" button to the dialog box
     remove_all = tk.Button(dialog_box, text="Remove all", command= remove_everyone)
     remove_all.pack()
-
-
     
 def inputStudent():
 
@@ -131,6 +136,7 @@ def inputStudent():
     grade_level.set("Select a grade")
     entry3 = OptionMenu(inputStudent, grade_level, 6, 7, 8, 9, 10, 11, 12)
     entry3.pack()
+
     # Define a function to be called when the "Save" button is clicked
     def save_inputs():
         # Get the values entered in the entry widgets
@@ -146,13 +152,13 @@ def inputStudent():
 #        cursor.execute("""CREATE TABLE students (
 #                            first text,
 #                            last text,
-#                            grade integer
+#                            grade integer,
+#                            points integer
 #                            )""")
 
         # Save the values to database
-        cursor.execute("INSERT INTO students VALUES (?, ?, ?)", (new_student.first, new_student.last, new_student.grade))
+        cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?)", (new_student.first, new_student.last, new_student.grade, 0))
         conn.commit()
-#        cursor.execute("INSERT INTO students VALUES('haris','rajesh',10)")
 
 
         # Close the input window

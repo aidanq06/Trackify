@@ -21,11 +21,11 @@ conn.close()
 """
 Must have at least five sporting events and five non-sports school events.
 1. Attended River Ridge prom
-2. Attended River Ridge dance
+2. Attended River Ridge dance performance
 3. Attended River Ridge pep rally
 4. Attended River Ridge homecoming
-5. Attended River Ridge photoshoot
-ideas:spelling bee, rrhs musical
+5. Attended River Ridge musical
+ideas:spelling bee
 
 1. Attended River Ridge soccer games
 2. Attended River Ridge football games

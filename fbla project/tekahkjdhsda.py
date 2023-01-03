@@ -3,6 +3,7 @@ import sqlite3
 from tkinter import *
 import tkinter as tk
 import tkinter.ttk as ttk
+import random as rand
 
 
 """
@@ -33,12 +34,14 @@ ideas:spelling bee
 4. Attended River Ridge basketball
 5. Attended River Ridge volleyball
 """
+global student_number
 #create a student class with the attributes "first" "last" and "grade" correlating to the students first and last name as well as the students grade
 class student():
-    def __init__(self, first, last, grade):
+    def __init__(self, first, last, grade, number):
         self.first = first
         self.last = last
         self.grade = grade
+        self.number = number
 
 def error():
     ...
@@ -89,7 +92,8 @@ def open_dialog_box():
             selection = listbox.item(i, option="values")
             temp_name = selection[1]
             temp_name2 = selection[0]
-            cursor.execute("DELETE FROM students WHERE first = :first AND last = :last",{'first': temp_name2, 'last': temp_name})
+            student_number = selection[4]
+            cursor.execute("DELETE FROM students WHERE first = :first AND last = :last AND number = :studentnumber",{'first': temp_name2, 'last': temp_name, 'studentnumber': student_number})
         conn.commit()
 
         # Close the dialog box
@@ -107,7 +111,7 @@ def open_dialog_box():
             try:
                 point_value = e1.get()
                 print(point_value)
-                cursor.execute("UPDATE students SET points = :point WHERE first = :first AND last = :last", {'point': point_value, 'first': temp_name2, 'last': temp_name})
+                cursor.execute("UPDATE students SET points = :point WHERE first = :first AND last = :last AND number = :number", {'point': point_value, 'first': temp_name2, 'last': temp_name, 'number': number })
                 conn.commit()
             except ValueError:
                 ...
@@ -118,6 +122,7 @@ def open_dialog_box():
             selection = listbox.item(items, option="values")
             temp_name = selection[1]
             temp_name2 = selection[0]
+            number = selection[4]
         except ValueError:
             ...
         new_points= tk.Toplevel()
@@ -176,10 +181,13 @@ def inputStudent():
 
     # Define a function to be called when the "Save" button is clicked
     def save_inputs():
+        # generate a random student id
+        var2 = tk.IntVar()
+        var2.set(rand.randint(0,100000))
         # Get the values entered in the entry widgets
         try:
 #            new_student = student(entry1.get(), entry2.get(), grade_level.get())
-            new_student = student(entry1.get(), entry2.get(), grade_level.get())
+            new_student = student(entry1.get(), entry2.get(), grade_level.get(), var2)
         except ValueError:
             ...
             # do a pop up window telling them its a value error
@@ -190,7 +198,8 @@ def inputStudent():
 #                            first text,
 #                            last text,
 #                            grade integer,
-#                            points integer
+#                            points integer,
+#                            number integer
 #                            )""")
 
         # Save the values to database
@@ -199,11 +208,13 @@ def inputStudent():
         student_first = new_student.first.capitalize()
         student_last = new_student.last.capitalize()
         if var1.get() == 0 or len(options) == 0:
-            cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0))
+            cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0, var2.get()))
         else:
             for option in range(len(options)):
-                if new_student.first == options[option][0] and new_student.last == options[option][1] and new_student.grade == options[option][2]:
-                    cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0))
+                if options[option][4] == var2.get():
+                    var2.set(rand.randint(0, 100000))
+                if not(new_student.first == options[option][0] and new_student.last == options[option][1] and new_student.grade == options[option][2]):
+                    cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0, var2.get()))
                 else:
                     ...
         conn.commit()

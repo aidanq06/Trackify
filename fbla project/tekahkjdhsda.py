@@ -169,6 +169,11 @@ def inputStudent():
     entry3 = OptionMenu(inputStudent, grade_level, 6, 7, 8, 9, 10, 11, 12)
     entry3.pack()
 
+    var1 = tk.IntVar()
+    var1.set(1)
+    cb = tk.Checkbutton(inputStudent, text= "ignore duplicate students", variable= var1)
+    cb.pack()
+
     # Define a function to be called when the "Save" button is clicked
     def save_inputs():
         # Get the values entered in the entry widgets
@@ -189,9 +194,18 @@ def inputStudent():
 #                            )""")
 
         # Save the values to database
+        cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9 OR 8 OR 7 OR 6")
+        options =cursor.fetchall()
         student_first = new_student.first.capitalize()
         student_last = new_student.last.capitalize()
-        cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0))
+        if var1.get() == 0 or len(options) == 0:
+            cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0))
+        else:
+            for option in range(len(options)):
+                if new_student.first == options[option][0] and new_student.last == options[option][1] and new_student.grade == options[option][2]:
+                    cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0))
+                else:
+                    ...
         conn.commit()
 
 

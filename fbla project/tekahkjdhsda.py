@@ -213,7 +213,7 @@ def inputStudent():
             for option in range(len(options)):
                 if options[option][4] == var2.get():
                     var2.set(rand.randint(0, 100000))
-                if not(new_student.first == options[option][0] and new_student.last == options[option][1] and new_student.grade == options[option][2]):
+                if not(new_student.first.capitalize() == options[option][0] and new_student.last.capitalize() == options[option][1] and new_student.grade == options[option][2]):
                     cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0, var2.get()))
                 else:
                     ...

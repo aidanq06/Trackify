@@ -229,7 +229,6 @@ def inputStudent():
     save_button.pack()
 
 root = tk.Tk()
-root.geometry("400x200")
 
 tk.Label(root, text="FBLA Project").grid(column=0, row=0)
 

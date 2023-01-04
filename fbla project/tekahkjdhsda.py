@@ -3,6 +3,7 @@ import sqlite3
 from tkinter import *
 import tkinter as tk
 import tkinter.ttk as ttk
+import customtkinter as ctk
 import random as rand
 
 
@@ -48,8 +49,9 @@ def error():
 
 def open_dialog_box():
     # Create a new top-level window (i.e., a new window that is independent of the main window)
-    dialog_box = tk.Toplevel()
+    dialog_box = ctk.CTkToplevel()
     dialog_box.title("Dialog Box")
+    dialog_box.geometry("643x250")
 
     # Create a list of students
     cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9 OR 8 OR 7 OR 6")
@@ -59,7 +61,11 @@ def open_dialog_box():
     selected_options = tk.StringVar(value=options)
 
     # Create a listbox widget to display the options
-    listbox = ttk.Treeview(dialog_box, selectmode="extended",columns=("c1", "c2", "c3", "c4"),show="headings" )
+    style = ttk.Style(root)
+    style.theme_use("clam")
+    ttk.Style().configure("Treeview", fieldbackground= "#242424", background = "#242424", foreground= "white")
+    ttk.Style().configure("Treeview.Heading", background = "#242424", foreground= "white", relief= "flat")
+    listbox = ttk.Treeview(dialog_box, selectmode="extended",columns=("c1", "c2", "c3", "c4"),show="headings")
     listbox.column("# 1", anchor=CENTER)
     listbox.heading("# 1", text="first name")
     listbox.column("# 2", anchor=CENTER)
@@ -70,7 +76,7 @@ def open_dialog_box():
     listbox.heading("# 4", text="points")
     for option in options:
         listbox.insert('', 'end', values=(option))
-    listbox.pack()
+    listbox.place(relx= 0, rely= 0)
 
     # Define a function to be called when the "Save" button is clicked
     def save_selection():
@@ -125,58 +131,60 @@ def open_dialog_box():
             number = selection[4]
         except ValueError:
             ...
-        new_points= tk.Toplevel()
+        new_points= ctk.CTkToplevel()
         new_points.title("add points to student")
-        l1 = tk.Label(new_points, text= "Please enter the points you would like to assign " + temp_name2 + " " + temp_name)
+        l1 = ctk.CTkLabel(new_points, text= "Please enter the points you would like to assign " + temp_name2 + " " + temp_name)
         l1.pack()
-        e1 = tk.Entry(new_points)
+        e1 = ctk.CTkEntry(new_points)
         e1.pack()
-        submit = tk.Button(new_points, text="submit", command= get_value)
+        submit = ctk.CTkButton(new_points, text="submit", command= get_value)
         submit.pack()
 
 
     # Add a "Save" button to the dialog box
-    save_button = tk.Button(dialog_box, text="Save", command=save_selection)
-    save_button.pack()
+    save_button = ctk.CTkButton(dialog_box, text="Save", command=save_selection)
+    save_button.place(relx= .01, rely= .8)
 
     # Add a "remove student" button to the dialog box
-    remove_button = tk.Button(dialog_box, text="Remove student", command= remove_student)
-    remove_button.pack()
+    remove_button = ctk.CTkButton(dialog_box, text="Remove student", command= remove_student)
+    remove_button.place(relx= .265, rely= .8)
 
     # add a "remove all" button to the dialog box
-    remove_all = tk.Button(dialog_box, text="Remove all", command= remove_everyone)
-    remove_all.pack()
+    remove_all = ctk.CTkButton(dialog_box, text="Remove all", command= remove_everyone)
+    remove_all.place(relx= .52, rely= .8)
 
-    add_points_button = tk.Button(dialog_box, text= "Edit student points", command= add_points)
-    add_points_button.pack()
+    add_points_button = ctk.CTkButton(dialog_box, text= "Edit student points", command= add_points)
+    add_points_button.place(relx= .775, rely= .8)
     
 def inputStudent():
+    def optionmenu_get(choice):
+        grade_level = choice
 
     # Create a new top-level window (i.e., a new window that is independent of the main window)
-    inputStudent = tk.Toplevel()
+    inputStudent = ctk.CTkToplevel()
     inputStudent.title("Enter New Student")
 
     # Add three labels and three entry widgets to the input window
-    label1 = tk.Label(inputStudent, text="Enter the student's name.")
+    label1 = ctk.CTkLabel(inputStudent, text="Enter the student's name.")
     label1.pack()
-    entry1 = tk.Entry(inputStudent)
+    entry1 = ctk.CTkEntry(inputStudent)
     entry1.pack()
 
-    label2 = tk.Label(inputStudent, text="Enter the student's last name.")
+    label2 = ctk.CTkLabel(inputStudent, text="Enter the student's last name.")
     label2.pack()
-    entry2 = tk.Entry(inputStudent)
+    entry2 = ctk.CTkEntry(inputStudent)
     entry2.pack()
 
-    label3 = tk.Label(inputStudent, text="Select the student's grade")
+    label3 = ctk.CTkLabel(inputStudent, text="Select the student's grade")
     label3.pack()
-    grade_level = IntVar(inputStudent)
-    grade_level.set("Select a grade")
-    entry3 = OptionMenu(inputStudent, grade_level, 6, 7, 8, 9, 10, 11, 12)
+    grade_level = ctk.IntVar(inputStudent)
+    grade_level.set("select a grade")
+    entry3 = ctk.CTkComboBox(master=inputStudent, values=["6", "7", "8", "9", "10", "11", "12"], variable=grade_level)
     entry3.pack()
 
-    var1 = tk.IntVar()
+    var1 = ctk.IntVar()
     var1.set(1)
-    cb = tk.Checkbutton(inputStudent, text= "ignore duplicate students", variable= var1)
+    cb = ctk.CTkCheckBox(master= inputStudent, text= "ignore duplicate students", variable= var1, checkbox_height= 15, checkbox_width= 15)
     cb.pack()
 
     # Define a function to be called when the "Save" button is clicked
@@ -187,7 +195,7 @@ def inputStudent():
         # Get the values entered in the entry widgets
         try:
 #            new_student = student(entry1.get(), entry2.get(), grade_level.get())
-            new_student = student(entry1.get(), entry2.get(), grade_level.get(), var2)
+            new_student = student(entry1.get(), entry2.get(), int(grade_level.get()), var2)
         except ValueError:
             ...
             # do a pop up window telling them its a value error
@@ -225,17 +233,26 @@ def inputStudent():
 
 
     # Add a "Save" button to the input window
-    save_button = tk.Button(inputStudent, text="Submit", command=save_inputs)
+    save_button = ctk.CTkButton(inputStudent, text="Submit", command=save_inputs)
     save_button.pack()
 
-root = tk.Tk()
+root = ctk.CTk()
+root.geometry("300x150")
 
-tk.Label(root, text="FBLA Project").grid(column=0, row=0)
+Label = ctk.CTkLabel(root, text="FBLA Project")
+Label.place(relx= .5, rely=.1, anchor=CENTER)
+
 
 # BUTTONS
-tk.Button(root, text="Add New Student",command=inputStudent, width=56).grid(column=0, row=1)
-tk.Button(root, text="Quit", command=root.destroy, width=56).grid(column=0, row=5)
-tk.Button(root, text="View/Edit Students", command=open_dialog_box, width=56).grid(column=0,row=3)
+button1 = ctk.CTkButton(root, text="Add New Student",command=inputStudent, width=290, corner_radius= 8)
+button1.place(relx= .5, rely=.3, anchor=CENTER)
+
+button3 = ctk.CTkButton(root, text="View/Edit Students", command=open_dialog_box, width=290, corner_radius= 8)
+button3.place(relx= .5, rely=.55, anchor=CENTER)
+
+button2 = ctk.CTkButton(root, text="Quit", command=root.destroy, width=290, corner_radius= 8)
+button2.place(relx= .5, rely=.8, anchor=CENTER)
+
 conn = sqlite3.connect('mydatabase.db')
 cursor = conn.cursor()
 # keeps gui running

@@ -51,7 +51,7 @@ def open_dialog_box():
     # Create a new top-level window (i.e., a new window that is independent of the main window)
     dialog_box = ctk.CTkToplevel()
     dialog_box.title("Dialog Box")
-    dialog_box.geometry("643x250")
+    dialog_box.geometry("643x275")
 
     # Create a list of students
     cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9 OR 8 OR 7 OR 6")
@@ -76,7 +76,7 @@ def open_dialog_box():
     listbox.heading("# 4", text="points")
     for option in options:
         listbox.insert('', 'end', values=(option))
-    listbox.place(relx= 0, rely= 0)
+    listbox.place(relx= 0, rely= .1)
 
     # Define a function to be called when the "Save" button is clicked
     def save_selection():
@@ -100,9 +100,8 @@ def open_dialog_box():
             temp_name2 = selection[0]
             student_number = selection[4]
             cursor.execute("DELETE FROM students WHERE first = :first AND last = :last AND number = :studentnumber",{'first': temp_name2, 'last': temp_name, 'studentnumber': student_number})
-        conn.commit()
-
-        # Close the dialog box
+        conn.commit()     
+        # update the dialog box
         dialog_box.destroy()
 
     #creates a function to remove all students
@@ -140,21 +139,48 @@ def open_dialog_box():
         submit = ctk.CTkButton(new_points, text="submit", command= get_value)
         submit.pack()
 
+    def get_entry():
+        temp_name = my_entry.get()
+        for item in listbox.get_children():
+            listbox.delete(item)
+        dialog_box.update_idletasks()
+        cursor.execute("SELECT * FROM students WHERE last = :last", {'last': temp_name.capitalize()})
+        temp_values= cursor.fetchall()
+        for values in temp_values:
+            listbox.insert('', 'end', values=(values))
+        dialog_box.update_idletasks()
+
+    def destroy():
+        dialog_box.destroy()
+
+
+
 
     # Add a "Save" button to the dialog box
     save_button = ctk.CTkButton(dialog_box, text="Save", command=save_selection)
-    save_button.place(relx= .01, rely= .8)
+    save_button.place(relx= .01, rely= .85)
 
     # Add a "remove student" button to the dialog box
     remove_button = ctk.CTkButton(dialog_box, text="Remove student", command= remove_student)
-    remove_button.place(relx= .265, rely= .8)
+    remove_button.place(relx= .265, rely= .85)
 
     # add a "remove all" button to the dialog box
     remove_all = ctk.CTkButton(dialog_box, text="Remove all", command= remove_everyone)
-    remove_all.place(relx= .52, rely= .8)
+    remove_all.place(relx= .52, rely= .85)
 
     add_points_button = ctk.CTkButton(dialog_box, text= "Edit student points", command= add_points)
-    add_points_button.place(relx= .775, rely= .8)
+    add_points_button.place(relx= .775, rely= .85)
+
+    my_entry = ctk.CTkEntry(dialog_box)
+    my_entry.insert(tk.END, "search by last name: ")
+    my_entry.place(relx= .15, rely= .02, height= 20, width= 500)
+    my_entry.bind("<Button-1>", lambda a: my_entry.delete(0, tk.END))
+
+    my_button = ctk.CTkButton(dialog_box, text= "enter", command= get_entry)
+    my_button.place(relx = .8, rely= .02, height= 20, width= 120)
+
+    my_button2 = ctk.CTkButton(dialog_box, text= "clear", command=lambda:[destroy(),open_dialog_box()])
+    my_button2.place(relx = .01, rely= .02, height= 20, width= 80)
     
 def inputStudent():
     def optionmenu_get(choice):
@@ -222,10 +248,10 @@ def inputStudent():
             for option in range(len(options)):
                 if options[option][4] == var2.get():
                     var2.set(rand.randint(0, 100000))
-                if not(new_student.first.capitalize() == options[option][0] and new_student.last.capitalize() == options[option][1] and new_student.grade == options[option][2]):
-                    cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0, var2.get()))
-                else:
-                    ...
+            if not(new_student.first.capitalize() == options[option][0] and new_student.last.capitalize() == options[option][1] and new_student.grade == options[option][2]):
+                cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0, var2.get()))
+            else:
+                ...
         conn.commit()
 
 

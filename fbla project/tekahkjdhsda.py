@@ -79,17 +79,40 @@ def open_dialog_box():
     listbox.place(relx= 0, rely= .1)
 
     # Define a function to be called when the "Save" button is clicked
-    def save_selection():
-        # Get the selected options
-        selection = listbox.curselection()
-        selected_values = [options[index] for index in selection]
+    def edit_student():
+        def update_student():
+            cursor.execute("UPDATE students SET first = :first, last = :last, grade = :grade  WHERE number = :number", {'first': entry1.get(), 'last': entry2.get(), 'grade': int(entry3.get()), 'number': selection[4] })
+            conn.commit()
+            edit_window.destroy()
+            dialog_box.destroy()
 
-        # Save the selected options to a variable (in this case, a global variable)
-        global var
-        var = selected_values
 
-        # Close the dialog box
-        dialog_box.destroy()
+        item = listbox.selection()
+        selection = listbox.item(item, option="values")
+        print(selection)
+
+        edit_window= ctk.CTkToplevel()
+        edit_window.title("edit student")
+
+        label1 = ctk.CTkLabel(edit_window, text="Edit student's first name")
+        label1.pack()
+        entry1 = ctk.CTkEntry(edit_window, placeholder_text= selection[0])
+        entry1.pack()
+
+        label2 = ctk.CTkLabel(edit_window, text="Edit student's last name")
+        label2.pack()
+        entry2 = ctk.CTkEntry(edit_window, placeholder_text= selection[1])
+        entry2.pack()
+
+        label3 = ctk.CTkLabel(edit_window, text="Edit student's grade")
+        label3.pack()
+        grade_level = ctk.IntVar(edit_window)
+        entry3 = ctk.CTkComboBox(master=edit_window, values=["6", "7", "8", "9", "10", "11", "12"], variable=grade_level)
+        entry3.set(selection[2])
+        entry3.pack()
+
+        b1 = ctk.CTkButton(edit_window, text= "submit", command= update_student)
+        b1.pack()
 
     #create a function to remove one or more students using selection
     def remove_student():
@@ -157,7 +180,7 @@ def open_dialog_box():
 
 
     # Add a "Save" button to the dialog box
-    save_button = ctk.CTkButton(dialog_box, text="Save", command=save_selection)
+    save_button = ctk.CTkButton(dialog_box, text="edit student", command=edit_student)
     save_button.place(relx= .01, rely= .85)
 
     # Add a "remove student" button to the dialog box
@@ -171,16 +194,15 @@ def open_dialog_box():
     add_points_button = ctk.CTkButton(dialog_box, text= "Edit student points", command= add_points)
     add_points_button.place(relx= .775, rely= .85)
 
-    my_entry = ctk.CTkEntry(dialog_box)
-    my_entry.insert(tk.END, "search by last name: ")
+    my_entry = ctk.CTkEntry(dialog_box, placeholder_text= "Search by last name: ")
     my_entry.place(relx= .15, rely= .02, height= 20, width= 500)
-    my_entry.bind("<Button-1>", lambda a: my_entry.delete(0, tk.END))
+
 
     my_button = ctk.CTkButton(dialog_box, text= "enter", command= get_entry)
     my_button.place(relx = .8, rely= .02, height= 20, width= 120)
 
     my_button2 = ctk.CTkButton(dialog_box, text= "clear", command=lambda:[destroy(),open_dialog_box()])
-    my_button2.place(relx = .01, rely= .02, height= 20, width= 80)
+    my_button2.place(relx = .02, rely= .02, height= 20, width= 80)
     
 def inputStudent():
     def optionmenu_get(choice):

@@ -308,4 +308,4 @@ cursor = conn.cursor()
 if __name__ == "__main__":
     root.mainloop()
 cursor.close()
-conn.close(
+conn.close()

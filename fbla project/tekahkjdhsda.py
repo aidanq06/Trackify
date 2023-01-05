@@ -163,6 +163,7 @@ def inputStudent():
     # Create a new top-level window (i.e., a new window that is independent of the main window)
     inputStudent = ctk.CTkToplevel()
     inputStudent.title("Enter New Student")
+    inputStudent.geometry("200x250")
 
     # Add three labels and three entry widgets to the input window
     label1 = ctk.CTkLabel(inputStudent, text="Enter the student's name.")
@@ -185,7 +186,7 @@ def inputStudent():
     var1 = ctk.IntVar()
     var1.set(1)
     cb = ctk.CTkCheckBox(master= inputStudent, text= "ignore duplicate students", variable= var1, checkbox_height= 15, checkbox_width= 15)
-    cb.pack()
+    cb.place(relx= .1, rely= .75)
 
     # Define a function to be called when the "Save" button is clicked
     def save_inputs():
@@ -234,7 +235,7 @@ def inputStudent():
 
     # Add a "Save" button to the input window
     save_button = ctk.CTkButton(inputStudent, text="Submit", command=save_inputs)
-    save_button.pack()
+    save_button.place(relx= .15, rely= .9)
 
 root = ctk.CTk()
 root.geometry("300x150")

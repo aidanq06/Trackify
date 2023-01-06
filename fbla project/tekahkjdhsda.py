@@ -22,18 +22,18 @@ conn.close()
 
 """
 Must have at least five sporting events and five non-sports school events.
-1. Attended River Ridge prom
-2. Attended River Ridge dance performance
-3. Attended River Ridge pep rally
-4. Attended River Ridge homecoming
-5. Attended River Ridge musical
+1.  River Ridge prom
+2.  River Ridge dance performance
+3.  River Ridge pep rally
+4.  River Ridge homecoming
+5.  River Ridge musical
 ideas:spelling bee
 
-1. Attended River Ridge soccer games
-2. Attended River Ridge football games
-3. Attended River Ridge lacross games
-4. Attended River Ridge basketball
-5. Attended River Ridge volleyball
+1.  River Ridge soccer games
+2.  River Ridge football games
+3.  River Ridge lacross games
+4.  River Ridge basketball
+5.  River Ridge volleyball
 """
 global student_number
 #create a student class with the attributes "first" "last" and "grade" correlating to the students first and last name as well as the students grade
@@ -135,32 +135,60 @@ def open_dialog_box():
         dialog_box.destroy()
 
     def add_points():
-        def get_value():
-            try:
-                point_value = e1.get()
-                print(point_value)
-                cursor.execute("UPDATE students SET points = :point WHERE first = :first AND last = :last AND number = :number", {'point': point_value, 'first': temp_name2, 'last': temp_name, 'number': number })
-                conn.commit()
-            except ValueError:
-                ...
+        def check_for_points():
+            x = entry1.get()
+            y= entry2.get()
+            print(x)
+            print(y)
+
+
+            if x == " River Ridge prom" or x == " River Ridge dance performance" or x == " River Ridge pep rally" or x == " River Ridge homecoming" or x == " River Ridge musical":
+                if entry2.get() == "attended":
+                    points = 10
+                else: 
+                    points = 15
+            else: 
+                if entry2.get() == "attended":
+                    points = 5
+                else:
+                    points = 10
+            cursor.execute("SELECT points FROM students WHERE number = :number", {'number': number})
+            temp_points =cursor.fetchall()
+            point_value = int(temp_points[0][0]) + points
+            cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': point_value, 'number': number })
+            conn.commit()
             new_points.destroy()
             dialog_box.destroy()
-        try:
-            items = listbox.selection()
-            selection = listbox.item(items, option="values")
-            temp_name = selection[1]
-            temp_name2 = selection[0]
-            number = selection[4]
-        except ValueError:
-            ...
+
+        def clear_points():
+            cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': 0, 'number': number })
+            conn.commit()
+            new_points.destroy()
+            dialog_box.destroy()
+
+        items = listbox.selection()
+        selection = listbox.item(items, option="values")
+        temp_name = selection[1]
+        temp_name2 = selection[0]
+        number = selection[4]
+
         new_points= ctk.CTkToplevel()
         new_points.title("add points to student")
-        l1 = ctk.CTkLabel(new_points, text= "Please enter the points you would like to assign " + temp_name2 + " " + temp_name)
+        new_points.geometry("350x150")
+        l1 = ctk.CTkLabel(new_points, text= "What event did  " + temp_name2 + " " + temp_name + " attend or participate in")
         l1.pack()
-        e1 = ctk.CTkEntry(new_points)
-        e1.pack()
-        submit = ctk.CTkButton(new_points, text="submit", command= get_value)
+        event_check = ctk.IntVar(new_points)
+        event_check.set("Select an event ")
+        entry1 = ctk.CTkComboBox(master=new_points, values=[" River Ridge prom", " River Ridge dance performance", " River Ridge pep rally", " River Ridge homecoming", " River Ridge musical", " River Ridge soccer game", " River Ridge football game", " River Ridge lacross game", " River Ridge basketball game", " River Ridge volleyball game"], variable=event_check)
+        entry1.pack()
+        type_check = ctk.IntVar(new_points)
+        type_check.set("did the student attend or participate in this event ")
+        entry2 = ctk.CTkComboBox(master=new_points, values=["attended", "participated"], variable=type_check, width= 325)
+        entry2.pack()
+        submit = ctk.CTkButton(new_points, text= "submit", command= check_for_points)
         submit.pack()
+        clear = ctk.CTkButton(new_points, text= "Clear student's points", command= clear_points)
+        clear.pack()
 
     def get_entry():
         temp_name = my_entry.get()

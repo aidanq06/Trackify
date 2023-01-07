@@ -179,7 +179,7 @@ def open_dialog_box():
         l1.pack()
         event_check = ctk.IntVar(new_points)
         event_check.set("Select an event ")
-        entry1 = ctk.CTkComboBox(master=new_points, values=[" River Ridge prom", " River Ridge dance performance", " River Ridge pep rally", " River Ridge homecoming", " River Ridge musical", " River Ridge soccer game", " River Ridge football game", " River Ridge lacross game", " River Ridge basketball game", " River Ridge volleyball game"], variable=event_check)
+        entry1 = ctk.CTkComboBox(master=new_points, values=[" River Ridge prom", " River Ridge dance performance", " River Ridge pep rally", " River Ridge homecoming", " River Ridge musical", " River Ridge soccer game", " River Ridge football game", " River Ridge lacross game", " River Ridge basketball game", " River Ridge volleyball game"], variable=event_check, width= 325)
         entry1.pack()
         type_check = ctk.IntVar(new_points)
         type_check.set("did the student attend or participate in this event ")

@@ -5,12 +5,12 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import customtkinter as ctk
 import random as rand
-
+import matplotlib.pyplot as plt
 
 # FIRST TIME RUN
 """
 # Connect to the database
-conn = sqlite3.connect('mydatabase.db')
+conn = sqlite3.connect('studentDatabase.db')
 # Create a cursor
 cursor = conn.cursor()
 # Create the table
@@ -20,6 +20,7 @@ conn.commit()
 # Close the connection to the database
 conn.close()
 """
+
 
 
 """
@@ -37,6 +38,7 @@ ideas:spelling bee
 4.  School basketball
 5.  School volleyball
 """
+
 global student_number
 #create a student class with the attributes "first" "last" and "grade" correlating to the students first and last name as well as the students grade
 class student():
@@ -46,16 +48,50 @@ class student():
         self.grade = grade
         self.number = number
 
+# Error Window (input an error message argument to display)
 def error(error=str):
-    window = ctk.CTkToplevel()
-    window.title("Error!")
-    window.geometry("100,250")
+
+    def close():
+        eWin.destroy()
+
+    eWin = ctk.CTkToplevel()
+    eWin.title("Error!")
+    eWin.geometry("400x100")
+
+    style = ttk.Style(eWin)
+    style.theme_use("clam")
+
+    Label = ctk.CTkLabel(eWin, text=error,corner_radius=10)
+    Label.place(relx=0.5,rely=.3, anchor=CENTER)
+    
+    close_button = ctk.CTkButton(eWin, text="Close", command=close)
+    close_button.place(relx=0.5,rely=0.7, anchor=CENTER)
+
+# Success Window (input a success message argument to display)
+def success(success=str):
+
+    def close():
+        sWin.destroy()
+
+    sWin = ctk.CTkToplevel()
+    sWin.title("Success!")
+    sWin.geometry("400x100")
+
+    style = ttk.Style(sWin)
+    style.theme_use("clam")
+
+    Label = ctk.CTkLabel(sWin, text=success,corner_radius=10)
+    Label.place(relx=0.5,rely=.3, anchor=CENTER)
+    
+    close_button = ctk.CTkButton(sWin, text="Close", command=close)
+    close_button.place(relx=0.5,rely=0.7, anchor=CENTER)
+    
 
 def open_dialog_box():
     # Create a new top-level window (i.e., a new window that is independent of the main window)
     dialog_box = ctk.CTkToplevel()
     dialog_box.title("Dialog Box")
-    dialog_box.geometry("650x250")
+    dialog_box.geometry("800x325")
 
     # Create a list of students
     cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9 OR 8 OR 7 OR 6")
@@ -87,7 +123,7 @@ def open_dialog_box():
     # Define a function to be called when the "Save" button is clicked
     def edit_student():
         def update_student():
-            cursor.execute("UPDATE students SET first = :first, last = :last, grade = :grade  WHERE number = :number", {'first': entry1.get(), 'last': entry2.get(), 'grade': int(entry3.get()), 'number': selection[4] })
+            cursor.execute("UPDATE students SET name = :first, lastname = :last, grade = :grade  WHERE number = :number", {'first': entry1.get(), 'last': entry2.get(), 'grade': int(entry3.get()), 'number': selection[4] })
             conn.commit()
             edit_window.destroy()
             dialog_box.destroy()
@@ -128,17 +164,22 @@ def open_dialog_box():
             temp_name = selection[1]
             temp_name2 = selection[0]
             student_number = selection[4]
-            cursor.execute("DELETE FROM students WHERE first = :first AND last = :last AND number = :studentnumber",{'first': temp_name2, 'last': temp_name, 'studentnumber': student_number})
+            cursor.execute("DELETE FROM students WHERE name = :first AND lastname = :last AND number = :studentnumber",{'first': temp_name2, 'last': temp_name, 'studentnumber': student_number})
         conn.commit()     
-        # update the dialog box
+        
+        # Destroy dialog box (to update database) then reopen to show the result.
         dialog_box.destroy()
+        open_dialog_box()
 
     #creates a function to remove all students
     def remove_everyone():
         cursor.execute("DELETE FROM students")
         conn.commit()
 
+        # Destroy dialog box (to update database) then reopen to show the result.
         dialog_box.destroy()
+        open_dialog_box()
+
 
     def add_points():
         def check_for_points():
@@ -163,14 +204,21 @@ def open_dialog_box():
             point_value = int(temp_points[0][0]) + points
             cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': point_value, 'number': number })
             conn.commit()
+            
+            # Destroy dialog box (to update database) then reopen to show the result. Destroy new points GUI.
             new_points.destroy()
             dialog_box.destroy()
+            open_dialog_box()
+
 
         def clear_points():
             cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': 0, 'number': number })
             conn.commit()
+
+            # Destroy dialog box (to update database) then reopen to show the result. Destroy new points GUI.
             new_points.destroy()
             dialog_box.destroy()
+            open_dialog_box()
 
         items = listbox.selection()
         selection = listbox.item(items, option="values")
@@ -190,13 +238,13 @@ def open_dialog_box():
         l1.pack()
         event_check = ctk.IntVar(new_points)
         event_check.set("Select an event ")
-        entry1 = ctk.CTkComboBox(master=new_points, values=[" School prom", " School dance performance", " School pep rally", " School homecoming", " School musical", " School soccer game", " School football game", " School lacross game", " School basketball game", " School volleyball game"], variable=event_check, width= 325)
+        entry1 = ctk.CTkComboBox(master=new_points, values=[" School Prom", " School Dance Performance", " School Pep Rally", " School Homecoming", " School Musical", " School Soccer Game", " School Football Game", " School Lacross Game", " School Basketball Game", " School Volleyball Game"], variable=event_check, width= 325)
         entry1.pack()
         type_check = ctk.IntVar(new_points)
         type_check.set("did the student attend or participate in this event ")
-        entry2 = ctk.CTkComboBox(master=new_points, values=["attended", "participated"], variable=type_check, width= 325)
+        entry2 = ctk.CTkComboBox(master=new_points, values=["Attended", "Participated"], variable=type_check, width= 325)
         entry2.pack()
-        submit = ctk.CTkButton(new_points, text= "submit", command= check_for_points)
+        submit = ctk.CTkButton(new_points, text= "Submit", command= check_for_points)
         submit.pack()
         clear = ctk.CTkButton(new_points, text= "Clear student's points", command= clear_points)
         clear.pack()
@@ -206,7 +254,7 @@ def open_dialog_box():
         for item in listbox.get_children():
             listbox.delete(item)
         dialog_box.update_idletasks()
-        cursor.execute("SELECT * FROM students WHERE last = :last", {'last': temp_name.capitalize()})
+        cursor.execute("SELECT * FROM students WHERE lastname = :last", {'last': temp_name.capitalize()})
         temp_values= cursor.fetchall()
         for values in temp_values:
             listbox.insert('', 'end', values=(values))
@@ -219,7 +267,7 @@ def open_dialog_box():
 
 
     # Add a "Save" button to the dialog box
-    save_button = ctk.CTkButton(dialog_box, text="edit student", command=edit_student)
+    save_button = ctk.CTkButton(dialog_box, text="Edit Student", command=edit_student)
     save_button.place(relx= .01, rely= .85)
 
     # Add a "remove student" button to the dialog box
@@ -234,23 +282,25 @@ def open_dialog_box():
     add_points_button.place(relx= .775, rely= .85)
 
     my_entry = ctk.CTkEntry(dialog_box, placeholder_text= "Search by last name: ")
-    my_entry.place(relx= .15, rely= .02, height= 50, width= 500)
+    my_entry.place(relx= .15, rely= .02, height= 25, width= 500)
 
 
-    my_button = ctk.CTkButton(dialog_box, text= "enter", command= get_entry)
-    my_button.place(relx = .8, rely= .02, height= 50, width= 120)
+    my_button = ctk.CTkButton(dialog_box, text= "Enter", command= get_entry)
+    my_button.place(relx = .8, rely= .02, height= 25, width= 120)
 
-    my_button2 = ctk.CTkButton(dialog_box, text= "clear", command=lambda:[destroy(),open_dialog_box()])
-    my_button2.place(relx = .02, rely= .02, height= 50, width= 80)
+    my_button2 = ctk.CTkButton(dialog_box, text= "Clear", command=lambda:[destroy(),open_dialog_box()])
+    my_button2.place(relx = .02, rely= .02, height= 25, width= 80)
     
 def inputStudent():
+
+    # not used?
     def optionmenu_get(choice):
         grade_level = choice
 
     # Create a new top-level window (i.e., a new window that is independent of the main window)
     inputStudent = ctk.CTkToplevel()
     inputStudent.title("Enter New Student")
-    inputStudent.geometry("200x250")
+    inputStudent.geometry("200x275")
 
     # Add three labels and three entry widgets to the input window
     label1 = ctk.CTkLabel(inputStudent, text="Enter the student's name.")
@@ -272,60 +322,70 @@ def inputStudent():
 
     var1 = ctk.IntVar()
     var1.set(1)
-    cb = ctk.CTkCheckBox(master= inputStudent, text= "ignore duplicate students", variable= var1, checkbox_height= 15, checkbox_width= 15)
-    cb.place(relx= .1, rely= .75)
+    cb = ctk.CTkCheckBox(master= inputStudent, text= "Ignore duplicate students", variable= var1, checkbox_height=20, checkbox_width=20)
+    cb.place(relx= .1, rely= .7)
 
     # Define a function to be called when the "Save" button is clicked
     def save_inputs():
-        # generate a random student id
-        var2 = tk.IntVar()
-        var2.set(rand.randint(0,100000))
-        # Get the values entered in the entry widgets
         try:
-#            new_student = student(entry1.get(), entry2.get(), grade_level.get())
-            new_student = student(entry1.get(), entry2.get(), int(grade_level.get()), var2)
-        except ValueError:
-            ...
-            # do a pop up window telling them its a value error
-
-
-        # database init
-#        cursor.execute("""CREATE TABLE students (
-#                            first text,
-#                            last text,
-#                            grade integer,
-#                            points integer,
-#                            number integer
-#                            )""")
-
-        # Save the values to database
-        cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9 OR 8 OR 7 OR 6")
-        options =cursor.fetchall()
-        student_first = new_student.first.capitalize()
-        student_last = new_student.last.capitalize()
-        if var1.get() == 0 or len(options) == 0:
-            cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0, var2.get()))
-        else:
-            for option in range(len(options)):
-                if options[option][4] == var2.get():
-                    var2.set(rand.randint(0, 100000))
-            if not(new_student.first.capitalize() == options[option][0] and new_student.last.capitalize() == options[option][1] and new_student.grade == options[option][2]):
-                cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0, var2.get()))
+            # If the user didn't input anything for firstname or lastname, bring up an error.
+            if entry1.get() == "" or entry2.get() == "":
+                error("Please fill in all fields!")
             else:
-                ...
-        conn.commit()
+                #if entry1.get() == ""
+                # Generate a random student id
+                studentID = tk.IntVar()
+                studentID.set(rand.randint(0,100000))
 
+                # Get the values entered in the entry widgets
+                new_student = student(entry1.get(), entry2.get(), int(grade_level.get()), studentID)
+                    
+                # Save the values to database
+                cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9 OR 8 OR 7 OR 6")
+                options =cursor.fetchall()
+                student_first = new_student.first.capitalize()
+                student_last = new_student.last.capitalize()
+                if var1.get() == 0 or len(options) == 0:
+                    cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0, studentID.get()))
+                else:
+                    for option in range(len(options)):
+                        if options[option][4] == studentID.get():
+                            studentID.set(rand.randint(0, 100000))
+                    if not(new_student.first.capitalize() == options[option][0] and new_student.last.capitalize() == options[option][1] and new_student.grade == options[option][2]):
+                        cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0, studentID.get()))
+                    else:
+                        ...
+                conn.commit()
 
-        # Close the input window
-        inputStudent.destroy()
+                # Close the input window
+                inputStudent.destroy()
+                success(f"Successfully added {student_first} {student_last} ({grade_level.get()}) to the database.")
 
+        except:
+            error("Please fill in all fields!")
 
     # Add a "Save" button to the input window
     save_button = ctk.CTkButton(inputStudent, text="Submit", command=save_inputs)
-    save_button.place(relx= .15, rely= .9)
+    save_button.place(relx= .15, rely=0.85)
 
 def report():
-    ...
+    cursor.execute("SELECT * FROM students WHERE grade = :grade", {'grade': 10})
+    fetch = cursor.fetchall()
+    for i in range(len(fetch)-1):
+        print(fetch[i][2],fetch[i][0])
+
+    """plt.rcParams["figure.figsize"] = (15,5)
+    plt.barh(names,data,color="royalblue")
+
+    #plt.plot(range(len(data)), data,"r+")
+    plt.savefig("QPoints.pdf",format="pdf")
+
+    plt.title('Quarterly Points (10)', fontweight="bold")
+
+    plt.ylabel('Students', fontweight="bold")
+    plt.xlabel('Points', fontweight="bold")
+
+    plt.show()"""
 
 
 root = ctk.CTk()

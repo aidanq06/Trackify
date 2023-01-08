@@ -369,24 +369,58 @@ def inputStudent():
     save_button.place(relx= .15, rely=0.85)
 
 def report():
-    cursor.execute("SELECT * FROM students WHERE grade = :grade", {'grade': 10})
-    fetch = cursor.fetchall()
-    for i in range(len(fetch)-1):
-        print(fetch[i][2],fetch[i][0])
+    def destroyGui():
+        dialog_box.destroy()
 
-    """plt.rcParams["figure.figsize"] = (15,5)
-    plt.barh(names,data,color="royalblue")
+    def save_inputs():
+        try:
+            dialog_box.destroy()
+            choice = grade_level.get()
+            cursor.execute("SELECT * FROM students WHERE grade = :grade", {'grade': choice})
+            fetch = cursor.fetchall()
+            points = list()
+            name = list()
+            for i in range(len(fetch)):
+                points.append(fetch[i][3])
+                name.append(f"{fetch[i][0]} {(fetch[i][1][0]).title()}.")
+                print(fetch[i][3],fetch[i][0])
+            print(points,name)
 
-    #plt.plot(range(len(data)), data,"r+")
-    plt.savefig("QPoints.pdf",format="pdf")
+            plt.rcParams["figure.figsize"] = (15,5)
+            plt.barh(name,points,color="royalblue")
 
-    plt.title('Quarterly Points (10)', fontweight="bold")
+            #plt.plot(range(len(data)), data,"r+")
+            plt.savefig(f"QuarterlyG{choice}.pdf",format="pdf")
 
-    plt.ylabel('Students', fontweight="bold")
-    plt.xlabel('Points', fontweight="bold")
+            plt.title(f'Quarterly Points (Grade {choice})', fontweight="bold")
 
-    plt.show()"""
+            plt.ylabel('Students', fontweight="bold")
+            plt.xlabel('Points', fontweight="bold")
 
+            plt.show()
+        except TclError: # didnt select a grade
+            error("Please select a grade.")
+        
+    dialog_box = ctk.CTkToplevel()
+    dialog_box.title("Dialog Box")
+    dialog_box.geometry("400x100")
+
+    dropdown = ctk.CTkLabel(dialog_box, text="Select which grade level's quarterly report you would like to view.")
+    dropdown.pack()
+    grade_level = ctk.IntVar(dialog_box)
+    grade_level.set("Select a grade.")
+    dropdown = ctk.CTkComboBox(master=dialog_box, values=["9", "10", "11", "12"], variable=grade_level)
+    dropdown.pack()
+
+    # Submit grade button
+    save_button = ctk.CTkButton(dialog_box, text="Submit", command=save_inputs)
+    save_button.place(relx=0.75,rely=0.75,anchor=CENTER)
+
+    save_button = ctk.CTkButton(dialog_box, text="Quit", command=destroyGui)
+    save_button.place(relx=0.25,rely=0.75,anchor=CENTER)
+
+def pickWinner():
+    print("placeholder")
 
 root = ctk.CTk()
 root.geometry("500x350")
@@ -403,11 +437,15 @@ button1.place(relx= .5, rely=.25, anchor=CENTER)
 
 # Allows you to view all current entries. Returns the complete database in treeview form.
 button2 = ctk.CTkButton(root, text="View Entries", command=open_dialog_box, width=350, corner_radius=10)
-button2.place(relx= .5, rely=.45, anchor=CENTER)
+button2.place(relx= .5, rely=.4, anchor=CENTER)
+
+# Creates a report of the entire database
+button5 = ctk.CTkButton(root, text="Pick Winner", command=pickWinner, width=350, corner_radius=10)
+button5.place(relx= .5, rely=.55, anchor=CENTER)
 
 # Creates a report of the entire database
 button4 = ctk.CTkButton(root, text="Create Report", command=report, width=350, corner_radius=10)
-button4.place(relx= .5, rely=.65, anchor=CENTER)
+button4.place(relx= .5, rely=.70, anchor=CENTER)
 
 button3 = ctk.CTkButton(root, text="Quit", command=root.destroy, width=350, corner_radius=10)
 button3.place(relx= .5, rely=.85, anchor=CENTER)

@@ -1,5 +1,5 @@
 - generate a report (preferably in pdf form) that returns all the students from each grade
-- edit error for exceptions
+- edit error for exceptions ADD ERROR MESSAGES
 - UPDATE POINT VALUES
 ->
     You must have a way to pick a random winner each

@@ -40,7 +40,8 @@ ideas:spelling bee
 """
 
 global student_number
-#create a student class with the attributes "first" "last" and "grade" correlating to the students first and last name as well as the students grade
+
+# Create a student class with the attributes "first" "last" and "grade" correlating to the students first and last name as well as the students grade
 class student():
     def __init__(self, first, last, grade, number):
         self.first = first
@@ -127,6 +128,7 @@ def open_dialog_box():
             conn.commit()
             edit_window.destroy()
             dialog_box.destroy()
+            open_dialog_box()
 
 
         item = listbox.selection()
@@ -149,14 +151,14 @@ def open_dialog_box():
         label3 = ctk.CTkLabel(edit_window, text="Edit student's grade")
         label3.pack()
         grade_level = ctk.IntVar(edit_window)
-        entry3 = ctk.CTkComboBox(master=edit_window, values=["6", "7", "8", "9", "10", "11", "12"], variable=grade_level)
+        entry3 = ctk.CTkComboBox(master=edit_window, values=["9", "10", "11", "12"], variable=grade_level)
         entry3.set(selection[2])
         entry3.pack()
-
-        b1 = ctk.CTkButton(edit_window, text= "submit", command= update_student)
+        
+        b1 = ctk.CTkButton(edit_window, text= "submit", command=update_student)
         b1.pack()
 
-    #create a function to remove one or more students using selection
+    # Create a function to remove one or more students using selection
     def remove_student():
         items = listbox.selection()
         for i in items:
@@ -183,22 +185,29 @@ def open_dialog_box():
 
     def add_points():
         def check_for_points():
-            x = entry1.get()
-            y= entry2.get()
-            print(x)
-            print(y)
+            x=entry1.get()
+            y=entry2.get()
+            cursor.execute("SELECT * FROM students WHERE name = :first AND lastname = :last", {'first':temp_name2,'last':temp_name})
+            fetch = cursor.fetchall()
+            
+            # Sports games
+            # Attend = 5 points
+            # Participate = 10 points
+            # School related
+            # Attend = 10 points
+            # Participate = 15 points
 
-
-            if x == " School prom" or x == " School dance performance" or x == " School pep rally" or x == " School homecoming" or x == " School musical":
-                if entry2.get() == "attended":
+            if x == " School Prom" or x == " School Dance Performance" or x == " School Pep Rally" or x == " School Homecoming" or x == " School Musical":
+                if y == " Attended":
                     points = 10
                 else: 
                     points = 15
             else: 
-                if entry2.get() == "attended":
+                if y == " Attended":
                     points = 5
                 else:
                     points = 10
+
             cursor.execute("SELECT points FROM students WHERE number = :number", {'number': number})
             temp_points =cursor.fetchall()
             point_value = int(temp_points[0][0]) + points
@@ -209,6 +218,8 @@ def open_dialog_box():
             new_points.destroy()
             dialog_box.destroy()
             open_dialog_box()
+
+            success(f"Assigned {fetch[0][0]} {fetch[0][1][0]}. {points} points")
 
 
         def clear_points():
@@ -226,28 +237,28 @@ def open_dialog_box():
         # ERROR: Didn't pick a student
         try:
             temp_name = selection[1]
-        except IndexError:
-            error("test")
-        temp_name2 = selection[0]
-        number = selection[4]
+            temp_name2 = selection[0]
+            number = selection[4]
 
-        new_points= ctk.CTkToplevel()
-        new_points.title("add points to student")
-        new_points.geometry("350x150")
-        l1 = ctk.CTkLabel(new_points, text= "What event did  " + temp_name2 + " " + temp_name + " attend or participate in")
-        l1.pack()
-        event_check = ctk.IntVar(new_points)
-        event_check.set("Select an event ")
-        entry1 = ctk.CTkComboBox(master=new_points, values=[" School Prom", " School Dance Performance", " School Pep Rally", " School Homecoming", " School Musical", " School Soccer Game", " School Football Game", " School Lacross Game", " School Basketball Game", " School Volleyball Game"], variable=event_check, width= 325)
-        entry1.pack()
-        type_check = ctk.IntVar(new_points)
-        type_check.set("did the student attend or participate in this event ")
-        entry2 = ctk.CTkComboBox(master=new_points, values=["Attended", "Participated"], variable=type_check, width= 325)
-        entry2.pack()
-        submit = ctk.CTkButton(new_points, text= "Submit", command= check_for_points)
-        submit.pack()
-        clear = ctk.CTkButton(new_points, text= "Clear student's points", command= clear_points)
-        clear.pack()
+            new_points= ctk.CTkToplevel()
+            new_points.title("add points to student")
+            new_points.geometry("350x150")
+            l1 = ctk.CTkLabel(new_points, text= "What event did  " + temp_name2 + " " + temp_name + " attend or participate in")
+            l1.pack()
+            event_check = ctk.IntVar(new_points)
+            event_check.set("Select an event ")
+            entry1 = ctk.CTkComboBox(master=new_points, values=[" School Prom", " School Dance Performance", " School Pep Rally", " School Homecoming", " School Musical", " School Soccer Game", " School Football Game", " School Lacross Game", " School Basketball Game", " School Volleyball Game"], variable=event_check, width= 325)
+            entry1.pack()
+            type_check = ctk.IntVar(new_points)
+            type_check.set("Did the student attend or participate in this event?")
+            entry2 = ctk.CTkComboBox(master=new_points, values=[" Attended", " Participated"], variable=type_check, width= 325)
+            entry2.pack()
+            submit = ctk.CTkButton(new_points, text= "Submit", command=check_for_points)
+            submit.pack()
+            clear = ctk.CTkButton(new_points, text= "Clear student's points", command= clear_points)
+            clear.pack()
+        except IndexError:
+            error("Please select someone")
 
     def get_entry():
         temp_name = my_entry.get()
@@ -383,21 +394,22 @@ def report():
             for i in range(len(fetch)):
                 points.append(fetch[i][3])
                 name.append(f"{fetch[i][0]} {(fetch[i][1][0]).title()}.")
-                print(fetch[i][3],fetch[i][0])
-            print(points,name)
+                #print(fetch[i][3],fetch[i][0])
+            if points==[] and name==[]:
+                error(f"There currently isn't any data for grade {choice}.")
+            else:
+                plt.rcParams["figure.figsize"] = (15,5)
+                plt.barh(name,points,color="royalblue")
 
-            plt.rcParams["figure.figsize"] = (15,5)
-            plt.barh(name,points,color="royalblue")
+                #plt.plot(range(len(data)), data,"r+")
+                plt.savefig(f"QuarterlyG{choice}.pdf",format="pdf")
 
-            #plt.plot(range(len(data)), data,"r+")
-            plt.savefig(f"QuarterlyG{choice}.pdf",format="pdf")
+                plt.title(f'Quarterly Points (Grade {choice})', fontweight="bold")
 
-            plt.title(f'Quarterly Points (Grade {choice})', fontweight="bold")
+                plt.ylabel('Students', fontweight="bold")
+                plt.xlabel('Points', fontweight="bold")
 
-            plt.ylabel('Students', fontweight="bold")
-            plt.xlabel('Points', fontweight="bold")
-
-            plt.show()
+                plt.show()
         except TclError: # didnt select a grade
             error("Please select a grade.")
         

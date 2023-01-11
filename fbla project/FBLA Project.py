@@ -124,7 +124,7 @@ def open_dialog_box():
     # Define a function to be called when the "Save" button is clicked
     def edit_student():
         def update_student():
-            cursor.execute("UPDATE students SET name = :first, lastname = :last, grade = :grade  WHERE number = :number", {'first': entry1.get(), 'last': entry2.get(), 'grade': int(entry3.get()), 'number': selection[4] })
+            cursor.execute("UPDATE students SET name = :first, lastname = :last, grade = :grade  WHERE number = :number", {'first':(entry1.get()).title(), 'last': (entry2.get()).title(), 'grade': int(entry3.get()), 'number': selection[4] })
             conn.commit()
             edit_window.destroy()
             dialog_box.destroy()
@@ -433,6 +433,46 @@ def report():
 
 def pickWinner():
     print("placeholder")
+    #pointDict = dict()
+    cursor.execute("SELECT * FROM students")
+    all_students = cursor.fetchall()
+    pointList = list()
+    maxStudents = list()
+    max = all_students[0][3]
+    for i in range(len(all_students)):
+        pointList.append((all_students[i][3],all_students[i][4]))
+        if all_students[i][3] > max:
+            max = all_students[i][3]
+    for i in range(len(all_students)):
+        if max == all_students[i][3]:
+            maxStudents.append(all_students[i])
+    
+    # GUI
+    win = ctk.CTkToplevel()
+    win.title("Winners")
+    win.geometry("400x400")
+
+    if len(maxStudents) > 1:
+        Label2 = ctk.CTkLabel(win, text= "These students tied for first place: ", corner_radius=10)
+        Label2.pack()
+        for i in range(len(maxStudents)):
+            Label = ctk.CTkLabel(win, text=f" {(maxStudents[i][0]).title()} {(maxStudents[i][1][0]).title()}. with a total of: {maxStudents[i][3]} points.", corner_radius=10)
+            Label.pack()
+    else:
+        Label3 = ctk.CTkLabel(win, text= "The student that won first place is: ", corner_radius=10)
+        Label3.pack()
+
+        Label4 = ctk.CTkLabel(win, text=f" {(maxStudents[0][0]).title()} {(maxStudents[0][1][0]).title()}. with a total of: {maxStudents[0][3]} points.", corner_radius=10)
+        Label4.pack()
+
+    for grade in range(9, 12):
+        cursor.execute("SELECT * FROM students WHERE grade= :grade", {'grade': grade})
+        grade_values = cursor.fetchall()
+        
+        #print(maxStudents)
+
+    
+        
 
 root = ctk.CTk()
 root.geometry("500x350")

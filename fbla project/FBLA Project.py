@@ -13,10 +13,6 @@ import matplotlib.pyplot as plt
 conn = sqlite3.connect('studentDatabase.db')
 # Create a cursor
 cursor = conn.cursor()
-# Create the table
-cursor.execute('''CREATE TABLE students (name TEXT, lastname TEXT, grade INTEGER, points INTEGER, number INTEGER)''')
-# Commit the changes to the database
-conn.commit()
 # Close the connection to the database
 conn.close()
 """
@@ -121,7 +117,7 @@ def open_dialog_box():
         listbox.insert('', 'end', values=(option))
     listbox.place(relx= 0, rely= .1)
 
-    # Define a function to be called when the "Save" button is clicked
+    # Define a function to be called when the "edit student" button is clicked
     def edit_student():
         def update_student():
             cursor.execute("UPDATE students SET name = :first, lastname = :last, grade = :grade  WHERE number = :number", {'first':(entry1.get()).title(), 'last': (entry2.get()).title(), 'grade': int(entry3.get()), 'number': selection[4] })
@@ -130,7 +126,7 @@ def open_dialog_box():
             dialog_box.destroy()
             open_dialog_box()
 
-
+        #gets the user selection
         item = listbox.selection()
         selection = listbox.item(item, option="values")
         print(selection)
@@ -138,6 +134,7 @@ def open_dialog_box():
         edit_window= ctk.CTkToplevel()
         edit_window.title("edit student")
 
+        #labels and entry boxes to edit the student
         label1 = ctk.CTkLabel(edit_window, text="Edit student's first name")
         label1.pack()
         entry1 = ctk.CTkEntry(edit_window, placeholder_text= selection[0])
@@ -155,6 +152,7 @@ def open_dialog_box():
         entry3.set(selection[2])
         entry3.pack()
         
+        #saves the entries and updates the student
         b1 = ctk.CTkButton(edit_window, text= "submit", command=update_student)
         b1.pack()
 
@@ -182,20 +180,13 @@ def open_dialog_box():
         dialog_box.destroy()
         open_dialog_box()
 
-
+    #add points to a selected student
     def add_points():
         def check_for_points():
             x=entry1.get()
             y=entry2.get()
             cursor.execute("SELECT * FROM students WHERE name = :first AND lastname = :last", {'first':temp_name2,'last':temp_name})
             fetch = cursor.fetchall()
-            
-            # Sports games
-            # Attend = 5 points
-            # Participate = 10 points
-            # School related
-            # Attend = 10 points
-            # Participate = 15 points
 
             if x == " School Prom" or x == " School Dance Performance" or x == " School Pep Rally" or x == " School Homecoming" or x == " School Musical":
                 if y == " Attended":
@@ -412,11 +403,13 @@ def report():
                 plt.show()
         except TclError: # didnt select a grade
             error("Please select a grade.")
-        
+
+    #GUI    
     dialog_box = ctk.CTkToplevel()
     dialog_box.title("Dialog Box")
     dialog_box.geometry("400x100")
 
+    #dropdown menu for grade selection
     dropdown = ctk.CTkLabel(dialog_box, text="Select which grade level's quarterly report you would like to view.")
     dropdown.pack()
     grade_level = ctk.IntVar(dialog_box)
@@ -428,9 +421,11 @@ def report():
     save_button = ctk.CTkButton(dialog_box, text="Submit", command=save_inputs)
     save_button.place(relx=0.75,rely=0.75,anchor=CENTER)
 
+    #quit the view students GUI
     save_button = ctk.CTkButton(dialog_box, text="Quit", command=destroyGui)
     save_button.place(relx=0.25,rely=0.75,anchor=CENTER)
 
+#command for pick winners button
 def pickWinner():
     gradeValues = list()
     cursor.execute("SELECT * FROM students")
@@ -451,12 +446,15 @@ def pickWinner():
     win.title("Winners")
     win.geometry("400x400")
 
+    #prints the winner if there is multiple winners
     if len(maxStudents) > 1:
         Label2 = ctk.CTkLabel(win, text= "These students tied for first place: ", corner_radius=10)
         Label2.pack()
         for i in range(len(maxStudents)):
             Label = ctk.CTkLabel(win, text=f" {(maxStudents[i][0]).title()} {(maxStudents[i][1][0]).title()}. with a total of: {maxStudents[i][3]} points.", corner_radius=10)
             Label.pack()
+
+    #prints the winner if there is only one winner
     else:
         Label3 = ctk.CTkLabel(win, text= "The student that won first place is: ", corner_radius=10)
         Label3.pack()
@@ -464,6 +462,7 @@ def pickWinner():
         Label4 = ctk.CTkLabel(win, text=f" {(maxStudents[0][0]).title()} {(maxStudents[0][1][0]).title()}. with a total of: {maxStudents[0][3]} points.", corner_radius=10)
         Label4.pack()
 
+    #picks a random winner for each grade level
     for grade in range(9, 13):
         cursor.execute("SELECT * FROM students WHERE grade = :grade", {'grade': grade})
         gradeStudents = cursor.fetchall()
@@ -473,22 +472,13 @@ def pickWinner():
         label5= ctk.CTkLabel(win, text= "The random winner for grade " + str(grade) + " is: ")
         label5.pack()
         label6 = ctk.CTkLabel(win, text= f" {(gradeStudents[randStudent][0]).title()} {(gradeStudents[randStudent][1][0]).title()}. with a total of: {gradeStudents[randStudent][3]} points.")
-        label6.pack()
+        label6.pack()  
 
-        
-
-
-
-        
-
-        
-
-    
-        
-
+#creates the home GUI
 root = ctk.CTk()
 root.geometry("500x350")
 
+#creates a label for the home GUI called Student Involment Tracker
 Label = ctk.CTkLabel(root, text="Student Involvement Tracker",corner_radius=10)
 Label.place(relx= .5, rely=.1, anchor=CENTER)
 
@@ -511,16 +501,30 @@ button5.place(relx= .5, rely=.55, anchor=CENTER)
 button4 = ctk.CTkButton(root, text="Create Report", command=report, width=350, corner_radius=10)
 button4.place(relx= .5, rely=.70, anchor=CENTER)
 
+#closes the application
 button3 = ctk.CTkButton(root, text="Quit", command=root.destroy, width=350, corner_radius=10)
 button3.place(relx= .5, rely=.85, anchor=CENTER)
 
 
 
-
+#connects to the database
 conn = sqlite3.connect('studentDatabase.db')
+
+#creates a cursor
 cursor = conn.cursor()
+
+# Create the table
+cursor.execute('''CREATE TABLE IF NOT EXISTS students (name TEXT, lastname TEXT, grade INTEGER, points INTEGER, number INTEGER)''')
+
+# Commit the changes to the database
+conn.commit()
+
 # keeps gui running
 if __name__ == "__main__":
     root.mainloop()
+
+    #closes the cursor
     cursor.close()
+
+    #closes the connection
     conn.close()

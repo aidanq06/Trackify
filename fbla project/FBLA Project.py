@@ -120,7 +120,10 @@ def open_dialog_box():
     # Define a function to be called when the "edit student" button is clicked
     def edit_student():
         def update_student():
-            cursor.execute("UPDATE students SET name = :first, lastname = :last, grade = :grade  WHERE number = :number", {'first':(entry1.get()).title(), 'last': (entry2.get()).title(), 'grade': int(entry3.get()), 'number': selection[4] })
+            if entry1.get() == "" and entry2.get() == "":
+                ...
+            else:
+                cursor.execute("UPDATE students SET name = :first, lastname = :last, grade = :grade  WHERE number = :number", {'first':(entry1.get()).title(), 'last': (entry2.get()).title(), 'grade': int(entry3.get()), 'number': selection[4] })
             conn.commit()
             edit_window.destroy()
             dialog_box.destroy()
@@ -129,7 +132,6 @@ def open_dialog_box():
         #gets the user selection
         item = listbox.selection()
         selection = listbox.item(item, option="values")
-        print(selection)
 
         edit_window= ctk.CTkToplevel()
         edit_window.title("edit student")
@@ -173,44 +175,62 @@ def open_dialog_box():
 
     #creates a function to remove all students
     def remove_everyone():
-        cursor.execute("DELETE FROM students")
-        conn.commit()
+        def makingSure():
+            cursor.execute("DELETE FROM students")
+            conn.commit()
+            dialog_box.destroy()
+            open_dialog_box()
 
+        sure = ctk.CTkToplevel(dialog_box)
+        sure.title("")
+        sure.geometry("300x100")
+        label1 = ctk.CTkLabel(sure, text= "Are you sure you want to remove all students?")
+        label1.pack()
+        b1 = ctk.CTkButton(sure, text= "yes", command= makingSure)
+        b1.pack()
+
+        def closeSure():
+            sure.destroy()
+
+        b2 = ctk.CTkButton(sure, text= "no", command= closeSure)
+        b2.pack()
         # Destroy dialog box (to update database) then reopen to show the result.
-        dialog_box.destroy()
-        open_dialog_box()
+
 
     #add points to a selected student
     def add_points():
         def check_for_points():
-            x=entry1.get()
-            y=entry2.get()
-            cursor.execute("SELECT * FROM students WHERE name = :first AND lastname = :last", {'first':temp_name2,'last':temp_name})
-            fetch = cursor.fetchall()
+            try:
+                x=entry1.get()
+                y=entry2.get()
+                cursor.execute("SELECT * FROM students WHERE name = :first AND lastname = :last", {'first':temp_name2,'last':temp_name})
+                fetch = cursor.fetchall()
 
-            if x == " School Prom" or x == " School Dance Performance" or x == " School Pep Rally" or x == " School Homecoming" or x == " School Musical":
-                if y == " Attended":
-                    points = 10
+                if x == " School Prom" or x == " School Dance Performance" or x == " School Pep Rally" or x == " School Homecoming" or x == " School Musical":
+                    if y == " Attended":
+                        points = 10
+                    else: 
+                        points = 15
                 else: 
-                    points = 15
-            else: 
-                if y == " Attended":
-                    points = 5
-                else:
-                    points = 10
+                    if y == " Attended":
+                        points = 5
+                    else:
+                        points = 10
 
-            cursor.execute("SELECT points FROM students WHERE number = :number", {'number': number})
-            temp_points =cursor.fetchall()
-            point_value = int(temp_points[0][0]) + points
-            cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': point_value, 'number': number })
-            conn.commit()
-            
-            # Destroy dialog box (to update database) then reopen to show the result. Destroy new points GUI.
-            new_points.destroy()
-            dialog_box.destroy()
-            open_dialog_box()
+                cursor.execute("SELECT points FROM students WHERE number = :number", {'number': number})
+                temp_points =cursor.fetchall()
+                point_value = int(temp_points[0][0]) + points
+                cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': point_value, 'number': number })
+                conn.commit()
+                
+                # Destroy dialog box (to update database) then reopen to show the result. Destroy new points GUI.
+                new_points.destroy()
+                dialog_box.destroy()
+                open_dialog_box()
 
-            success(f"Assigned {fetch[0][0]} {fetch[0][1][0]}. {points} points")
+                success(f"Assigned {fetch[0][0]} {fetch[0][1][0]}. {points} points")
+            except:
+                error("You can only add points to one student at a time.")
 
 
         def clear_points():
@@ -222,9 +242,11 @@ def open_dialog_box():
             dialog_box.destroy()
             open_dialog_box()
 
-        items = listbox.selection()
-        selection = listbox.item(items, option="values")
-
+        try:
+            items = listbox.selection()
+            selection = listbox.item(items, option="values")
+        except:
+            error("You can only add points to one student at a time.")
         # ERROR: Didn't pick a student
         try:
             temp_name = selection[1]

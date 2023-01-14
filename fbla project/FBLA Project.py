@@ -186,13 +186,13 @@ def open_dialog_box():
         sure.geometry("300x100")
         label1 = ctk.CTkLabel(sure, text= "Are you sure you want to remove all students?")
         label1.pack()
-        b1 = ctk.CTkButton(sure, text= "yes", command= makingSure)
+        b1 = ctk.CTkButton(sure, text= "Yes", command= makingSure)
         b1.pack()
 
         def closeSure():
             sure.destroy()
 
-        b2 = ctk.CTkButton(sure, text= "no", command= closeSure)
+        b2 = ctk.CTkButton(sure, text= "No", command= closeSure)
         b2.pack()
         # Destroy dialog box (to update database) then reopen to show the result.
 
@@ -203,32 +203,36 @@ def open_dialog_box():
             try:
                 x=entry1.get()
                 y=entry2.get()
-                cursor.execute("SELECT * FROM students WHERE name = :first AND lastname = :last", {'first':temp_name2,'last':temp_name})
-                fetch = cursor.fetchall()
-
-                if x == " School Prom" or x == " School Dance Performance" or x == " School Pep Rally" or x == " School Homecoming" or x == " School Musical":
-                    if y == " Attended":
-                        points = 10
-                    else: 
-                        points = 15
+                if x == "Select an event " or y == "Did the student attend or participate in this event?":
+                    error("Please fill out all fields.")
                 else: 
-                    if y == " Attended":
-                        points = 5
-                    else:
-                        points = 10
+                    if x == " School Prom" or x == " School Dance Performance" or x == " School Pep Rally" or x == " School Homecoming" or x == " School Musical":
+                        if y == " Attended":
+                            points = 10
+                        elif y == " Participated": 
+                            points = 15
+                    elif x == " School Soccer Game" or x == " School Football Game" or x == " School Lacross Game" or x == " School Basketball Game" or x == " School Volleyball Game":
+                        if y == " Attended":
+                            points = 5
+                        elif y == " Participated":
+                            points = 10
 
-                cursor.execute("SELECT points FROM students WHERE number = :number", {'number': number})
-                temp_points =cursor.fetchall()
-                point_value = int(temp_points[0][0]) + points
-                cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': point_value, 'number': number })
-                conn.commit()
+                    cursor.execute("SELECT * FROM students WHERE name = :first AND lastname = :last", {'first':temp_name2,'last':temp_name})
+                    fetch = cursor.fetchall()
+                    cursor.execute("SELECT points FROM students WHERE number = :number", {'number': number})
+                    temp_points =cursor.fetchall()
+                    point_value = int(temp_points[0][0]) + points
+                    cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': point_value, 'number': number })
+                    conn.commit()
+                    
+                    # Destroy dialog box (to update database) then reopen to show the result. Destroy new points GUI.
+                    new_points.destroy()
+                    dialog_box.destroy()
+                    open_dialog_box()
+
+                    success(f"Assigned {fetch[0][0]} {fetch[0][1][0]}. {points} points")
+        
                 
-                # Destroy dialog box (to update database) then reopen to show the result. Destroy new points GUI.
-                new_points.destroy()
-                dialog_box.destroy()
-                open_dialog_box()
-
-                success(f"Assigned {fetch[0][0]} {fetch[0][1][0]}. {points} points")
             except:
                 error("You can only add points to one student at a time.")
 
@@ -254,7 +258,7 @@ def open_dialog_box():
             number = selection[4]
 
             new_points= ctk.CTkToplevel()
-            new_points.title("add points to student")
+            new_points.title("Add points to student")
             new_points.geometry("350x150")
             l1 = ctk.CTkLabel(new_points, text= "What event did  " + temp_name2 + " " + temp_name + " attend or participate in")
             l1.pack()
@@ -341,7 +345,7 @@ def inputStudent():
     label3.pack()
     grade_level = ctk.IntVar(inputStudent)
     grade_level.set("Select a grade.")
-    entry3 = ctk.CTkComboBox(master=inputStudent, values=["6", "7", "8", "9", "10", "11", "12"], variable=grade_level)
+    entry3 = ctk.CTkComboBox(master=inputStudent, values=["9", "10", "11", "12"], variable=grade_level)
     entry3.pack()
 
     var1 = ctk.IntVar()
@@ -365,7 +369,7 @@ def inputStudent():
                 new_student = student(entry1.get(), entry2.get(), int(grade_level.get()), studentID)
                     
                 # Save the values to database
-                cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9 OR 8 OR 7 OR 6")
+                cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9")
                 options =cursor.fetchall()
                 student_first = new_student.first.capitalize()
                 student_last = new_student.last.capitalize()
@@ -408,11 +412,14 @@ def report():
                 points.append(fetch[i][3])
                 name.append(f"{fetch[i][0]} {(fetch[i][1][0]).title()}.")
                 #print(fetch[i][3],fetch[i][0])
+            name2=list()
+            for i in range(len(name)):
+                name2.append(f"{name[i]} ({points[i]} points)")
             if points==[] and name==[]:
                 error(f"There currently isn't any data for grade {choice}.")
             else:
                 plt.rcParams["figure.figsize"] = (15,5)
-                plt.barh(name,points,color="royalblue")
+                plt.barh(name2,points,color="royalblue")
 
                 #plt.plot(range(len(data)), data,"r+")
                 plt.savefig(f"QuarterlyG{choice}.pdf",format="pdf")
@@ -484,17 +491,20 @@ def pickWinner():
         Label4 = ctk.CTkLabel(win, text=f" {(maxStudents[0][0]).title()} {(maxStudents[0][1][0]).title()}. with a total of: {maxStudents[0][3]} points.", corner_radius=10)
         Label4.pack()
 
-    #picks a random winner for each grade level
-    for grade in range(9, 13):
-        cursor.execute("SELECT * FROM students WHERE grade = :grade", {'grade': grade})
-        gradeStudents = cursor.fetchall()
-        randStudent = rand.randint(0, len(gradeStudents)-1)
-        space = ctk.CTkLabel(win, text= " ")
-        space.pack()
-        label5= ctk.CTkLabel(win, text= "The random winner for grade " + str(grade) + " is: ")
-        label5.pack()
-        label6 = ctk.CTkLabel(win, text= f" {(gradeStudents[randStudent][0]).title()} {(gradeStudents[randStudent][1][0]).title()}. with a total of: {gradeStudents[randStudent][3]} points.")
-        label6.pack()  
+    try:
+        #picks a random winner for each grade level
+        for grade in range(9, 13):
+            cursor.execute("SELECT * FROM students WHERE grade = :grade", {'grade': grade})
+            gradeStudents = cursor.fetchall()
+            randStudent = rand.randint(0, len(gradeStudents)-1)
+            space = ctk.CTkLabel(win, text= " ")
+            space.pack()
+            label5= ctk.CTkLabel(win, text= "The random winner for grade " + str(grade) + " is: ")
+            label5.pack()
+            label6 = ctk.CTkLabel(win, text= f" {(gradeStudents[randStudent][0]).title()} {(gradeStudents[randStudent][1][0]).title()}. with a total of: {gradeStudents[randStudent][3]} points.")
+            label6.pack()  
+    except ValueError:
+        ...
 
 #creates the home GUI
 root = ctk.CTk()

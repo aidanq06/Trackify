@@ -3,7 +3,7 @@ FBLA Coding &amp; Programming Project // 2022-2023
 
 # Required Libraries
 tkinter - https://docs.python.org/3/library/tkinter.html <br />
-customtikinter - https://github.com/TomSchimansky/CustomTkinter <br />
+customtkinter - https://github.com/TomSchimansky/CustomTkinter <br />
 matplotlib - https://matplotlib.org/ <br />
 sqlite3 - https://www.sqlite.org/index.html <br />
 

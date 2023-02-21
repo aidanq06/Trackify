@@ -88,7 +88,7 @@ def open_dialog_box():
     # Create a new top-level window (i.e., a new window that is independent of the main window)
     dialog_box = ctk.CTkToplevel()
     dialog_box.title("Dialog Box")
-    dialog_box.geometry("800x325")
+    dialog_box.geometry("645x325")
 
     # Create a list of students
     cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9 OR 8 OR 7 OR 6")

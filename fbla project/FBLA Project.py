@@ -511,7 +511,6 @@ def pickWinner():
         space2 = ctk.CTkLabel(win, text= "")
         space2.pack()
         rand.shuffle(studentValues)
-        print(studentValues)
 
         if len(maxStudents) > 1:
             label7 = ctk.CTkLabel(win, text= " These students won a Pizza Party for their class: ")

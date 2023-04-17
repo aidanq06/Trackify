@@ -7,34 +7,6 @@ import customtkinter as ctk
 import random as rand
 import matplotlib.pyplot as plt
 
-# FIRST TIME RUN
-"""
-# Connect to the database
-conn = sqlite3.connect('studentDatabase.db')
-# Create a cursor
-cursor = conn.cursor()
-# Close the connection to the database
-conn.close()
-"""
-
-
-
-"""
-Must have at least five sporting events and five non-sports school events.
-1.  School prom
-2.  School dance performance
-3.  School pep rally
-4.  School homecoming
-5.  School musical
-ideas:spelling bee
-
-1.  School soccer games
-2.  School football games
-3.  School lacross games
-4.  School basketball
-5.  School volleyball
-"""
-
 global student_number
 
 # Create a student class with the attributes "first" "last" and "grade" correlating to the students first and last name as well as the students grade
@@ -90,19 +62,20 @@ def open_dialog_box():
     dialog_box.title("Dialog Box")
     dialog_box.geometry("645x325")
 
-    # Create a list of students
+    # Creates a list of students from the database called students
     cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9 OR 8 OR 7 OR 6")
-    options = cursor.fetchall()
+    students = cursor.fetchall()
 
-    # Create a variable to store the selected options
-    selected_options = tk.StringVar(value=options)
+    # Create a variable to store the selected students
+    selected_options = tk.StringVar(value=students)
 
-    # Create a listbox widget to display the options
+    # Create a listbox widget to display the students
     style = ttk.Style(root)
     style.theme_use("clam")
     ttk.Style().configure("Treeview", fieldbackground= "#242424", background = "#242424", foreground= "white")
     ttk.Style().configure("Treeview.Heading", background = "#242424", foreground= "white", relief= "flat")
 
+    #Assign the listbox widget number of columns and names of columns
     listbox = ttk.Treeview(dialog_box, selectmode="extended",columns=("c1", "c2", "c3", "c4"),show="headings")
     listbox.column("# 1", anchor=CENTER)
     listbox.heading("# 1", text="First Name")
@@ -113,46 +86,55 @@ def open_dialog_box():
     listbox.column("# 4", anchor=CENTER)
     listbox.heading("# 4", text="Points")
 
-    for option in options:
-        listbox.insert('', 'end', values=(option))
+
+    #Add students to the listbox from list "students"
+    for student in students:
+        listbox.insert('', 'end', values=(student))
     listbox.place(relx= 0, rely= .1)
 
     # Define a function to be called when the "edit student" button is clicked
     def edit_student():
         def update_student():
-            if entry1.get() == "" and entry2.get() == "":
+            #If user leaves both entries empty nothing will happen
+            if first_entry.get() == "" and last_entry.get() == "":
                 ...
             else:
-                cursor.execute("UPDATE students SET name = :first, lastname = :last, grade = :grade  WHERE number = :number", {'first':(entry1.get()).title(), 'last': (entry2.get()).title(), 'grade': int(entry3.get()), 'number': selection[4] })
+                #Sets Student first and last name to the user inputs
+                cursor.execute("UPDATE students SET name = :first, lastname = :last, grade = :grade  WHERE number = :number", {'first':(first_entry.get()).title(), 'last': (last_entry.get()).title(), 'grade': int(grade_options.get()), 'number': selection[4] })
+            
+            #Saves changes to the database
             conn.commit()
             edit_window.destroy()
             dialog_box.destroy()
             open_dialog_box()
 
-        #gets the user selection
+        #Gets the user selection
         item = listbox.selection()
         selection = listbox.item(item, option="values")
 
+        #Creates the edit window
         edit_window= ctk.CTkToplevel()
         edit_window.title("edit student")
 
-        #labels and entry boxes to edit the student
-        label1 = ctk.CTkLabel(edit_window, text="Edit student's first name")
-        label1.pack()
-        entry1 = ctk.CTkEntry(edit_window, placeholder_text= selection[0])
-        entry1.pack()
+        #Label and entry for student's first name
+        first_name = ctk.CTkLabel(edit_window, text="Edit student's first name")
+        first_name.pack()
+        first_entry = ctk.CTkEntry(edit_window, placeholder_text= selection[0])
+        first_entry.pack()
 
-        label2 = ctk.CTkLabel(edit_window, text="Edit student's last name")
-        label2.pack()
-        entry2 = ctk.CTkEntry(edit_window, placeholder_text= selection[1])
-        entry2.pack()
+        #Label and entry for students's last name
+        last_name = ctk.CTkLabel(edit_window, text="Edit student's last name")
+        last_name.pack()
+        last_entry = ctk.CTkEntry(edit_window, placeholder_text= selection[1])
+        last_entry.pack()
 
-        label3 = ctk.CTkLabel(edit_window, text="Edit student's grade")
-        label3.pack()
+        #label and dropdown menu for student's grade
+        grade_label = ctk.CTkLabel(edit_window, text="Edit student's grade")
+        grade_label.pack()
         grade_level = ctk.IntVar(edit_window)
-        entry3 = ctk.CTkComboBox(master=edit_window, values=["9", "10", "11", "12"], variable=grade_level)
-        entry3.set(selection[2])
-        entry3.pack()
+        grade_options = ctk.CTkComboBox(master=edit_window, values=["9", "10", "11", "12"], variable=grade_level)
+        grade_options.set(selection[2])
+        grade_options.pack()
         
         #saves the entries and updates the student
         b1 = ctk.CTkButton(edit_window, text= "submit", command=update_student)
@@ -163,10 +145,10 @@ def open_dialog_box():
         items = listbox.selection()
         for i in items:
             selection = listbox.item(i, option="values")
-            temp_name = selection[1]
-            temp_name2 = selection[0]
+            last_name = selection[1]
+            first_name = selection[0]
             student_number = selection[4]
-            cursor.execute("DELETE FROM students WHERE name = :first AND lastname = :last AND number = :studentnumber",{'first': temp_name2, 'last': temp_name, 'studentnumber': student_number})
+            cursor.execute("DELETE FROM students WHERE name = :first AND lastname = :last AND number = :studentnumber",{'first': first_name, 'last': last_name, 'studentnumber': student_number})
         conn.commit()     
         
         # Destroy dialog box (to update database) then reopen to show the result.
@@ -181,63 +163,66 @@ def open_dialog_box():
             dialog_box.destroy()
             open_dialog_box()
 
+        #Creates a window to confirm the option to delete all students
         sure = ctk.CTkToplevel(dialog_box)
         sure.title("")
         sure.geometry("300x100")
-        label1 = ctk.CTkLabel(sure, text= "Are you sure you want to remove all students?")
-        label1.pack()
-        b1 = ctk.CTkButton(sure, text= "Yes", command= makingSure)
-        b1.pack()
+        first_name = ctk.CTkLabel(sure, text= "Are you sure you want to remove all students?")
+        first_name.pack()
 
+        #Function to close the confirm window
         def closeSure():
             sure.destroy()
 
+        #Yes and no buttons to confirm deletion of all students
+        b1 = ctk.CTkButton(sure, text= "Yes", command= makingSure)
+        b1.pack()
+
         b2 = ctk.CTkButton(sure, text= "No", command= closeSure)
         b2.pack()
-        # Destroy dialog box (to update database) then reopen to show the result.
+        
 
 
     #add points to a selected student
     def add_points():
         def check_for_points():
-            try:
-                x=entry1.get()
-                y=entry2.get()
-                if x == "Select an event " or y == "Did the student attend or participate in this event?":
-                    error("Please fill out all fields.")
-                else: 
-                    if x == " School Prom" or x == " School Dance Performance" or x == " School Pep Rally" or x == " School Homecoming" or x == " School Musical":
-                        if y == " Attended":
-                            points = 10
-                        elif y == " Participated": 
-                            points = 15
-                    elif x == " School Soccer Game" or x == " School Football Game" or x == " School Lacross Game" or x == " School Basketball Game" or x == " School Volleyball Game":
-                        if y == " Attended":
-                            points = 5
-                        elif y == " Participated":
-                            points = 10
-
-                    cursor.execute("SELECT * FROM students WHERE name = :first AND lastname = :last", {'first':temp_name2,'last':temp_name})
-                    fetch = cursor.fetchall()
-                    cursor.execute("SELECT points FROM students WHERE number = :number", {'number': number})
-                    temp_points =cursor.fetchall()
-                    point_value = int(temp_points[0][0]) + points
-                    cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': point_value, 'number': number })
-                    conn.commit()
-                    
-                    # Destroy dialog box (to update database) then reopen to show the result. Destroy new points GUI.
-                    new_points.destroy()
-                    dialog_box.destroy()
-                    open_dialog_box()
-
-                    success(f"Assigned {fetch[0][0]} {fetch[0][1][0]}. {points} points")
-        
+            x=first_entry.get()
+            y=last_entry.get()
+            if x == "Select an event " or y == "Did the student attend or participate in this event?":
+                error("Please fill out all fields.")
+            else: 
+                if x == " School Prom" or x == " School Dance Performance" or x == " School Pep Rally" or x == " School Homecoming" or x == " School Musical":
+                    if y == " Attended":
+                        points = 10
+                    elif y == " Participated": 
+                        points = 15
+                elif x == " School Soccer Game" or x == " School Football Game" or x == " School Lacross Game" or x == " School Basketball Game" or x == " School Volleyball Game":
+                    if y == " Attended":
+                        points = 5
+                    elif y == " Participated":
+                        points = 10
                 
-            except:
-                error("You can only add points to one student at a time.")
+                #Assigns points to the selected student
+                cursor.execute("SELECT * FROM students WHERE name = :first AND lastname = :last", {'first':first_name,'last':last_name})
+                fetch = cursor.fetchall()
+                cursor.execute("SELECT points FROM students WHERE number = :number", {'number': number})
+                temp_points =cursor.fetchall()
+                point_value = int(temp_points[0][0]) + points
+                cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': point_value, 'number': number })
+                conn.commit()
+                
+                # Destroy dialog box (to update database) then reopen to show the result. Destroy new points GUI.
+                new_points.destroy()
+                dialog_box.destroy()
+                open_dialog_box()
+
+                #Success window prints student name and points assigned
+                success(f"Assigned {fetch[0][0]} {fetch[0][1][0]}. {points} points")
+
 
 
         def clear_points():
+            #removes all points from the selected student
             cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': 0, 'number': number })
             conn.commit()
 
@@ -247,42 +232,54 @@ def open_dialog_box():
             open_dialog_box()
 
         try:
+            #Gets the selected student and sets it to selection
             items = listbox.selection()
             selection = listbox.item(items, option="values")
         except:
+            #Error message if multiple students were selected
             error("You can only add points to one student at a time.")
-        # ERROR: Didn't pick a student
         try:
-            temp_name = selection[1]
-            temp_name2 = selection[0]
+            #Sets first, last and student number to according variables
+            last_name = selection[1]
+            first_name = selection[0]
             number = selection[4]
 
+            #Creates the window to add points to the selected student
             new_points= ctk.CTkToplevel()
             new_points.title("Add points to student")
             new_points.geometry("350x150")
-            l1 = ctk.CTkLabel(new_points, text= "What event did  " + temp_name2 + " " + temp_name + " attend or participate in")
+
+            #Dropdown for the event the selected student attended
+            l1 = ctk.CTkLabel(new_points, text= "What event did  " + first_name + " " + last_name + " attend or participate in")
             l1.pack()
             event_check = ctk.IntVar(new_points)
             event_check.set("Select an event ")
-            entry1 = ctk.CTkComboBox(master=new_points, values=[" School Prom", " School Dance Performance", " School Pep Rally", " School Homecoming", " School Musical", " School Soccer Game", " School Football Game", " School Lacross Game", " School Basketball Game", " School Volleyball Game"], variable=event_check, width= 325)
-            entry1.pack()
+            first_entry = ctk.CTkComboBox(master=new_points, values=[" School Prom", " School Dance Performance", " School Pep Rally", " School Homecoming", " School Musical", " School Soccer Game", " School Football Game", " School Lacross Game", " School Basketball Game", " School Volleyball Game"], variable=event_check, width= 325)
+            first_entry.pack()
+
+            #Dropdown for whether the selected student participated or attended the selected event
             type_check = ctk.IntVar(new_points)
             type_check.set("Did the student attend or participate in this event?")
-            entry2 = ctk.CTkComboBox(master=new_points, values=[" Attended", " Participated"], variable=type_check, width= 325)
-            entry2.pack()
+            last_entry = ctk.CTkComboBox(master=new_points, values=[" Attended", " Participated"], variable=type_check, width= 325)
+            last_entry.pack()
+
+            #Submit button
             submit = ctk.CTkButton(new_points, text= "Submit", command=check_for_points)
             submit.pack()
             clear = ctk.CTkButton(new_points, text= "Clear student's points", command= clear_points)
             clear.pack()
-        except IndexError:
+
+        #index error
+        except:
+            #error message in nobody is selected
             error("Please select someone")
 
     def get_entry():
-        temp_name = my_entry.get()
+        last_name = searchbar.get()
         for item in listbox.get_children():
             listbox.delete(item)
         dialog_box.update_idletasks()
-        cursor.execute("SELECT * FROM students WHERE lastname = :last", {'last': temp_name.capitalize()})
+        cursor.execute("SELECT * FROM students WHERE lastname = :last", {'last': last_name.capitalize()})
         temp_values= cursor.fetchall()
         for values in temp_values:
             listbox.insert('', 'end', values=(values))
@@ -309,9 +306,8 @@ def open_dialog_box():
     add_points_button = ctk.CTkButton(dialog_box, text= "Edit student points", command= add_points)
     add_points_button.place(relx= .775, rely= .85)
 
-    my_entry = ctk.CTkEntry(dialog_box, placeholder_text= "Search by last name: ")
-    my_entry.place(relx= .15, rely= .02, height= 25, width= 500)
-
+    searchbar = ctk.CTkEntry(dialog_box, placeholder_text= "Search by last name: ")
+    searchbar.place(relx= .15, rely= .02, height= 25, width= 500)
 
     my_button = ctk.CTkButton(dialog_box, text= "Enter", command= get_entry)
     my_button.place(relx = .8, rely= .02, height= 25, width= 120)
@@ -321,32 +317,28 @@ def open_dialog_box():
     
 def inputStudent():
 
-    # not used?
-    def optionmenu_get(choice):
-        grade_level = choice
-
     # Create a new top-level window (i.e., a new window that is independent of the main window)
     inputStudent = ctk.CTkToplevel()
     inputStudent.title("Enter New Student")
     inputStudent.geometry("200x275")
 
     # Add three labels and three entry widgets to the input window
-    label1 = ctk.CTkLabel(inputStudent, text="Enter the student's name.")
-    label1.pack()
-    entry1 = ctk.CTkEntry(inputStudent)
-    entry1.pack()
+    first_name = ctk.CTkLabel(inputStudent, text="Enter the student's name.")
+    first_name.pack()
+    first_entry = ctk.CTkEntry(inputStudent)
+    first_entry.pack()
 
-    label2 = ctk.CTkLabel(inputStudent, text="Enter the student's last name.")
-    label2.pack()
-    entry2 = ctk.CTkEntry(inputStudent)
-    entry2.pack()
+    last_name = ctk.CTkLabel(inputStudent, text="Enter the student's last name.")
+    last_name.pack()
+    last_entry = ctk.CTkEntry(inputStudent)
+    last_entry.pack()
 
-    label3 = ctk.CTkLabel(inputStudent, text="Select the student's grade")
-    label3.pack()
+    grade_label = ctk.CTkLabel(inputStudent, text="Select the student's grade")
+    grade_label.pack()
     grade_level = ctk.IntVar(inputStudent)
     grade_level.set("Select a grade.")
-    entry3 = ctk.CTkComboBox(master=inputStudent, values=["9", "10", "11", "12"], variable=grade_level)
-    entry3.pack()
+    grade_options = ctk.CTkComboBox(master=inputStudent, values=["9", "10", "11", "12"], variable=grade_level)
+    grade_options.pack()
 
     var1 = ctk.IntVar()
     var1.set(1)
@@ -357,29 +349,28 @@ def inputStudent():
     def save_inputs():
         try:
             # If the user didn't input anything for firstname or lastname, bring up an error.
-            if entry1.get() == "" or entry2.get() == "":
+            if first_entry.get() == "" or last_entry.get() == "":
                 error("Please fill in all fields!")
             else:
-                #if entry1.get() == ""
                 # Generate a random student id
                 studentID = tk.IntVar()
                 studentID.set(rand.randint(0,100000))
 
                 # Get the values entered in the entry widgets
-                new_student = student(entry1.get(), entry2.get(), int(grade_level.get()), studentID)
+                new_student = student(first_entry.get(), last_entry.get(), int(grade_level.get()), studentID)
                     
                 # Save the values to database
                 cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9")
-                options =cursor.fetchall()
+                students =cursor.fetchall()
                 student_first = new_student.first.capitalize()
                 student_last = new_student.last.capitalize()
-                if var1.get() == 0 or len(options) == 0:
+                if var1.get() == 0 or len(students) == 0:
                     cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0, studentID.get()))
                 else:
-                    for option in range(len(options)):
-                        if options[option][4] == studentID.get():
+                    for option in range(len(students)):
+                        if students[option][4] == studentID.get():
                             studentID.set(rand.randint(0, 100000))
-                    if not(new_student.first.capitalize() == options[option][0] and new_student.last.capitalize() == options[option][1] and new_student.grade == options[option][2]):
+                    if not(new_student.first.capitalize() == students[option][0] and new_student.last.capitalize() == students[option][1] and new_student.grade == students[option][2]):
                         cursor.execute("INSERT INTO students VALUES (?, ?, ?, ?, ?)", (student_first, student_last, new_student.grade, 0, studentID.get()))
                     else:
                         ...

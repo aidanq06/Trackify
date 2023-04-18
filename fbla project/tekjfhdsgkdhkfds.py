@@ -534,28 +534,31 @@ def pickWinner():
 root = tk.Tk()
 root.geometry(dimensions_string)
 root.state('zoomed')
-root.configure(bg= 'grey')
-default_font = ctk.CTkFont(size= 20, family= 'Futura', )
+root.configure(bg= '#1c1c1c')
+default_font = ctk.CTkFont(size= 20, family= 'Roboto',  )
 
 
 #creates a label for the home GUI called Student Involment Tracker
+left_frame = Frame(root, width = 275, height = 1000, bg= '#242424')
+left_frame.place(x = 0, y= 0, anchor = NW)
+
+top_frame = Frame(root, width = 1000, height = 100, bg= '#1C1919')
+top_frame.place(x = 275, y= 0, anchor = NW)
+
 Label = ctk.CTkLabel(root, text="Student Involvement Tracker",corner_radius=10)
 Label.place(relx= .5, rely=.1, anchor=CENTER)
 
-left_frame = Frame(root, width = x/2, height = y*10, bg= '#2c2c2c')
-left_frame.place(x = 0, y= 0, anchor = CENTER)
-
 # Allows you to add new students to the database
-button1 = ctk.CTkButton(root, text="add new student",command=inputStudent, width=200, corner_radius=0, bg_color="#2c2c2c", fg_color= "#2c2c2c", font= default_font)
-button1.place(x= 100, y= 270, anchor=CENTER)
+button1 = tk.Button(root, text="Add new student",command=inputStudent, width=15, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0)
+button1.place(x= 20, y= 50, anchor=NW)
 
 # Allows you to view all current entries. Returns the complete database in treeview form.
 button2 = ctk.CTkButton(root, text="View Entries", command=open_dialog_box, width=350, corner_radius=10)
 button2.place(relx= .5, rely=.4, anchor=CENTER)
 
 # Creates a report of the entire database
-button5 = ctk.CTkButton(root, text="Pick Winner", command=pickWinner, width=350, corner_radius=10)
-button5.place(relx= .5, rely=.55, anchor=CENTER)
+button5 = tk.Button(root, text="Pick Winner", command=pickWinner, width=15, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0)
+button5.place(x= 0, y= 150, anchor=NW)
 
 # Creates a report of the entire database
 button4 = ctk.CTkButton(root, text="Create Report", command=report, width=350, corner_radius=10)
@@ -564,8 +567,6 @@ button4.place(relx= .5, rely=.70, anchor=CENTER)
 #closes the application
 button3 = ctk.CTkButton(root, text="Quit", command=root.destroy, width=350, corner_radius=10)
 button3.place(relx= .5, rely=.85, anchor=CENTER)
-
-
 
 #connects to the database
 conn = sqlite3.connect('studentDatabase.db')

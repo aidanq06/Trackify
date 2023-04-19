@@ -8,6 +8,7 @@ import random as rand
 import matplotlib.pyplot as plt
 import pyautogui as pg
 import tkinter.font as font
+from PIL import ImageTk, Image
 # Please make sure the required modules are installed on the computer you are using
 
 dimensions = pg.size()
@@ -54,267 +55,8 @@ def success(success=str):
     
     close_button = ctk.CTkButton(sWin, text="Close", command=close)
     close_button.place(relx=0.5,rely=0.7, anchor=CENTER)
-    
-
-def open_dialog_box():
-    # Create a new top-level window (i.e., a new window that is independent of the main window)
-    dialog_box = ctk.CTkToplevel()
-    dialog_box.title("Dialog Box")
-    dialog_box.geometry("645x325")
-
-    # Creates a list of students from the database called students
-    cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9 OR 8 OR 7 OR 6")
-    students = cursor.fetchall()
-
-    # Create a listbox widget to display the students
-    style = ttk.Style(root)
-    style.theme_use("clam")
-    ttk.Style().configure("Treeview", fieldbackground= "#242424", background = "#242424", foreground= "white")
-    ttk.Style().configure("Treeview.Heading", background = "#242424", foreground= "white", relief= "flat")
-
-    # Assign the listbox widget number of columns and names of columns
-    listbox = ttk.Treeview(dialog_box, selectmode="extended",columns=("c1", "c2", "c3", "c4"),show="headings")
-    listbox.column("# 1", anchor=CENTER)
-    listbox.heading("# 1", text="First Name")
-    listbox.column("# 2", anchor=CENTER)
-    listbox.heading("# 2", text="Last Name")
-    listbox.column("# 3", anchor=CENTER)
-    listbox.heading("# 3", text="Grade Level")
-    listbox.column("# 4", anchor=CENTER)
-    listbox.heading("# 4", text="Points")
-
-
-    # Add students to the listbox from list "students"
-    for student in students:
-        listbox.insert('', 'end', values=(student))
-    listbox.place(relx= 0, rely= .1)
 
     # Define a function to be called when the "edit student" button is clicked
-    def edit_student():
-        def update_student():
-            # If user leaves both entries empty nothing will happen
-            if first_entry.get() == "" and last_entry.get() == "":
-                ...
-            else:
-                # Sets Student first and last name to the user inputs
-                cursor.execute("UPDATE students SET name = :first, lastname = :last, grade = :grade  WHERE number = :number", {'first':(first_entry.get()).title(), 'last': (last_entry.get()).title(), 'grade': int(grade_options.get()), 'number': selection[4] })
-            
-            # Saves changes to the database
-            conn.commit()
-            # Closes the edit window and refreshes the dialog box
-            edit_window.destroy()
-            dialog_box.destroy()
-            open_dialog_box()
-
-        # Gets the user selection
-        item = listbox.selection()
-        selection = listbox.item(item, option="values")
-
-        # Creates the edit window
-        edit_window= ctk.CTkToplevel()
-        edit_window.title("edit student")
-
-        # Label and entry for student's first name
-        first_name = ctk.CTkLabel(edit_window, text="Edit student's first name")
-        first_name.pack()
-        first_entry = ctk.CTkEntry(edit_window, placeholder_text= selection[0])
-        first_entry.pack()
-
-        # Label and entry for students's last name
-        last_name = ctk.CTkLabel(edit_window, text="Edit student's last name")
-        last_name.pack()
-        last_entry = ctk.CTkEntry(edit_window, placeholder_text= selection[1])
-        last_entry.pack()
-
-        # label and dropdown menu for student's grade
-        grade_label = ctk.CTkLabel(edit_window, text="Edit student's grade")
-        grade_label.pack()
-        grade_level = ctk.IntVar(edit_window)
-        grade_options = ctk.CTkComboBox(master=edit_window, values=["9", "10", "11", "12"], variable=grade_level)
-        grade_options.set(selection[2])
-        grade_options.pack()
-        
-        # Saves the entries and updates the student
-        b1 = ctk.CTkButton(edit_window, text= "submit", command=update_student)
-        b1.pack()
-
-    # Create a function to remove one or more students using selection
-    def remove_student():
-        items = listbox.selection()
-        for i in items:
-            selection = listbox.item(i, option="values")
-            last_name = selection[1]
-            first_name = selection[0]
-            student_number = selection[4]
-            cursor.execute("DELETE FROM students WHERE name = :first AND lastname = :last AND number = :studentnumber",{'first': first_name, 'last': last_name, 'studentnumber': student_number})
-        conn.commit()     
-        
-        # Close dialog box (to update database) then reopen to show the result.
-        dialog_box.destroy()
-        open_dialog_box()
-
-    # Creates a function to remove all students
-    def remove_everyone():
-        def makingSure():
-            cursor.execute("DELETE FROM students")
-            conn.commit()
-            dialog_box.destroy()
-            open_dialog_box()
-
-        # Creates a window to confirm the option to delete all students
-        sure = ctk.CTkToplevel(dialog_box)
-        sure.title("")
-        sure.geometry("300x100")
-        message = ctk.CTkLabel(sure, text= "Are you sure you want to remove all students?")
-        message.pack()
-
-        # Function to close the confirm window
-        def closeSure():
-            sure.destroy()
-
-        # Yes and no buttons to confirm deletion of all students
-        b1 = ctk.CTkButton(sure, text= "Yes", command= makingSure)
-        b1.pack()
-        b2 = ctk.CTkButton(sure, text= "No", command= closeSure)
-        b2.pack()
-        
-
-
-    # Add points to a selected student
-    def add_points():
-        def check_for_points():
-            x=first_entry.get()
-            y=last_entry.get()
-
-            # Statements to decide the amount of points to add to a student
-            if x == "Select an event " or y == "Did the student attend or participate in this event?":
-                error("Please fill out all fields.")
-            else: 
-                if x == " School Prom" or x == " School Dance Performance" or x == " School Pep Rally" or x == " School Homecoming" or x == " School Musical":
-                    if y == " Attended":
-                        points = 10
-                    elif y == " Participated": 
-                        points = 15
-                elif x == " School Soccer Game" or x == " School Football Game" or x == " School Lacross Game" or x == " School Basketball Game" or x == " School Volleyball Game":
-                    if y == " Attended":
-                        points = 5
-                    elif y == " Participated":
-                        points = 10
-                
-                # Assigns points to the selected student
-                cursor.execute("SELECT * FROM students WHERE name = :first AND lastname = :last", {'first':first_name,'last':last_name})
-                fetch = cursor.fetchall()
-                cursor.execute("SELECT points FROM students WHERE number = :number", {'number': number})
-                temp_points =cursor.fetchall()
-                point_value = int(temp_points[0][0]) + points
-                cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': point_value, 'number': number })
-                conn.commit()
-                
-                # Destroy dialog box (to update database) then reopen to show the result. Destroy new points GUI.
-                new_points.destroy()
-                dialog_box.destroy()
-                open_dialog_box()
-
-                # Success window prints student name and points assigned
-                success(f"Assigned {fetch[0][0]} {fetch[0][1][0]}. {points} points")
-
-
-
-        def clear_points():
-            #removes all points from the selected student
-            cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': 0, 'number': number })
-            conn.commit()
-
-            # Destroy dialog box (to update database) then reopen to show the result. Destroy new points GUI.
-            new_points.destroy()
-            dialog_box.destroy()
-            open_dialog_box()
-
-        try:
-            #Gets the selected student and sets it to selection
-            items = listbox.selection()
-            selection = listbox.item(items, option="values")
-        except:
-            # Error message if multiple students were selected
-            error("You can only add points to one student at a time.")
-        try:
-            #Sets first, last and student number to according variables
-            last_name = selection[1]
-            first_name = selection[0]
-            number = selection[4]
-
-            # Creates the window to add points to the selected student
-            new_points= ctk.CTkToplevel()
-            new_points.title("Add points to student")
-            new_points.geometry("350x150")
-
-            # Dropdown for the event the selected student attended
-            l1 = ctk.CTkLabel(new_points, text= "What event did  " + first_name + " " + last_name + " attend or participate in")
-            l1.pack()
-            event_check = ctk.IntVar(new_points)
-            event_check.set("Select an event ")
-            first_entry = ctk.CTkComboBox(master=new_points, values=[" School Prom", " School Dance Performance", " School Pep Rally", " School Homecoming", " School Musical", " School Soccer Game", " School Football Game", " School Lacross Game", " School Basketball Game", " School Volleyball Game"], variable=event_check, width= 325)
-            first_entry.pack()
-
-            # Dropdown for whether the selected student participated or attended the selected event
-            type_check = ctk.IntVar(new_points)
-            type_check.set("Did the student attend or participate in this event?")
-            last_entry = ctk.CTkComboBox(master=new_points, values=[" Attended", " Participated"], variable=type_check, width= 325)
-            last_entry.pack()
-
-            # Submit selections for the event and whether the student attended or participated in the event
-            submit = ctk.CTkButton(new_points, text= "Submit", command=check_for_points)
-            submit.pack()
-            clear = ctk.CTkButton(new_points, text= "Clear student's points", command= clear_points)
-            clear.pack()
-
-        # index error
-        except:
-            # error message in nobody is selected
-            error("Please select someone")
-
-    def get_entry():
-        last_name = searchbar.get()
-        for item in listbox.get_children():
-            listbox.delete(item)
-        dialog_box.update_idletasks()
-        cursor.execute("SELECT * FROM students WHERE lastname = :last", {'last': last_name.capitalize()})
-        temp_values= cursor.fetchall()
-        for values in temp_values:
-            listbox.insert('', 'end', values=(values))
-        dialog_box.update_idletasks()
-
-    def destroy():
-        dialog_box.destroy()
-
-
-
-
-    # Add a "Save" button to the dialog box
-    save_button = ctk.CTkButton(dialog_box, text="Edit Student", command=edit_student)
-    save_button.place(relx= .01, rely= .85)
-
-    # Add a "remove student" button to the dialog box
-    remove_button = ctk.CTkButton(dialog_box, text="Remove student", command= remove_student)
-    remove_button.place(relx= .265, rely= .85)
-
-    # Add a "remove all" button to the dialog box
-    remove_all = ctk.CTkButton(dialog_box, text="Remove all", command= remove_everyone)
-    remove_all.place(relx= .52, rely= .85)
-
-    # Add a "Edit student points" button to the dialog box
-    add_points_button = ctk.CTkButton(dialog_box, text= "Edit student points", command= add_points)
-    add_points_button.place(relx= .775, rely= .85)
-
-    # Add a search bar to the dialog box
-    searchbar = ctk.CTkEntry(dialog_box, placeholder_text= "Search by last name: ")
-    searchbar.place(relx= .15, rely= .02, height= 25, width= 500)
-
-    my_button = ctk.CTkButton(dialog_box, text= "Enter", command= get_entry)
-    my_button.place(relx = .8, rely= .02, height= 25, width= 120)
-
-    my_button2 = ctk.CTkButton(dialog_box, text= "Clear", command=lambda:[destroy(),open_dialog_box()])
-    my_button2.place(relx = .02, rely= .02, height= 25, width= 80)
     
 def inputStudent():
 
@@ -535,30 +277,299 @@ root = tk.Tk()
 root.geometry(dimensions_string)
 root.state('zoomed')
 root.configure(bg= '#1c1c1c')
-default_font = ctk.CTkFont(size= 20, family= 'Roboto',  )
+default_font = ctk.CTkFont(size= 18, family= 'Roboto',  )
 
 
 #creates a label for the home GUI called Student Involment Tracker
 left_frame = Frame(root, width = 275, height = 1000, bg= '#242424')
 left_frame.place(x = 0, y= 0, anchor = NW)
 
-top_frame = Frame(root, width = 1000, height = 100, bg= '#1C1919')
+image_frame = Frame(root, width = 2000, height = 100, bg= '#1c1c1c')
+image_frame.place(x = 275, y= 100, anchor = NW)
+
+top_frame = Frame(root, width = 2000, height = 100, bg= '#1c1c1c')
 top_frame.place(x = 275, y= 0, anchor = NW)
 
-Label = ctk.CTkLabel(root, text="Student Involvement Tracker",corner_radius=10)
-Label.place(relx= .5, rely=.1, anchor=CENTER)
+img = Image.open("minimal-moonlight-wallpaper.png")
+img_dimensions = img.size
+print(img_dimensions)
+width = img_dimensions[0]
+height = img_dimensions[1]
+box = (10, 1000, width, 1619)
+img1 = img.crop(box)
+resize = (1640, 200)
+img2 = img1.resize(resize)
+img2.save('idk.png')
+img = ImageTk.PhotoImage(Image.open("idk.png"))
+
+image = Label(image_frame, image = img, border= 0)
+image.pack()
+
+Label = ctk.CTkLabel(root, text="",corner_radius=10)
+Label.place(relx= .5, rely=0, anchor=CENTER)
+
+def refresh_treeview():
+    for item in listbox.get_children():
+        listbox.delete(item)
+
+    conn = sqlite3.connect('studentDatabase.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM students WHERE grade = 12 OR 11 OR 10 OR 9 OR 8 OR 7 OR 6")
+    students = cursor.fetchall()
+
+    for student in students:
+        listbox.insert('', 'end', values=(student))
+    listbox.place(x= 495, y = 300, anchor= "nw")
+
+style = ttk.Style(root)
+style.theme_use("clam")
+ttk.Style().configure("Treeview", fieldbackground= "#242424", background = "#242424", foreground= "#9b9a92")
+ttk.Style().configure("Treeview.Heading", background = "#242424", foreground= "#9b9a92", relief= "flat")
+
+# Assign the listbox widget number of columns and names of columns
+listbox = ttk.Treeview(root, selectmode="extended",columns=("c1", "c2", "c3", "c4"),show="headings", height= 15)
+listbox.column("# 1", anchor=CENTER, width = 300)
+listbox.heading("# 1", text="First Name")
+listbox.column("# 2", anchor=CENTER, width = 300)
+listbox.heading("# 2", text="Last Name")
+listbox.column("# 3", anchor=CENTER, width = 300)
+listbox.heading("# 3", text="Grade Level")
+listbox.column("# 4", anchor=CENTER, width = 300)
+listbox.heading("# 4", text="Points")
+
+refresh_treeview()
+
+
+def edit_student():
+    def update_student():
+        # If user leaves both entries empty nothing will happen
+        if first_entry.get() == "" and last_entry.get() == "":
+            ...
+        else:
+            # Sets Student first and last name to the user inputs
+            cursor.execute("UPDATE students SET name = :first, lastname = :last, grade = :grade  WHERE number = :number", {'first':(first_entry.get()).title(), 'last': (last_entry.get()).title(), 'grade': int(grade_options.get()), 'number': selection[4] })
+        
+        # Saves changes to the database
+        conn.commit()
+        # Closes the edit window and refreshes the dialog box
+        edit_window.destroy()
+        refresh_treeview()
+
+    # Gets the user selection
+    item = listbox.selection()
+    selection = listbox.item(item, option="values")
+
+    # Creates the edit window
+    edit_window= ctk.CTkToplevel()
+    edit_window.title("edit student")
+
+    # Label and entry for student's first name
+    first_name = ctk.CTkLabel(edit_window, text="Edit student's first name")
+    first_name.pack()
+    first_entry = ctk.CTkEntry(edit_window, placeholder_text= selection[0])
+    first_entry.pack()
+
+    # Label and entry for students's last name
+    last_name = ctk.CTkLabel(edit_window, text="Edit student's last name")
+    last_name.pack()
+    last_entry = ctk.CTkEntry(edit_window, placeholder_text= selection[1])
+    last_entry.pack()
+
+    # label and dropdown menu for student's grade
+    grade_label = ctk.CTkLabel(edit_window, text="Edit student's grade")
+    grade_label.pack()
+    grade_level = ctk.IntVar(edit_window)
+    grade_options = ctk.CTkComboBox(master=edit_window, values=["9", "10", "11", "12"], variable=grade_level)
+    grade_options.set(selection[2])
+    grade_options.pack()
+    
+    # Saves the entries and updates the student
+    b1 = ctk.CTkButton(edit_window, text= "submit", command=update_student)
+    b1.pack()
+
+# Create a function to remove one or more students using selection
+def remove_student():
+    items = listbox.selection()
+    for i in items:
+        selection = listbox.item(i, option="values")
+        last_name = selection[1]
+        first_name = selection[0]
+        student_number = selection[4]
+        cursor.execute("DELETE FROM students WHERE name = :first AND lastname = :last AND number = :studentnumber",{'first': first_name, 'last': last_name, 'studentnumber': student_number})
+    conn.commit()     
+    
+    # Close dialog box (to update database) then reopen to show the result.
+    refresh_treeview()
+
+# Creates a function to remove all students
+def remove_everyone():
+    def makingSure():
+        cursor.execute("DELETE FROM students")
+        conn.commit()
+    refresh_treeview()
+
+    # Creates a window to confirm the option to delete all students
+    sure = ctk.CTkToplevel(root)
+    sure.title("")
+    sure.geometry("300x100")
+    message = ctk.CTkLabel(sure, text= "Are you sure you want to remove all students?")
+    message.pack()
+
+    # Function to close the confirm window
+    def closeSure():
+        sure.destroy()
+
+    # Yes and no buttons to confirm deletion of all students
+    b1 = ctk.CTkButton(sure, text= "Yes", command= makingSure)
+    b1.pack()
+    b2 = ctk.CTkButton(sure, text= "No", command= closeSure)
+    b2.pack()
+    
+
+
+# Add points to a selected student
+def add_points():
+    def check_for_points():
+        x=first_entry.get()
+        y=last_entry.get()
+
+        # Statements to decide the amount of points to add to a student
+        if x == "Select an event " or y == "Did the student attend or participate in this event?":
+            error("Please fill out all fields.")
+        else: 
+            if x == " School Prom" or x == " School Dance Performance" or x == " School Pep Rally" or x == " School Homecoming" or x == " School Musical":
+                if y == " Attended":
+                    points = 10
+                elif y == " Participated": 
+                    points = 15
+            elif x == " School Soccer Game" or x == " School Football Game" or x == " School Lacross Game" or x == " School Basketball Game" or x == " School Volleyball Game":
+                if y == " Attended":
+                    points = 5
+                elif y == " Participated":
+                    points = 10
+            
+            # Assigns points to the selected student
+            cursor.execute("SELECT * FROM students WHERE name = :first AND lastname = :last", {'first':first_name,'last':last_name})
+            fetch = cursor.fetchall()
+            cursor.execute("SELECT points FROM students WHERE number = :number", {'number': number})
+            temp_points =cursor.fetchall()
+            point_value = int(temp_points[0][0]) + points
+            cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': point_value, 'number': number })
+            conn.commit()
+            
+            # Destroy dialog box (to update database) then reopen to show the result. Destroy new points GUI.
+            new_points.destroy()
+            refresh_treeview()
+
+            # Success window prints student name and points assigned
+            success(f"Assigned {fetch[0][0]} {fetch[0][1][0]}. {points} points")
+
+
+
+    def clear_points():
+        #removes all points from the selected student
+        cursor.execute("UPDATE students SET points = :point WHERE number = :number", {'point': 0, 'number': number })
+        conn.commit()
+
+        # Destroy dialog box (to update database) then reopen to show the result. Destroy new points GUI.
+        new_points.destroy()
+    refresh_treeview()
+
+    try:
+        #Gets the selected student and sets it to selection
+        items = listbox.selection()
+        selection = listbox.item(items, option="values")
+    except:
+        # Error message if multiple students were selected
+        error("You can only add points to one student at a time.")
+    try:
+        #Sets first, last and student number to according variables
+        last_name = selection[1]
+        first_name = selection[0]
+        number = selection[4]
+
+        # Creates the window to add points to the selected student
+        new_points= ctk.CTkToplevel()
+        new_points.title("Add points to student")
+        new_points.geometry("350x150")
+
+        # Dropdown for the event the selected student attended
+        l1 = ctk.CTkLabel(new_points, text= "What event did  " + first_name + " " + last_name + " attend or participate in")
+        l1.pack()
+        event_check = ctk.IntVar(new_points)
+        event_check.set("Select an event ")
+        first_entry = ctk.CTkComboBox(master=new_points, values=[" School Prom", " School Dance Performance", " School Pep Rally", " School Homecoming", " School Musical", " School Soccer Game", " School Football Game", " School Lacross Game", " School Basketball Game", " School Volleyball Game"], variable=event_check, width= 325)
+        first_entry.pack()
+
+        # Dropdown for whether the selected student participated or attended the selected event
+        type_check = ctk.IntVar(new_points)
+        type_check.set("Did the student attend or participate in this event?")
+        last_entry = ctk.CTkComboBox(master=new_points, values=[" Attended", " Participated"], variable=type_check, width= 325)
+        last_entry.pack()
+
+        # Submit selections for the event and whether the student attended or participated in the event
+        submit = ctk.CTkButton(new_points, text= "Submit", command=check_for_points)
+        submit.pack()
+        clear = ctk.CTkButton(new_points, text= "Clear student's points", command= clear_points)
+        clear.pack()
+
+    # index error
+    except:
+        # error message in nobody is selected
+        error("Please select someone")
+
+def get_entry():
+    last_name = searchbar.get()
+    for item in listbox.get_children():
+        listbox.delete(item)
+    root.update_idletasks()
+    cursor.execute("SELECT * FROM students WHERE lastname = :last", {'last': last_name.capitalize()})
+    temp_values= cursor.fetchall()
+    for values in temp_values:
+        listbox.insert('', 'end', values=(values))
+    root.update_idletasks()
+
+
+
+
+
+# Add a "Save" button to the dialog box
+save_button = ctk.CTkButton(root, text="Edit Student", command=edit_student)
+save_button.place(relx= .01, rely= .85)
+
+# Add a "remove student" button to the dialog box
+remove_button = ctk.CTkButton(root, text="Remove student", command= remove_student)
+remove_button.place(relx= .265, rely= .85)
+
+# Add a "remove all" button to the dialog box
+remove_all = ctk.CTkButton(root, text="Remove all", command= remove_everyone)
+remove_all.place(relx= .52, rely= .85)
+
+# Add a "Edit student points" button to the dialog box
+add_points_button = ctk.CTkButton(root, text= "Edit student points", command= add_points)
+add_points_button.place(relx= .775, rely= .85)
+
+# Add a search bar to the dialog box
+searchbar = ctk.CTkEntry(root, placeholder_text= "Search by last name: ")
+searchbar.place(relx= .15, rely= .02, height= 25, width= 500)
+
+my_button = ctk.CTkButton(root, text= "Enter", command= get_entry)
+my_button.place(relx = .8, rely= .02, height= 25, width= 120)
+
+my_button2 = ctk.CTkButton(root, text= "Clear", command=lambda:[searchbar.delete(0, END), get_entry])
+my_button2.place(relx = .02, rely= .02, height= 25, width= 80)
 
 # Allows you to add new students to the database
-button1 = tk.Button(root, text="Add new student",command=inputStudent, width=15, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0)
-button1.place(x= 20, y= 50, anchor=NW)
+button1 = tk.Button(root, text="Add new student",command=inputStudent, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor = "w")
+button1.place(x= 30, y= 50, anchor=NW)
 
 # Allows you to view all current entries. Returns the complete database in treeview form.
-button2 = ctk.CTkButton(root, text="View Entries", command=open_dialog_box, width=350, corner_radius=10)
-button2.place(relx= .5, rely=.4, anchor=CENTER)
+#button2 = ctk.CTkButton(root, text="View Entries", command=open_dialog_box, width=350, corner_radius=10)
+#button2.place(relx= .5, rely=.4, anchor=CENTER)
 
 # Creates a report of the entire database
-button5 = tk.Button(root, text="Pick Winner", command=pickWinner, width=15, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0)
-button5.place(x= 0, y= 150, anchor=NW)
+button5 = tk.Button(root, text="Pick Winner", command=pickWinner, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
+button5.place(x= 30, y= 150, anchor=NW)
 
 # Creates a report of the entire database
 button4 = ctk.CTkButton(root, text="Create Report", command=report, width=350, corner_radius=10)

@@ -280,34 +280,6 @@ root.configure(bg= '#1c1c1c')
 default_font = ctk.CTkFont(size= 18, family= 'Roboto',  )
 
 
-#creates a label for the home GUI called Student Involment Tracker
-left_frame = Frame(root, width = 275, height = 1000, bg= '#242424')
-left_frame.place(x = 0, y= 0, anchor = NW)
-
-image_frame = Frame(root, width = 2000, height = 100, bg= '#1c1c1c')
-image_frame.place(x = 275, y= 100, anchor = NW)
-
-top_frame = Frame(root, width = 2000, height = 100, bg= '#1c1c1c')
-top_frame.place(x = 275, y= 0, anchor = NW)
-
-img = Image.open("minimal-moonlight-wallpaper.png")
-img_dimensions = img.size
-print(img_dimensions)
-width = img_dimensions[0]
-height = img_dimensions[1]
-box = (10, 1000, width, 1619)
-img1 = img.crop(box)
-resize = (1640, 200)
-img2 = img1.resize(resize)
-img2.save('idk.png')
-img = ImageTk.PhotoImage(Image.open("idk.png"))
-
-image = Label(image_frame, image = img, border= 0)
-image.pack()
-
-Label = ctk.CTkLabel(root, text="",corner_radius=10)
-Label.place(relx= .5, rely=0, anchor=CENTER)
-
 def refresh_treeview():
     for item in listbox.get_children():
         listbox.delete(item)
@@ -473,7 +445,7 @@ def add_points():
 
         # Destroy dialog box (to update database) then reopen to show the result. Destroy new points GUI.
         new_points.destroy()
-    refresh_treeview()
+        refresh_treeview()
 
     try:
         #Gets the selected student and sets it to selection
@@ -529,55 +501,80 @@ def get_entry():
         listbox.insert('', 'end', values=(values))
     root.update_idletasks()
 
+def clear():
+    refresh_treeview()
+    searchbar.delete(0, END)
 
 
+#creates a label for the home GUI called Student Involment Tracker
+left_frame = Frame(root, width = 275, height = 1000, bg= '#242424')
+left_frame.place(x = 0, y= 0, anchor = NW)
 
+image_frame = Frame(root, width = 2000, height = 100, bg= '#1c1c1c')
+image_frame.place(x = 275, y= 100, anchor = NW)
 
-# Add a "Save" button to the dialog box
-save_button = ctk.CTkButton(root, text="Edit Student", command=edit_student)
-save_button.place(relx= .01, rely= .85)
+top_frame = Frame(root, width = 2000, height = 100, bg= '#1c1c1c')
+top_frame.place(x = 275, y= 0, anchor = NW)
+
+img = Image.open("minimal-moonlight-wallpaper.png")
+img_dimensions = img.size
+print(img_dimensions)
+width = img_dimensions[0]
+height = img_dimensions[1]
+box = (10, 1000, width, 1619)
+img1 = img.crop(box)
+resize = (1640, 200)
+img2 = img1.resize(resize)
+img2.save('idk.png')
+img = ImageTk.PhotoImage(Image.open("idk.png"))
+
+image = Label(image_frame, image = img, border= 0)
+image.pack()
+
+Label = ctk.CTkLabel(root, text="",corner_radius=10)
+Label.place(relx= .5, rely=0, anchor=CENTER)
+
+# Add a "Edit Student" button to the dialog box
+edit_button = ctk.CTkButton(root, text="Edit Student", command=edit_student)
+edit_button.place(x= 420, y= 600, height= 35, width = 200)
 
 # Add a "remove student" button to the dialog box
 remove_button = ctk.CTkButton(root, text="Remove student", command= remove_student)
-remove_button.place(relx= .265, rely= .85)
-
-# Add a "remove all" button to the dialog box
-remove_all = ctk.CTkButton(root, text="Remove all", command= remove_everyone)
-remove_all.place(relx= .52, rely= .85)
+remove_button.place(x= 670, y= 600, height= 35, width = 200)
 
 # Add a "Edit student points" button to the dialog box
 add_points_button = ctk.CTkButton(root, text= "Edit student points", command= add_points)
-add_points_button.place(relx= .775, rely= .85)
+add_points_button.place(x= 920, y= 600, height= 35, width = 200)
+
+# Add a "remove all" button to the dialog box
+remove_all = ctk.CTkButton(root, text="Remove all", command= remove_everyone)
+remove_all.place(x= 1170, y= 600, height= 35, width = 200)
 
 # Add a search bar to the dialog box
 searchbar = ctk.CTkEntry(root, placeholder_text= "Search by last name: ")
-searchbar.place(relx= .15, rely= .02, height= 25, width= 500)
+searchbar.place(x= 850, y= 540, height= 25, width= 500, anchor= CENTER)
 
-my_button = ctk.CTkButton(root, text= "Enter", command= get_entry)
-my_button.place(relx = .8, rely= .02, height= 25, width= 120)
+enter = ctk.CTkButton(root, text= "Enter", command= get_entry)
+enter.place(x = 1200, y= 540, height= 25, width= 120, anchor= CENTER)
 
-my_button2 = ctk.CTkButton(root, text= "Clear", command=lambda:[searchbar.delete(0, END), get_entry])
-my_button2.place(relx = .02, rely= .02, height= 25, width= 80)
+clear = ctk.CTkButton(root, text= "Clear", command= clear)
+clear.place(x = 500, y= 540, height= 25, width= 120, anchor= CENTER)
 
 # Allows you to add new students to the database
-button1 = tk.Button(root, text="Add new student",command=inputStudent, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor = "w")
-button1.place(x= 30, y= 50, anchor=NW)
-
-# Allows you to view all current entries. Returns the complete database in treeview form.
-#button2 = ctk.CTkButton(root, text="View Entries", command=open_dialog_box, width=350, corner_radius=10)
-#button2.place(relx= .5, rely=.4, anchor=CENTER)
+add_student = tk.Button(root, text="Add new student",command=inputStudent, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor = "w")
+add_student.place(x= 30, y= 50, anchor=NW)
 
 # Creates a report of the entire database
 button5 = tk.Button(root, text="Pick Winner", command=pickWinner, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
 button5.place(x= 30, y= 150, anchor=NW)
 
 # Creates a report of the entire database
-button4 = ctk.CTkButton(root, text="Create Report", command=report, width=350, corner_radius=10)
-button4.place(relx= .5, rely=.70, anchor=CENTER)
+button4 = tk.Button(root, text="Create Report", command=report, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
+button4.place(x= 30, y= 250, anchor=NW)
 
 #closes the application
-button3 = ctk.CTkButton(root, text="Quit", command=root.destroy, width=350, corner_radius=10)
-button3.place(relx= .5, rely=.85, anchor=CENTER)
+button3 = tk.Button(root, text="Quit", command=root.destroy, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
+button3.place(x= 30, y= 900, anchor=NW)
 
 #connects to the database
 conn = sqlite3.connect('studentDatabase.db')

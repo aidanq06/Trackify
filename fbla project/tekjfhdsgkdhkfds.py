@@ -291,15 +291,16 @@ def refresh_treeview():
 
     for student in students:
         listbox.insert('', 'end', values=(student))
-    listbox.place(x= 495, y = 300, anchor= "nw")
+    listbox.place(x= 350, y = 300, anchor= "nw")
 
 style = ttk.Style(root)
 style.theme_use("clam")
 ttk.Style().configure("Treeview", fieldbackground= "#242424", background = "#242424", foreground= "#9b9a92")
 ttk.Style().configure("Treeview.Heading", background = "#242424", foreground= "#9b9a92", relief= "flat")
 
+style.configure("Treeview", rowheight= 25)
 # Assign the listbox widget number of columns and names of columns
-listbox = ttk.Treeview(root, selectmode="extended",columns=("c1", "c2", "c3", "c4"),show="headings", height= 15)
+listbox = ttk.Treeview(root, selectmode="extended",columns=("c1", "c2", "c3", "c4", "c5"),show="headings", height= 12)
 listbox.column("# 1", anchor=CENTER, width = 300)
 listbox.heading("# 1", text="First Name")
 listbox.column("# 2", anchor=CENTER, width = 300)
@@ -308,6 +309,9 @@ listbox.column("# 3", anchor=CENTER, width = 300)
 listbox.heading("# 3", text="Grade Level")
 listbox.column("# 4", anchor=CENTER, width = 300)
 listbox.heading("# 4", text="Points")
+listbox.column("# 5", anchor=CENTER, width = 300)
+listbox.heading("# 5", text="Student id")
+
 
 refresh_treeview()
 

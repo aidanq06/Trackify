@@ -277,7 +277,8 @@ root = tk.Tk()
 root.geometry(dimensions_string)
 root.state('zoomed')
 root.configure(bg= '#1c1c1c')
-default_font = ctk.CTkFont(size= 18, family= 'Roboto',  )
+default_font = ctk.CTkFont(size= 18, family= 'Roboto')
+large_font = ctk.CTkFont(size= 25, family= 'Roboto')
 
 
 def refresh_treeview():
@@ -333,49 +334,56 @@ def edit_student():
 
     # Gets the user selection
     item = listbox.selection()
-    selection = listbox.item(item, option="values")
+    if len(item) == 1:
+        selection = listbox.item(item, option="values")
 
-    # Creates the edit window
-    edit_window= ctk.CTkToplevel()
-    edit_window.title("edit student")
+        # Creates the edit window
+        edit_window= ctk.CTkToplevel()
+        edit_window.title("edit student")
 
-    # Label and entry for student's first name
-    first_name = ctk.CTkLabel(edit_window, text="Edit student's first name")
-    first_name.pack()
-    first_entry = ctk.CTkEntry(edit_window, placeholder_text= selection[0])
-    first_entry.pack()
+        # Label and entry for student's first name
+        first_name = ctk.CTkLabel(edit_window, text="Edit student's first name")
+        first_name.pack()
+        first_entry = ctk.CTkEntry(edit_window, placeholder_text= selection[0])
+        first_entry.pack()
 
-    # Label and entry for students's last name
-    last_name = ctk.CTkLabel(edit_window, text="Edit student's last name")
-    last_name.pack()
-    last_entry = ctk.CTkEntry(edit_window, placeholder_text= selection[1])
-    last_entry.pack()
+        # Label and entry for students's last name
+        last_name = ctk.CTkLabel(edit_window, text="Edit student's last name")
+        last_name.pack()
+        last_entry = ctk.CTkEntry(edit_window, placeholder_text= selection[1])
+        last_entry.pack()
 
-    # label and dropdown menu for student's grade
-    grade_label = ctk.CTkLabel(edit_window, text="Edit student's grade")
-    grade_label.pack()
-    grade_level = ctk.IntVar(edit_window)
-    grade_options = ctk.CTkComboBox(master=edit_window, values=["9", "10", "11", "12"], variable=grade_level)
-    grade_options.set(selection[2])
-    grade_options.pack()
-    
-    # Saves the entries and updates the student
-    b1 = ctk.CTkButton(edit_window, text= "submit", command=update_student)
-    b1.pack()
+        # label and dropdown menu for student's grade
+        grade_label = ctk.CTkLabel(edit_window, text="Edit student's grade")
+        grade_label.pack()
+        grade_level = ctk.IntVar(edit_window)
+        grade_options = ctk.CTkComboBox(master=edit_window, values=["9", "10", "11", "12"], variable=grade_level)
+        grade_options.set(selection[2])
+        grade_options.pack()
+        
+        # Saves the entries and updates the student
+        b1 = ctk.CTkButton(edit_window, text= "submit", command=update_student)
+        b1.pack()
+    else:
+        error("Please select someone.")
 
 # Create a function to remove one or more students using selection
 def remove_student():
     items = listbox.selection()
-    for i in items:
-        selection = listbox.item(i, option="values")
-        last_name = selection[1]
-        first_name = selection[0]
-        student_number = selection[4]
-        cursor.execute("DELETE FROM students WHERE name = :first AND lastname = :last AND number = :studentnumber",{'first': first_name, 'last': last_name, 'studentnumber': student_number})
-    conn.commit()     
+    if len(items) != 0:
+        for i in items:
+            selection = listbox.item(i, option="values")
+            last_name = selection[1]
+            first_name = selection[0]
+            student_number = selection[4]
+            cursor.execute("DELETE FROM students WHERE name = :first AND lastname = :last AND number = :studentnumber",{'first': first_name, 'last': last_name, 'studentnumber': student_number})
+        conn.commit()     
+        # Close dialog box (to update database) then reopen to show the result.
+        refresh_treeview()
+    else:
+        error("Please select someone.")
     
-    # Close dialog box (to update database) then reopen to show the result.
-    refresh_treeview()
+
 
 # Creates a function to remove all students
 def remove_everyone():
@@ -522,7 +530,6 @@ top_frame.place(x = 275, y= 0, anchor = NW)
 
 img = Image.open("minimal-moonlight-wallpaper.png")
 img_dimensions = img.size
-print(img_dimensions)
 width = img_dimensions[0]
 height = img_dimensions[1]
 box = (10, 1000, width, 1619)
@@ -534,9 +541,6 @@ img = ImageTk.PhotoImage(Image.open("idk.png"))
 
 image = Label(image_frame, image = img, border= 0)
 image.pack()
-
-Label = ctk.CTkLabel(root, text="",corner_radius=10)
-Label.place(relx= .5, rely=0, anchor=CENTER)
 
 # Add a "Edit Student" button to the dialog box
 edit_button = ctk.CTkButton(root, text="Edit Student", command=edit_student)
@@ -564,21 +568,29 @@ enter.place(x = 1200, y= 540, height= 25, width= 120, anchor= CENTER)
 clear = ctk.CTkButton(root, text= "Clear", command= clear)
 clear.place(x = 500, y= 540, height= 25, width= 120, anchor= CENTER)
 
+help_image = Image.open("help_image.png")
+resize2 = (50,50)
+temp_image = help_image.resize(resize2)
+temp_image.save("help_image2.png")
+help_image = PhotoImage(file = "help_image2.png")
+help_button = tk.Button(root, image= help_image,command=inputStudent, bg="#1c1c1c", fg= "#9b9a92", font= large_font, bd = 0, anchor = "w")
+help_button.place(x= 1800, y= 25, anchor=NW)
+
 # Allows you to add new students to the database
 add_student = tk.Button(root, text="Add new student",command=inputStudent, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor = "w")
 add_student.place(x= 30, y= 50, anchor=NW)
 
 # Creates a report of the entire database
-button5 = tk.Button(root, text="Pick Winner", command=pickWinner, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-button5.place(x= 30, y= 150, anchor=NW)
+winner_button = tk.Button(root, text="Pick Winner", command=pickWinner, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
+winner_button.place(x= 30, y= 150, anchor=NW)
 
 # Creates a report of the entire database
-button4 = tk.Button(root, text="Create Report", command=report, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-button4.place(x= 30, y= 250, anchor=NW)
+report_button = tk.Button(root, text="Create Report", command=report, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
+report_button.place(x= 30, y= 250, anchor=NW)
 
 #closes the application
-button3 = tk.Button(root, text="Quit", command=root.destroy, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-button3.place(x= 30, y= 900, anchor=NW)
+quit_button = tk.Button(root, text="Quit", command=root.destroy, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
+quit_button.place(x= 25, y= 900, anchor=NW)
 
 #connects to the database
 conn = sqlite3.connect('studentDatabase.db')

@@ -517,7 +517,17 @@ def clear():
     refresh_treeview()
     searchbar.delete(0, END)
 
+def open_help_window():
+    def close_help_window():
+        help_frame.place_forget()
+        help_button['image'] = help_image
 
+    if (help_button.cget('image')=='pyimage2'):
+        help_frame.place(x= 1800, y= 25, anchor=NE)
+        help_button['image'] = help2_image
+    else:
+        close_help_window()
+        
 #creates a label for the home GUI called Student Involment Tracker
 left_frame = Frame(root, width = 275, height = 1000, bg= '#242424')
 left_frame.place(x = 0, y= 0, anchor = NW)
@@ -528,17 +538,8 @@ image_frame.place(x = 275, y= 100, anchor = NW)
 top_frame = Frame(root, width = 2000, height = 100, bg= '#1c1c1c')
 top_frame.place(x = 275, y= 0, anchor = NW)
 
-img = Image.open("minimal-moonlight-wallpaper.png")
-img_dimensions = img.size
-width = img_dimensions[0]
-height = img_dimensions[1]
-box = (10, 1000, width, 1619)
-img1 = img.crop(box)
-resize = (1640, 200)
-img2 = img1.resize(resize)
-img2.save('idk.png')
-img = ImageTk.PhotoImage(Image.open("idk.png"))
 
+img = ImageTk.PhotoImage(Image.open("banner.png"))
 image = Label(image_frame, image = img, border= 0)
 image.pack()
 
@@ -568,13 +569,13 @@ enter.place(x = 1200, y= 540, height= 25, width= 120, anchor= CENTER)
 clear = ctk.CTkButton(root, text= "Clear", command= clear)
 clear.place(x = 500, y= 540, height= 25, width= 120, anchor= CENTER)
 
-help_image = Image.open("help_image.png")
-resize2 = (50,50)
-temp_image = help_image.resize(resize2)
-temp_image.save("help_image2.png")
-help_image = PhotoImage(file = "help_image2.png")
-help_button = tk.Button(root, image= help_image,command=inputStudent, bg="#1c1c1c", fg= "#9b9a92", font= large_font, bd = 0, anchor = "w")
+
+help_image = PhotoImage(file = "help_image.png")
+help2_image = PhotoImage(file = "help2_image.png")
+
+help_button = tk.Button(root, image= help_image,command=open_help_window, bg="#1c1c1c", fg= "#9b9a92", font= large_font, bd = 0, anchor = "w")
 help_button.place(x= 1800, y= 25, anchor=NW)
+help_frame = Frame(root, width = 500, height = 900, bg= '#242424')
 
 # Allows you to add new students to the database
 add_student = tk.Button(root, text="Add new student",command=inputStudent, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor = "w")

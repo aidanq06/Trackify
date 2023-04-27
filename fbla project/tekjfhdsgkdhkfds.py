@@ -545,29 +545,29 @@ image.pack()
 
 # Add a "Edit Student" button to the dialog box
 edit_button = ctk.CTkButton(root, text="Edit Student", command=edit_student)
-edit_button.place(x= 420, y= 600, height= 35, width = 200)
+edit_button.place(relx= .225, rely= .8, height= 35, width = 200)
 
 # Add a "remove student" button to the dialog box
 remove_button = ctk.CTkButton(root, text="Remove student", command= remove_student)
-remove_button.place(x= 670, y= 600, height= 35, width = 200)
+remove_button.place(relx= .425, rely= .8, height= 35, width = 200)
 
 # Add a "Edit student points" button to the dialog box
 add_points_button = ctk.CTkButton(root, text= "Edit student points", command= add_points)
-add_points_button.place(x= 920, y= 600, height= 35, width = 200)
+add_points_button.place(relx= .625, rely= .8, height= 35, width = 200)
 
 # Add a "remove all" button to the dialog box
 remove_all = ctk.CTkButton(root, text="Remove all", command= remove_everyone)
-remove_all.place(x= 1170, y= 600, height= 35, width = 200)
+remove_all.place(relx= .825, rely= .8, height= 35, width = 200)
 
 # Add a search bar to the dialog box
 searchbar = ctk.CTkEntry(root, placeholder_text= "Search by last name: ")
-searchbar.place(x= 850, y= 540, height= 25, width= 500, anchor= CENTER)
+searchbar.place(relx= .575, rely= .65, height= 25, width= 500, anchor= CENTER)
 
 enter = ctk.CTkButton(root, text= "Enter", command= get_entry)
-enter.place(x = 1200, y= 540, height= 25, width= 120, anchor= CENTER)
+enter.place(relx = .775, rely= .65, height= 25, width= 120, anchor= CENTER)
 
 clear = ctk.CTkButton(root, text= "Clear", command= clear)
-clear.place(x = 500, y= 540, height= 25, width= 120, anchor= CENTER)
+clear.place(relx = .375, rely= .65, height= 25, width= 120, anchor= CENTER)
 
 
 help_image = PhotoImage(file = "help_image.png")

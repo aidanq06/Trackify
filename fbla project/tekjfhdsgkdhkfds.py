@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import pyautogui as pg
 import tkinter.font as font
 from PIL import ImageTk, Image
+import keyboard as kb
 # Please make sure the required modules are installed on the computer you are using
 
 dimensions = pg.size()
@@ -35,7 +36,7 @@ def error(error=str):
     eWin.geometry("400x100")
 
     Label = ctk.CTkLabel(eWin, text=error,corner_radius=10)
-    Label.place(relx=0.5,rely=.3, anchor=CENTER)
+    Label.place(relx=0.5 ,rely=.3, anchor=CENTER)
     
     close_button = ctk.CTkButton(eWin, text="Close", command=close)
     close_button.place(relx=0.5,rely=0.7, anchor=CENTER)
@@ -513,6 +514,9 @@ def get_entry():
         listbox.insert('', 'end', values=(values))
     root.update_idletasks()
 
+def searchbar_update(event):
+    ...
+ 
 def clear():
     refresh_treeview()
     searchbar.delete(0, END)
@@ -561,13 +565,14 @@ remove_all.place(relx= .825, rely= .8, height= 35, width = 200)
 
 # Add a search bar to the dialog box
 searchbar = ctk.CTkEntry(root, placeholder_text= "Search by last name: ")
-searchbar.place(relx= .575, rely= .65, height= 25, width= 500, anchor= CENTER)
+searchbar.place(relx= .575, rely= .7, height= 25, width= 500, anchor= CENTER)
+searchbar.bind("<FocusIn>", searchbar_update )
 
 enter = ctk.CTkButton(root, text= "Enter", command= get_entry)
-enter.place(relx = .775, rely= .65, height= 25, width= 120, anchor= CENTER)
+enter.place(relx = .775, rely= .7, height= 25, width= 120, anchor= CENTER)
 
 clear = ctk.CTkButton(root, text= "Clear", command= clear)
-clear.place(relx = .375, rely= .65, height= 25, width= 120, anchor= CENTER)
+clear.place(relx = .375, rely= .7, height= 25, width= 120, anchor= CENTER)
 
 
 help_image = PhotoImage(file = "help_image.png")

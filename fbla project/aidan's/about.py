@@ -20,9 +20,9 @@ def about():
     aboutLabel.place(relx=0.5, rely=0.5, anchor="center")
 
     back_image = Image.open("./assets/back.png")
-    back_image = back_image.resize((25, 25))
+    back_image = back_image.resize((30, 23))
     back_image = ImageTk.PhotoImage(back_image)   
-    back_button = tk.Button(root1, image=back_image, border = 0, highlightthickness = 0)
+    back_button = tk.Button(root1, image=back_image, border = 0, highlightthickness = 0, command= close)
     back_button.image = back_image
     back_button.place(relx=0.1, rely=0.1, anchor="center")
 

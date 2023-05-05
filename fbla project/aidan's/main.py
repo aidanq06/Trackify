@@ -37,10 +37,10 @@ top_frame = Frame(root, width = 2000, height = 100, bg= '#1c1c1c')
 top_frame.place(x = 275, y= 0, anchor = NW)
 """
 
-help_image = PhotoImage(file = "./assets/help_image.png")
-help2_image = PhotoImage(file = "./assets/help2_image.png")
+"""help_image = PhotoImage(file = "./assets/help_image.png")
+help2_image = PhotoImage(file = "./assets/help2_image.png")"""
 # Open and resize the image
-img = Image.open("./assets/resized.png")
+img = Image.open("./assets/logo.png")
 img = img.resize((400, 400), Image.ANTIALIAS)
 img = ImageTk.PhotoImage(img)
 
@@ -118,7 +118,7 @@ button.place(relx=0.15,rely=0.85, anchor="center")
 
 """
 RIGHT SIDE
-"""
+
 button = tk.Button(root, text="     About Us", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
 button.place(relx=0.85,rely=0.1, anchor="center")
 
@@ -127,19 +127,20 @@ button.place(relx=0.85,rely=0.25, anchor="center")
 
 button = tk.Button(root, text="     Placeholder", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
 button.place(relx=0.85,rely=0.4, anchor="center")
+"""
 
 ## IMAGE BUTTONS
-image = Image.open("./assets/events.png")
-image = image.resize((200, 50), Image.ANTIALIAS)
-tk_image = ImageTk.PhotoImage(image)
-button = tk.Button(root, image=tk_image)
-button.place(relx=0.85, rely=0.55, anchor="center")
+event_image = Image.open("./assets/events.png")
+event_image = event_image.resize((250, 75), Image.ANTIALIAS)
+event_image = ImageTk.PhotoImage(event_image)
+button = tk.Button(root, image=event_image)
+button.place(relx=0.85, rely=0.2, anchor="center")
 
-image = Image.open("./assets/about.png")
-image = image.resize((200, 50), Image.ANTIALIAS)
-tk_image = ImageTk.PhotoImage(image)
-button = tk.Button(root, image=tk_image)
-button.place(relx=0.85, rely=0.7, anchor="center")
+about_image = Image.open("./assets/about.png")
+about_image = about_image.resize((250, 75), Image.ANTIALIAS)
+tk_image2 = ImageTk.PhotoImage(about_image)
+button = tk.Button(root, image=tk_image2)
+button.place(relx=0.85, rely=0.4, anchor="center")
 
 
 

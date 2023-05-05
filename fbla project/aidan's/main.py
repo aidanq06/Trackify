@@ -7,6 +7,7 @@ import random as rand
 
 from PIL import ImageTk, Image
 
+from about import about
 #from newStudent import inputStudent
 #from report import report
 #from winner import pickWinner
@@ -41,7 +42,7 @@ top_frame.place(x = 275, y= 0, anchor = NW)
 help2_image = PhotoImage(file = "./assets/help2_image.png")"""
 # Open and resize the image
 img = Image.open("./assets/logo.png")
-img = img.resize((400, 400), Image.ANTIALIAS)
+img = img.resize((400, 400))
 img = ImageTk.PhotoImage(img)
 
 # Create a label to display the image
@@ -130,17 +131,29 @@ button.place(relx=0.85,rely=0.4, anchor="center")
 """
 
 ## IMAGE BUTTONS
-event_image = Image.open("./assets/events.png")
-event_image = event_image.resize((250, 75), Image.ANTIALIAS)
+event_image = Image.open("./assets/event.png")
+event_image = event_image.resize((250, 75))
 event_image = ImageTk.PhotoImage(event_image)
-button = tk.Button(root, image=event_image)
-button.place(relx=0.85, rely=0.2, anchor="center")
+event_button = tk.Button(root, image=event_image)
+event_button.place(relx=0.85, rely=0.2, anchor="center")
 
 about_image = Image.open("./assets/about.png")
-about_image = about_image.resize((250, 75), Image.ANTIALIAS)
-tk_image2 = ImageTk.PhotoImage(about_image)
-button = tk.Button(root, image=tk_image2)
-button.place(relx=0.85, rely=0.4, anchor="center")
+about_image = about_image.resize((250, 75))
+about_image = ImageTk.PhotoImage(about_image)
+about_button = tk.Button(root, image=about_image, command=about)
+about_button.place(relx=0.85, rely=0.4, anchor="center")
+
+help_image = Image.open("./assets/help.png")
+help_image = help_image.resize((250, 75))
+help_image = ImageTk.PhotoImage(help_image)
+help_button = tk.Button(root, image=help_image, command=about) # CHANGE THIS
+help_button.place(relx=0.85, rely=0.6, anchor="center")
+
+exit_image = Image.open("./assets/leaderboard_final.png")
+exit_image = exit_image.resize((250, 75))
+exit_image = ImageTk.PhotoImage(exit_image)
+exit_button = tk.Button(root, image=exit_image, command=about) # CHANGE THIS
+exit_button.place(relx=0.85, rely=0.8, anchor="center")
 
 
 

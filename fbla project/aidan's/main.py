@@ -114,9 +114,6 @@ button = tk.Button(root, text="     Quit", command=root.destroy, width=25, bg="#
 button.place(relx=0.15,rely=0.1, anchor="center")
 
 button = tk.Button(root, text="     Placeholder", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-button.place(relx=0.15,rely=0.25, anchor="center")
-
-button = tk.Button(root, text="     Placeholder", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
 button.place(relx=0.15,rely=0.4, anchor="center")
 
 button = tk.Button(root, text="     Placeholder", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
@@ -167,24 +164,24 @@ help_button = tk.Button(root, image=help_image, command=about) # CHANGE THIS
 help_button.place(relx=0.85, rely=0.8, anchor="center")
 
 
-
-
 login_screen = Frame(root, width= 1000, height= 500, bg= '#1c1c1c')
 login_screen.place(relx= 0, rely= 0, anchor= NW)
 
+
 font = ctk.CTkFont(family= "Quicksand", size= 15, weight= "bold")
 
-username_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "username")
-username_entry.place(relx= .5, rely= .35, anchor= CENTER)
-
-password_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "password")
-password_entry.place(relx= .5, rely= .5, anchor= CENTER)
-
 sign_in_image = Image.open("./assets/sign_in.png")
-sign_in_image = sign_in_image.resize((100, 40))
+sign_in_image = sign_in_image.resize((270, 68))
 sign_in_image = ImageTk.PhotoImage(sign_in_image)
 sign_in = Label(login_screen, image= sign_in_image, bd= 0)
-sign_in.place(relx= .5, rely= .2, anchor= CENTER)
+sign_in.place(relx= .5, rely= .35, anchor= CENTER)
+
+username_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "username")
+username_entry.place(relx= .5, rely= .5, anchor= CENTER)
+
+password_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "password")
+password_entry.place(relx= .5, rely= .65, anchor= CENTER)
+
 
 def login():
     temp = student_info.find()
@@ -192,6 +189,7 @@ def login():
         try:
             if int(password_entry.get()) == int(item["_id"]) and str(username_entry.get()) == str(item["last_name"]):
                 login_screen.place_forget()
+                sign_out.place(relx=0.15, rely=0.2, anchor="center")
         except:
             ...
     
@@ -200,14 +198,22 @@ login_image = Image.open("./assets/login.png")
 login_image = login_image.resize((50, 50))
 login_image = ImageTk.PhotoImage(login_image)
 login_button = tk.Button(login_screen, image=login_image, command= login) # CHANGE THIS
-login_button.place(relx=0.5, rely=0.65, anchor="center")
+login_button.place(relx=0.5, rely=0.8, anchor="center")
 
 img1 = Image.open("./assets/logo.png")
 img1 = img1.resize((200, 200))
 img1 = ImageTk.PhotoImage(img1)
 
-logo = tk.Label(login_screen, image=img1, bd= 0)
-logo.place(relx= .05, rely= .05, anchor= 'nw')
+
+def place_login_frame():
+    login_screen.place(relx= 0, rely= 0, anchor= NW)
+    sign_out.place_forget()
+
+sign_out_image = Image.open("./assets/sign_out.png")
+sign_out_image = sign_out_image.resize((250, 75))
+sign_out_image = ImageTk.PhotoImage(sign_out_image)
+sign_out = tk.Button(root, image=sign_out_image, command= place_login_frame)
+
 
 # keeps gui running
 if __name__ == "__main__":

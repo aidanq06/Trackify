@@ -2,10 +2,18 @@
 import sqlite3
 from tkinter import *
 import tkinter as tk
+from tkinter import ttk
 import customtkinter as ctk
 import random as rand
-
 from PIL import ImageTk, Image
+
+import pymongo
+from pymongo import MongoClient
+
+cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
+db = cluster["RRHSfbla2023"]
+student_info = db["student_info"]
+
 
 from about import about
 #from newStudent import inputStudent
@@ -15,12 +23,14 @@ from about import about
 
 #connects to the database
 
-def connect_to_db():
-    conn = sqlite3.connect('studentDatabase.db')
-    cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS students (name TEXT, lastname TEXT, grade INTEGER, points INTEGER, number INTEGER)''')
-    conn.commit()
-    return cursor
+
+conn = sqlite3.connect('studentDatabase.db')
+cursor = conn.cursor()
+cursor.execute('''CREATE TABLE IF NOT EXISTS students (name TEXT, lastname TEXT, grade INTEGER, points INTEGER, number INTEGER)''')
+conn.commit()
+
+cursor.execute('SELECT * FROM students')
+fetch = cursor.fetchall()
 
 #creates the home GUI
 root = tk.Tk()
@@ -28,6 +38,7 @@ root.geometry("1000x500")
 root.configure(bg='#1c1c1c')
 default_font = ctk.CTkFont(size= 18, family= 'Roboto')
 large_font = ctk.CTkFont(size= 25, family= 'Roboto')
+
 
 """
 #creates a label for the home GUI called Student Involment Tracker
@@ -143,19 +154,60 @@ about_image = ImageTk.PhotoImage(about_image)
 about_button = tk.Button(root, image=about_image, command=about)
 about_button.place(relx=0.85, rely=0.4, anchor="center")
 
+view_image = Image.open("./assets/view_entries.png")
+view_image = view_image.resize((250, 75))
+view_image = ImageTk.PhotoImage(view_image)
+view_button = tk.Button(root, image=view_image, command=about) # CHANGE THIS
+view_button.place(relx=0.85, rely=0.6, anchor="center")
+
 help_image = Image.open("./assets/help.png")
 help_image = help_image.resize((250, 75))
 help_image = ImageTk.PhotoImage(help_image)
 help_button = tk.Button(root, image=help_image, command=about) # CHANGE THIS
-help_button.place(relx=0.85, rely=0.6, anchor="center")
-
-exit_image = Image.open("./assets/leaderboard_final.png")
-exit_image = exit_image.resize((250, 75))
-exit_image = ImageTk.PhotoImage(exit_image)
-exit_button = tk.Button(root, image=exit_image, command=about) # CHANGE THIS
-exit_button.place(relx=0.85, rely=0.8, anchor="center")
+help_button.place(relx=0.85, rely=0.8, anchor="center")
 
 
+
+
+login_screen = Frame(root, width= 1000, height= 500, bg= '#1c1c1c')
+login_screen.place(relx= 0, rely= 0, anchor= NW)
+
+font = ctk.CTkFont(family= "Quicksand", size= 15, weight= "bold")
+
+username_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "username")
+username_entry.place(relx= .5, rely= .35, anchor= CENTER)
+
+password_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "password")
+password_entry.place(relx= .5, rely= .5, anchor= CENTER)
+
+sign_in_image = Image.open("./assets/sign_in.png")
+sign_in_image = sign_in_image.resize((100, 40))
+sign_in_image = ImageTk.PhotoImage(sign_in_image)
+sign_in = Label(login_screen, image= sign_in_image, bd= 0)
+sign_in.place(relx= .5, rely= .2, anchor= CENTER)
+
+def login():
+    temp = student_info.find()
+    for item in temp:
+        try:
+            if int(password_entry.get()) == int(item["_id"]) and str(username_entry.get()) == str(item["last_name"]):
+                login_screen.place_forget()
+        except:
+            ...
+    
+
+login_image = Image.open("./assets/login.png")
+login_image = login_image.resize((50, 50))
+login_image = ImageTk.PhotoImage(login_image)
+login_button = tk.Button(login_screen, image=login_image, command= login) # CHANGE THIS
+login_button.place(relx=0.5, rely=0.65, anchor="center")
+
+img1 = Image.open("./assets/logo.png")
+img1 = img1.resize((200, 200))
+img1 = ImageTk.PhotoImage(img1)
+
+logo = tk.Label(login_screen, image=img1, bd= 0)
+logo.place(relx= .05, rely= .05, anchor= 'nw')
 
 # keeps gui running
 if __name__ == "__main__":

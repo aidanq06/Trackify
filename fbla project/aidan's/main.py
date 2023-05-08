@@ -110,8 +110,7 @@ LEFT SIDE
 """
 
 # can change the rely to increments of 0.1 to fit more buttons
-button = tk.Button(root, text="     Quit", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-button.place(relx=0.15,rely=0.1, anchor="center")
+
 
 button = tk.Button(root, text="     Placeholder", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
 button.place(relx=0.15,rely=0.4, anchor="center")
@@ -208,6 +207,8 @@ img1 = ImageTk.PhotoImage(img1)
 def place_login_frame():
     login_screen.place(relx= 0, rely= 0, anchor= NW)
     sign_out.place_forget()
+    username_entry.delete(0, END)
+    password_entry.delete(0, END)
 
 sign_out_image = Image.open("./assets/sign_out.png")
 sign_out_image = sign_out_image.resize((250, 75))

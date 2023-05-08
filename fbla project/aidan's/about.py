@@ -12,7 +12,7 @@ def about():
     def close():
         root1.destroy()
 
-    aboutText = Image.open("./assets/logo.png")
+    aboutText = Image.open("./assets/aboutText.png")
     aboutText = aboutText.resize((400, 400))
     aboutText = ImageTk.PhotoImage(aboutText)
     aboutLabel = tk.Label(root1,image=aboutText, border= 0)

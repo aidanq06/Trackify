@@ -6,16 +6,17 @@ from tkinter import ttk
 import customtkinter as ctk
 import random as rand
 from PIL import ImageTk, Image
-
 import pymongo
 from pymongo import MongoClient
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["RRHSfbla2023"]
 student_info = db["student_info"]
+event_info = db["event_info"]
 
 
 from about import about
+from event import event
 #from newStudent import inputStudent
 #from report import report
 #from winner import pickWinner
@@ -141,7 +142,7 @@ button.place(relx=0.85,rely=0.4, anchor="center")
 event_image = Image.open("./assets/event.png")
 event_image = event_image.resize((250, 75))
 event_image = ImageTk.PhotoImage(event_image)
-event_button = tk.Button(root, image=event_image)
+event_button = tk.Button(root, image=event_image, command= event)
 event_button.place(relx=0.85, rely=0.2, anchor="center")
 
 about_image = Image.open("./assets/about.png")

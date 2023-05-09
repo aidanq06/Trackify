@@ -17,6 +17,7 @@ event_info = db["event_info"]
 
 from about import about
 from event import event
+from register import register
 #from newStudent import inputStudent
 #from report import report
 #from winner import pickWinner
@@ -165,7 +166,7 @@ help_button.place(relx=0.85, rely=0.8, anchor="center")
 
 
 login_screen = Frame(root, width= 1000, height= 500, bg= '#1c1c1c')
-#login_screen.place(relx= 0, rely= 0, anchor= NW)
+login_screen.place(relx= 0, rely= 0, anchor= NW)
 
 
 font = ctk.CTkFont(family= "Quicksand", size= 15, weight= "bold")
@@ -187,18 +188,24 @@ def login():
     temp = student_info.find()
     for item in temp:
         try:
-            if int(password_entry.get()) == int(item["_id"]) and str(username_entry.get()) == str(item["last_name"]):
+            if int(password_entry.get()) == int(item["_id"]) and str(username_entry.get()) == str(item["last_name"]): 
                 login_screen.place_forget()
                 sign_out.place(relx=0.15, rely=0.2, anchor="center")
         except:
             ...
-    
+
 
 login_image = Image.open("./assets/login.png")
-login_image = login_image.resize((50, 50))
+login_image = login_image.resize((60, 60))
 login_image = ImageTk.PhotoImage(login_image)
-login_button = tk.Button(login_screen, image=login_image, command= login) # CHANGE THIS
-login_button.place(relx=0.5, rely=0.8, anchor="center")
+login_button = tk.Button(login_screen, image=login_image, command=login) # CHANGE THIS
+login_button.place(relx=0.425, rely=0.8, anchor="center")
+
+register_image = Image.open("./assets/register.png")
+register_image = register_image.resize((60, 60))
+register_image = ImageTk.PhotoImage(register_image)
+register_button = tk.Button(login_screen, image=register_image, command=register) # CHANGE THIS
+register_button.place(relx=0.575, rely=0.8, anchor="center")
 
 img1 = Image.open("./assets/logo.png")
 img1 = img1.resize((200, 200))

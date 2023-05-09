@@ -13,18 +13,18 @@ def about():
         root1.destroy()
 
     aboutText = Image.open("./assets/aboutText.png")
-    aboutText = aboutText.resize((400, 400))
+    aboutText = aboutText.resize((500, 500))
     aboutText = ImageTk.PhotoImage(aboutText)
     aboutLabel = tk.Label(root1,image=aboutText, border= 0)
     aboutLabel.image = aboutText
-    aboutLabel.place(relx=0.5, rely=0.5, anchor="center")
+    aboutLabel.place(relx=0.55, rely=0.5, anchor="center")
 
     back_image = Image.open("./assets/back.png")
-    back_image = back_image.resize((30, 23))
+    back_image = back_image.resize((50, 40))
     back_image = ImageTk.PhotoImage(back_image)   
     back_button = tk.Button(root1, image=back_image, border = 0, highlightthickness = 0, command= close)
     back_button.image = back_image
-    back_button.place(relx=0.1, rely=0.1, anchor="center")
+    back_button.place(relx=0.075, rely=0.075, anchor="center")
 
     root1.mainloop()
     """

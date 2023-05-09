@@ -165,7 +165,7 @@ help_button.place(relx=0.85, rely=0.8, anchor="center")
 
 
 login_screen = Frame(root, width= 1000, height= 500, bg= '#1c1c1c')
-login_screen.place(relx= 0, rely= 0, anchor= NW)
+#login_screen.place(relx= 0, rely= 0, anchor= NW)
 
 
 font = ctk.CTkFont(family= "Quicksand", size= 15, weight= "bold")

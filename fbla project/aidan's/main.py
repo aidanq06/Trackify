@@ -13,11 +13,12 @@ cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023proje
 db = cluster["RRHSfbla2023"]
 student_info = db["student_info"]
 event_info = db["event_info"]
-
+login_info = db["login_info"]
 
 from about import about
 from event import event
 from register import register
+from popups import error
 #from newStudent import inputStudent
 #from report import report
 #from winner import pickWinner
@@ -111,20 +112,6 @@ report_button.place(x= 30, y= 250, anchor=NW)
 LEFT SIDE 
 """
 
-# can change the rely to increments of 0.1 to fit more buttons
-
-
-button = tk.Button(root, text="     Placeholder", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-button.place(relx=0.15,rely=0.4, anchor="center")
-
-button = tk.Button(root, text="     Placeholder", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-button.place(relx=0.15,rely=0.55, anchor="center")
-
-button = tk.Button(root, text="     Placeholder", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-button.place(relx=0.15,rely=0.7, anchor="center")
-
-button = tk.Button(root, text="     Placeholder", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-button.place(relx=0.15,rely=0.85, anchor="center")
 
 """
 RIGHT SIDE
@@ -186,13 +173,21 @@ password_entry.place(relx= .5, rely= .65, anchor= CENTER)
 
 def login():
     temp = student_info.find()
+    temp2 = login_info.find()
     for item in temp:
-        try:
-            if int(password_entry.get()) == int(item["_id"]) and str(username_entry.get()) == str(item["last_name"]): 
-                login_screen.place_forget()
-                sign_out.place(relx=0.15, rely=0.2, anchor="center")
-        except:
-            ...
+        for item2 in temp2:
+            try:
+                if str(password_entry.get()) == str(item["_id"]) and str(username_entry.get()) == str(item["last_name"]): 
+                    login_screen.place_forget()
+                    sign_out.place(relx=0.15, rely=0.2, anchor="center")
+                elif str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]): 
+                    login_screen.place_forget()
+                    sign_out.place(relx=0.15, rely=0.2, anchor="center")
+                else:
+                    error()
+
+            except:
+                ...
 
 
 login_image = Image.open("./assets/login.png")

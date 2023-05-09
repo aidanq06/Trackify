@@ -9,7 +9,7 @@ from tkcalendar import Calendar
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["RRHSfbla2023"]
 student_info = db["student_info"]
-event_info = db["event_info"]
+login_info = db["login_info"]
 
 
 def register():
@@ -22,17 +22,12 @@ def register():
 
     font = ctk.CTkFont(family= "Quicksand", size= 15, weight= "bold")
 
-    event_type_entry = ctk.CTkEntry(event_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "event name")
-    event_type_entry.place(relx= .5, rely= .15, anchor= "center")
+    username_entry = ctk.CTkEntry(event_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "username")
+    username_entry.place(relx= .5, rely= .30, anchor= "center")
 
-    firstname = ctk.CTkEntry(event_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "firstname")
-    firstname.place(relx= .5, rely= .30, anchor= "center")
-
-    lastname = ctk.CTkEntry(event_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "lastname")
-    lastname.place(relx= .5, rely= .40, anchor= "center")
-
-    grade = ctk.CTkEntry(event_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "grade")
-    grade.place(relx= .5, rely= .50, anchor= "center")
+    password_entry = ctk.CTkEntry(event_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "password")
+    password_entry.place(relx= .5, rely= .40, anchor= "center")
+    
 
     sign_in_image = Image.open("./assets/add_new_event.png") # change
     sign_in_image = sign_in_image.resize((270, 75))
@@ -44,13 +39,13 @@ def register():
 
 
     def submit():
-        event_type = event_type_entry.get()
-        point_value = firstname.get()
-        if event_type == "" or point_value == "":
+        username = username_entry.get()
+        password = password_entry.get()
+        if username == "" or password == "":
             ...
         else:
-            temp = {"name": event_type, "points": int(point_value)}
-            event_info.insert_one(temp)
+            temp = {"username": username, "password": password}
+            login_info.insert_one(temp)
             event_window.destroy()
         
 

@@ -1,8 +1,10 @@
 import tkinter as tk
 import customtkinter as ctk
 from tkinter import ttk
-
+import pyglet
 from PIL import ImageTk, Image
+
+pyglet.font.add_file("./assets/Quicksand_Bold.otf")
 
 
 def error(error_message):
@@ -14,7 +16,16 @@ def error(error_message):
         root.destroy()
 
     aboutLabel = ctk.CTkLabel(root, text= error_message,font= ("Quicksand_bold", 20, "bold"), text_color="white")
-    aboutLabel.place(relx=0.5, rely=0.5, anchor="center")
+    aboutLabel.place(relx=0.5, rely=0.3333, anchor="center")
+
+    back_image = Image.open("./assets/back.png")
+    back_image = back_image.resize((50, 40))
+    back_image = ImageTk.PhotoImage(back_image)   
+    back_button = tk.Button(root, image=back_image, border = 0, highlightthickness = 0, command= close)
+    back_button.image = back_image
+    back_button.place(relx=0.5, rely=0.6666, anchor="center")
+
+    
 
     root.mainloop()
     """

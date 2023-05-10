@@ -183,8 +183,10 @@ def login():
                 elif str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]): 
                     login_screen.place_forget()
                     sign_out.place(relx=0.15, rely=0.2, anchor="center")
+                elif str(password_entry.get()) == "" or str(username_entry.get()) == "":
+                    error("Please fill out all the fields.")
                 else:
-                    error("please fill out all the fields")
+                    error("Incorrect username or password.")
 
             except:
                 ...

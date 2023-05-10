@@ -5,6 +5,7 @@ from PIL import ImageTk, Image
 import pymongo
 from pymongo import MongoClient
 from tkcalendar import Calendar
+from popups import error
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["RRHSfbla2023"]
@@ -29,7 +30,7 @@ def register():
     password_entry.place(relx= .5, rely= .40, anchor= "center")
     
 
-    sign_in_image = Image.open("./assets/add_new_event.png") # change
+    sign_in_image = Image.open("./assets/add_new_user.png") # change
     sign_in_image = sign_in_image.resize((270, 75))
     sign_in_image = ImageTk.PhotoImage(sign_in_image)
     sign_in = tk.Label(event_window, image= sign_in_image, bd= 0)
@@ -42,7 +43,7 @@ def register():
         username = username_entry.get()
         password = password_entry.get()
         if username == "" or password == "":
-            ...
+            error("please fill out all the required fields")
         else:
             temp = {"username": username, "password": password}
             login_info.insert_one(temp)

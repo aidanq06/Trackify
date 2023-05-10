@@ -17,6 +17,7 @@ student_info = db["student_info"]
 event_info = db["event_info"]
 login_info = db["login_info"]
 
+global current_user
 
 from about import about
 from event import event
@@ -167,29 +168,34 @@ sign_in.place(relx= .5, rely= .35, anchor= CENTER)
 username_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"), placeholder_text= "username")
 username_entry.place(relx= .5, rely= .5, anchor= CENTER)
 
-password_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"), placeholder_text= "password")
+password_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"), placeholder_text= "password", show= '*')
 password_entry.place(relx= .5, rely= .65, anchor= CENTER)
 
 
 def login():
     temp = student_info.find()
     temp2 = login_info.find()
-    for item in temp:
-        for item2 in temp2:
-            try:
-                if str(password_entry.get()) == str(item["_id"]) and str(username_entry.get()) == str(item["last_name"]): 
-                    login_screen.place_forget()
-                    sign_out.place(relx=0.15, rely=0.2, anchor="center")
-                elif str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]): 
-                    login_screen.place_forget()
-                    sign_out.place(relx=0.15, rely=0.2, anchor="center")
-                elif str(password_entry.get()) == "" or str(username_entry.get()) == "":
-                    error("Please fill out all the fields.")
-                else:
-                    error("Incorrect username or password.")
+    logged_in = False
 
-            except:
-                ...
+    if logged_in == False:
+        for item in temp:
+            if str(password_entry.get()) == str(item["_id"]) and str(username_entry.get()) == str(item["last_name"]): 
+                login_screen.place_forget()
+                sign_out.place(relx=0.15, rely=0.2, anchor="center")
+                logged_in = True
+
+    if logged_in == False:
+        for item2 in temp2:
+            if str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]): 
+                login_screen.place_forget()
+                sign_out.place(relx=0.15, rely=0.2, anchor="center")
+                logged_in = True
+
+    if logged_in == False:
+        if str(password_entry.get()) == "" or str(username_entry.get()) == "":
+            error("Please fill out all the fields.")
+        else:
+            error("Incorrect username or password.")
 
 
 login_image = Image.open("./assets/login.png")

@@ -5,31 +5,16 @@ from tkinter import ttk
 from PIL import ImageTk, Image
 
 
-def error():
+def error(error_message):
     root = tk.Toplevel()
-    root.geometry("600x600")
+    root.geometry("400x200")
     root.configure(bg='#1c1c1c')
-
-    font = ctk.CTkFont(family= "Quicksand", size= 50, weight= "bold")
 
     def close():
         root.destroy()
 
-    """aboutText = Image.open("./assets/aboutText.png")
-    aboutText = aboutText.resize((500, 500))
-    aboutText = ImageTk.PhotoImage(aboutText)"""
-    #aboutLabel = tk.Label(root1,image=aboutText, border= 0)
-    #aboutLabel.image = aboutText
-
-    aboutLabel = ctk.CTkLabel(root,text="hello",font=font,text_color="white")
+    aboutLabel = ctk.CTkLabel(root, text= error_message,font= ("Quicksand_bold", 20, "bold"), text_color="white")
     aboutLabel.place(relx=0.5, rely=0.5, anchor="center")
-
-    back_image = Image.open("./assets/back.png")
-    back_image = back_image.resize((50, 40))
-    back_image = ImageTk.PhotoImage(back_image)   
-    back_button = tk.Button(root, image=back_image, border = 0, highlightthickness = 0, command= close)
-    back_button.image = back_image
-    back_button.place(relx=0.075, rely=0.075, anchor="center")
 
     root.mainloop()
     """

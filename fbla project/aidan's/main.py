@@ -8,12 +8,15 @@ import random as rand
 from PIL import ImageTk, Image
 import pymongo
 from pymongo import MongoClient
+import pyglet 
+pyglet.font.add_file("./assets/Quicksand_Bold.otf")
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["RRHSfbla2023"]
 student_info = db["student_info"]
 event_info = db["event_info"]
 login_info = db["login_info"]
+
 
 from about import about
 from event import event
@@ -155,19 +158,16 @@ help_button.place(relx=0.85, rely=0.8, anchor="center")
 login_screen = Frame(root, width= 1000, height= 500, bg= '#1c1c1c')
 login_screen.place(relx= 0, rely= 0, anchor= NW)
 
-
-font = ctk.CTkFont(family= "Quicksand", size= 15, weight= "bold")
-
 sign_in_image = Image.open("./assets/sign_in.png")
 sign_in_image = sign_in_image.resize((270, 68))
 sign_in_image = ImageTk.PhotoImage(sign_in_image)
 sign_in = Label(login_screen, image= sign_in_image, bd= 0)
 sign_in.place(relx= .5, rely= .35, anchor= CENTER)
 
-username_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "username")
+username_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"), placeholder_text= "username")
 username_entry.place(relx= .5, rely= .5, anchor= CENTER)
 
-password_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font, placeholder_text= "password")
+password_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"), placeholder_text= "password")
 password_entry.place(relx= .5, rely= .65, anchor= CENTER)
 
 
@@ -184,7 +184,7 @@ def login():
                     login_screen.place_forget()
                     sign_out.place(relx=0.15, rely=0.2, anchor="center")
                 else:
-                    error()
+                    error("please fill out all the fields")
 
             except:
                 ...

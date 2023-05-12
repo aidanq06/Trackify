@@ -8,7 +8,8 @@ import random as rand
 from PIL import ImageTk, Image
 import pymongo
 from pymongo import MongoClient
-import pyglet 
+import pyglet
+
 pyglet.font.add_file("./assets/Quicksand_Bold.otf")
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
@@ -17,12 +18,13 @@ student_info = db["student_info"]
 event_info = db["event_info"]
 login_info = db["login_info"]
 
-global current_user
+current_user = 0
 
 from about import about
 from event import event
 from register import register
 from popups import error
+from add_student import add_student
 #from newStudent import inputStudent
 #from report import report
 #from winner import pickWinner
@@ -131,11 +133,19 @@ button.place(relx=0.85,rely=0.4, anchor="center")
 """
 
 ## IMAGE BUTTONS
+
+
 event_image = Image.open("./assets/event.png")
 event_image = event_image.resize((250, 75))
 event_image = ImageTk.PhotoImage(event_image)
 event_button = tk.Button(root, image=event_image, command= event)
 event_button.place(relx=0.85, rely=0.2, anchor="center")
+
+add_student_image = Image.open("./assets/add_student.png")
+add_student_image = add_student_image.resize((250, 75))
+add_student_image = ImageTk.PhotoImage(add_student_image)
+add_student_button = tk.Button(root, image=add_student_image, command= add_student)
+add_student_button.place(relx=0.15, rely=0.4, anchor="center")
 
 about_image = Image.open("./assets/about.png")
 about_image = about_image.resize((250, 75))
@@ -176,17 +186,20 @@ def login():
     temp = student_info.find()
     temp2 = login_info.find()
     logged_in = False
+    global current_user
 
     if logged_in == False:
         for item in temp:
-            if str(password_entry.get()) == str(item["_id"]) and str(username_entry.get()) == str(item["last_name"]): 
+            if str(password_entry.get()) == str(item["_id"]) and str(username_entry.get()) == str(item["last_name"]):
+                current_user = item.get("first_name") 
                 login_screen.place_forget()
                 sign_out.place(relx=0.15, rely=0.2, anchor="center")
                 logged_in = True
 
     if logged_in == False:
         for item2 in temp2:
-            if str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]): 
+            if str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]):
+                current_user = item2.get("username")
                 login_screen.place_forget()
                 sign_out.place(relx=0.15, rely=0.2, anchor="center")
                 logged_in = True
@@ -197,6 +210,8 @@ def login():
         else:
             error("Incorrect username or password.")
 
+    name_label = tk.Message(root, text = "welcome" + str(current_user),font= ("Quicksand_bold", 30, "bold"), fg= "white", bg= "#1c1c1c", width= 200)
+    name_label.place(relx= .15, rely= .2)
 
 login_image = Image.open("./assets/login.png")
 login_image = login_image.resize((60, 60))
@@ -225,6 +240,7 @@ sign_out_image = Image.open("./assets/sign_out.png")
 sign_out_image = sign_out_image.resize((250, 75))
 sign_out_image = ImageTk.PhotoImage(sign_out_image)
 sign_out = tk.Button(root, image=sign_out_image, command= place_login_frame)
+
 
 
 # keeps gui running

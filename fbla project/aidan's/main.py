@@ -146,7 +146,7 @@ add_student_image = Image.open("./assets/add_student.png")
 add_student_image = add_student_image.resize((250, 75))
 add_student_image = ImageTk.PhotoImage(add_student_image)
 add_student_button = tk.Button(root, image=add_student_image, command= add_student)
-add_student_button.place(relx=0.15, rely=0.4, anchor="center")
+add_student_button.place(relx=0.15, rely=0.2, anchor="center")
 
 about_image = Image.open("./assets/about.png")
 about_image = about_image.resize((250, 75))
@@ -194,7 +194,7 @@ def login():
             if str(password_entry.get()) == str(item["_id"]) and str(username_entry.get()) == str(item["last_name"]):
                 current_user = item.get("first_name") 
                 login_screen.place_forget()
-                sign_out.place(relx=0.15, rely=0.6, anchor="center")
+                sign_out.place(relx=0.15, rely=0.4, anchor="center")
                 logged_in = True
 
     if logged_in == False:
@@ -202,7 +202,7 @@ def login():
             if str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]):
                 current_user = item2.get("username")
                 login_screen.place_forget()
-                sign_out.place(relx=0.15, rely=0.6, anchor="center")
+                sign_out.place(relx=0.15, rely=0.4, anchor="center")
                 logged_in = True
 
     if logged_in == False:
@@ -210,12 +210,7 @@ def login():
             error("Please fill out all the fields.")
         else:
             error("Incorrect username or password.")
-
-    welcome_label = tk.Message(root, text = "welcome" ,font= ("Quicksand_bold", 34, "bold"), fg= "white", bg= "#1c1c1c", width= 250)
-    welcome_label.place(relx= 0, rely= 0, anchor= "nw")
-
-    name_label = tk.Message(root, text= str(current_user), font= ("Quicksand_bold", 34, "bold"), fg= "white", bg= "#1c1c1c", width= 200)
-    name_label.place(relx= 0, rely= .15, anchor= "nw")    
+  
 
 login_image = Image.open("./assets/login.png")
 login_image = login_image.resize((60, 60))

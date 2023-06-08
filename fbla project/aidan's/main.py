@@ -19,8 +19,6 @@ student_info = db["student_info"]
 event_info = db["event_info"]
 login_info = db["login_info"]
 
-current_user = 0
-
 from about import about
 from event import event
 from register import register
@@ -166,6 +164,12 @@ help_image = ImageTk.PhotoImage(help_image)
 help_button = tk.Button(root, image=help_image, command=about) # CHANGE THIS
 help_button.place(relx=0.85, rely=0.8, anchor="center")
 
+upcoming_event_image = Image.open("./assets/upcoming_events.png")
+upcoming_event_image = upcoming_event_image.resize((270, 75))
+upcoming_event_image = ImageTk.PhotoImage(upcoming_event_image)
+upcoming_event = Label(root, image= upcoming_event_image, bd= 0)
+upcoming_event.place(relx= .5, rely= .1, anchor= CENTER)
+
 
 login_screen = Frame(root, width= 1000, height= 500, bg= '#1c1c1c')
 login_screen.place(relx= 0, rely= 0, anchor= NW)
@@ -187,30 +191,37 @@ def login():
     temp = student_info.find()
     temp2 = login_info.find()
     logged_in = False
-    global current_user
 
     if logged_in == False:
         for item in temp:
             if str(password_entry.get()) == str(item["_id"]) and str(username_entry.get()) == str(item["last_name"]):
-                current_user = item.get("first_name") 
+                event_button.destroy()
+                add_student_button.destroy()
+                view_button.destroy()
                 login_screen.place_forget()
-                sign_out.place(relx=0.15, rely=0.4, anchor="center")
+                label.destroy()
                 logged_in = True
+
+                sign_out.place(relx=0.15, rely=0.8, anchor="center")
+                help_button.place(relx= 0.5, rely= 0.8, anchor= "center")
+                about_button.place(relx= 0.85, rely= 0.8, anchor= "center")
+                upcoming_event.place(relx= .5, rely= .1, anchor= CENTER)
 
     if logged_in == False:
         for item2 in temp2:
             if str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]):
-                current_user = item2.get("username")
                 login_screen.place_forget()
                 sign_out.place(relx=0.15, rely=0.4, anchor="center")
                 logged_in = True
+
+                upcoming_event.place_forget()
 
     if logged_in == False:
         if str(password_entry.get()) == "" or str(username_entry.get()) == "":
             error("Please fill out all the fields.")
         else:
             error("Incorrect username or password.")
-  
+    
 
 login_image = Image.open("./assets/login.png")
 login_image = login_image.resize((60, 60))

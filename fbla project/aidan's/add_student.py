@@ -60,7 +60,7 @@ def add_student():
                         break
                         
                 check_dup == 1
-                temp = {"first_name": student_first, "last_name": student_last, "grade": int(grade), "_id": studentId}
+                temp = {"first_name": student_first, "last_name": student_last, "grade": int(grade), "_id": studentId, "point": 0}
                 student_info.insert_one(temp)
                 add_window.destroy()
         

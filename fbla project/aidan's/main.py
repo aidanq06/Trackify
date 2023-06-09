@@ -24,21 +24,12 @@ from event import event
 from register import register
 from popups import error
 from add_student import add_student
+from view_entries import view_entries
+
 #from newStudent import inputStudent
 #from report import report
 #from winner import pickWinner
 #from helper import open_help_window
-
-#connects to the database
-
-
-conn = sqlite3.connect('studentDatabase.db')
-cursor = conn.cursor()
-cursor.execute('''CREATE TABLE IF NOT EXISTS students (name TEXT, lastname TEXT, grade INTEGER, points INTEGER, number INTEGER)''')
-conn.commit()
-
-cursor.execute('SELECT * FROM students')
-fetch = cursor.fetchall()
 
 #creates the home GUI
 root = tk.Tk()
@@ -69,6 +60,7 @@ label = tk.Label(root, image=img)
 
 # Position the label in the center of the window
 label.place(relx=0.5, rely=0.5, anchor="center")
+
 
 """
 # Add a "Edit Student" button to the dialog box
@@ -133,7 +125,6 @@ button.place(relx=0.85,rely=0.4, anchor="center")
 
 ## IMAGE BUTTONS
 
-
 event_image = Image.open("./assets/event.png")
 event_image = event_image.resize((250, 75))
 event_image = ImageTk.PhotoImage(event_image)
@@ -155,7 +146,7 @@ about_button.place(relx=0.85, rely=0.4, anchor="center")
 view_image = Image.open("./assets/view_entries.png")
 view_image = view_image.resize((250, 75))
 view_image = ImageTk.PhotoImage(view_image)
-view_button = tk.Button(root, image=view_image, command=about) # CHANGE THIS
+view_button = tk.Button(root, image=view_image, command= view_entries) # CHANGE THIS
 view_button.place(relx=0.85, rely=0.6, anchor="center")
 
 help_image = Image.open("./assets/help.png")

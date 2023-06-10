@@ -61,11 +61,32 @@ listbox.heading("# 4", text="Grade Level")
 listbox.column("# 5", anchor=CENTER, width = 199)
 listbox.heading("# 5", text="Points")
 
-count = 0
-for student in students:
-    listbox.insert(parent='', index='end', text= "", iid= count, values= (student["_id"], student["first_name"], student["last_name"], student["grade"], student["point"]) )
-    count+= 1
-listbox.place(relx= 0, rely= 0, anchor= "nw")
+def refresh():
+    for item in listbox.get_children():
+        listbox.delete(item)
+    students= student_info.find()
+    count = 0
+    for student in students:
+        listbox.insert(parent='', index='end', text= "", iid= count, values= (student["_id"], student["first_name"], student["last_name"], student["grade"], student["point"]) )
+        count+= 1
+    listbox.place(relx= 0, rely= 0, anchor= "nw")
+
+refresh()
+
+def remove_student():
+    item = listbox.selection()
+    selection = listbox.item(item, option="values")
+    temp = student_info.find()
+    for student in temp:
+        if int(student["_id"]) == int(selection[0]):
+            print(student_info.delete_one({"_id": student["_id"]}))
+    refresh()
+
+remove_button = tk.Button(root1, text= "click me", command= remove_student)
+remove_button.place(relx= 0.5, rely= 0.9)
+
+quit_button = tk.Button(root1, text= "quit", command= root1.withdraw)
+quit_button.place(relx= 0.8, rely= 0.9)
 
 root1.withdraw()
 

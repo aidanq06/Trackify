@@ -41,7 +41,7 @@ large_font = ctk.CTkFont(size= 25, family= 'Roboto')
 
 style = ttk.Style()
 style.theme_use("clam")
-style.configure("Treeview", fieldbackground= "#1c1c1c", background = "#1c1c1c", foreground= "#9b9a92", font= ("none", 10), rowheight= 40)
+style.configure("Treeview", fieldbackground= "#1c1c1c", background = "#1c1c1c", foreground= "#9b9a92", font= ("none", 10), rowheight= 40, highlightbackground = "#1c1c1c", highlightcolor= "#1c1c1c")
 style.configure("Treeview.Heading", background = "#1c1c1c", foreground= "#9b9a92", borderwidth= 0)
 
 root1 = tk.Toplevel()
@@ -49,7 +49,7 @@ root1.geometry("1000x500")
 root1.configure(bg= '#1c1c1c')
 students = student_info.find()
 
-listbox = ttk.Treeview(root1, selectmode="extended",columns=("c1", "c2", "c3", "c4", "c5"),show="headings", height= 24)
+listbox = ttk.Treeview(root1, selectmode="extended",columns=("c1", "c2", "c3", "c4", "c5"),show="headings", height= 10)
 listbox.column("# 1", anchor=CENTER, width = 199)
 listbox.heading("# 1", text="Student id")
 listbox.column("# 2", anchor=CENTER, width = 199)

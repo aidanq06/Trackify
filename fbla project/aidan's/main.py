@@ -10,7 +10,9 @@ import pymongo
 from pymongo import MongoClient
 import pyglet
 
+
 pyglet.font.add_file("./assets/Quicksand-Bold.ttf")
+
 #uicksand = pyglet.font.load('Quicksand-Bold.ttf', bold=True)
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
@@ -24,7 +26,6 @@ from event import event
 from register import register
 from popups import error
 from add_student import add_student
-from view_entries import view_entries
 
 #from newStudent import inputStudent
 #from report import report
@@ -38,6 +39,35 @@ root.configure(bg='#1c1c1c')
 default_font = ctk.CTkFont(size= 18, family= 'Roboto')
 large_font = ctk.CTkFont(size= 25, family= 'Roboto')
 
+style = ttk.Style()
+style.theme_use("clam")
+style.configure("Treeview", fieldbackground= "#1c1c1c", background = "#1c1c1c", foreground= "#9b9a92", font= ("none", 10), rowheight= 40)
+style.configure("Treeview.Heading", background = "#1c1c1c", foreground= "#9b9a92", borderwidth= 0)
+
+root1 = tk.Toplevel()
+root1.geometry("1000x500")
+root1.configure(bg= '#1c1c1c')
+students = student_info.find()
+
+listbox = ttk.Treeview(root1, selectmode="extended",columns=("c1", "c2", "c3", "c4", "c5"),show="headings", height= 24)
+listbox.column("# 1", anchor=CENTER, width = 199)
+listbox.heading("# 1", text="Student id")
+listbox.column("# 2", anchor=CENTER, width = 199)
+listbox.heading("# 2", text="First Name")
+listbox.column("# 3", anchor=CENTER, width = 199)
+listbox.heading("# 3", text="Last Name")
+listbox.column("# 4", anchor=CENTER, width = 199)
+listbox.heading("# 4", text="Grade Level")
+listbox.column("# 5", anchor=CENTER, width = 199)
+listbox.heading("# 5", text="Points")
+
+count = 0
+for student in students:
+    listbox.insert(parent='', index='end', text= "", iid= count, values= (student["_id"], student["first_name"], student["last_name"], student["grade"], student["point"]) )
+    count+= 1
+listbox.place(relx= 0, rely= 0, anchor= "nw")
+
+root1.withdraw()
 
 """
 #creates a label for the home GUI called Student Involment Tracker
@@ -146,7 +176,7 @@ about_button.place(relx=0.85, rely=0.4, anchor="center")
 view_image = Image.open("./assets/view_entries.png")
 view_image = view_image.resize((250, 75))
 view_image = ImageTk.PhotoImage(view_image)
-view_button = tk.Button(root, image=view_image, command= view_entries) # CHANGE THIS
+view_button = tk.Button(root, image=view_image, command= root1.deiconify) # CHANGE THIS
 view_button.place(relx=0.85, rely=0.6, anchor="center")
 
 help_image = Image.open("./assets/help.png")
@@ -247,10 +277,3 @@ sign_out = tk.Button(root, image=sign_out_image, command= place_login_frame)
 # keeps gui running
 if __name__ == "__main__":
     root.mainloop()
-    """
-    #closes the cursor
-    cursor.close()
-
-    #closes the connection
-    conn.close()
-    """

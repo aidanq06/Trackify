@@ -99,14 +99,27 @@ def edit_student():
     grade_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"), placeholder_text= selection[3] )
     grade_entry.place(relx= 0.5, rely= 0.6, anchor= "center")
 
+    def get_submit():
+
+        first= first_entry.get()
+        last= last_entry.get()
+        grade= grade_entry.get()
+        student_info.update_one({"_id": int(selection[0])}, {"$set":{"first_name": str(first).capitalize(), "last_name": (str(last).capitalize()), "grade": int(grade)}})
+
+        refresh()
+        edit_student_window.destroy()
+
+    submit_button = tk.Button(edit_student_window, text= "submit", command= get_submit)
+    submit_button.place(relx= 0.5, rely= 0.8, anchor= "center")
+
 
 edit_button = tk.Button(root1, text= "edit ", command= edit_student)
 edit_button.place(relx= 0.3, rely= 0.9)
 
-remove_button = tk.Button(root1, text= "click me", command= remove_student)
+remove_button = tk.Button(root1, text= "remove", command= remove_student)
 remove_button.place(relx= 0.5, rely= 0.9)
 
-quit_button = tk.Button(root1, text= "quit", command= root1.withdraw)
+quit_button = tk.Button(root1, text= "must use quit", command= root1.withdraw)
 quit_button.place(relx= 0.8, rely= 0.9)
 
 root1.withdraw()

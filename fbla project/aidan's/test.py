@@ -15,10 +15,21 @@ student_info = db["student_info"]
 event_info = db["event_info"]
 login_info = db["login_info"]
 
-temp = student_info.find()
+root = tk.Tk()
+root.geometry("500x500")
 
-for student in temp:
-    print(student)
+entry = ctk.CTkEntry(root, width= 200)
+entry.insert(0, "hello")
+
+def Entry1_Callback(event):
+    entry.select_range(0, END)
+
+entry.bind('<FocusIn>', Entry1_Callback)
+entry.pack()
+
+if __name__ == "__main__":
+    root.mainloop()
+
 
 
 

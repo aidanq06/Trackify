@@ -90,13 +90,25 @@ def edit_student():
     edit_student_window.geometry("400x600")
     edit_student_window.configure(bg= '#1c1c1c')
 
-    first_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"), placeholder_text= selection[1] )
+    first_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"))
+    first_entry.insert(0, selection[1])
+    def first_select(event):
+        first_entry.select_range(0, END)
+    first_entry.bind("<FocusIn>", first_select)
     first_entry.place(relx= 0.5, rely= 0.2, anchor= "center")
 
-    last_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"), placeholder_text= selection[2] )
+    last_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"))
+    last_entry.insert(0, selection[2])
+    def last_select(event):
+        last_entry.select_range(0, END)
+    last_entry.bind("<FocusIn>", last_select)
     last_entry.place(relx= 0.5, rely= 0.4, anchor= "center")
 
-    grade_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"), placeholder_text= selection[3] )
+    grade_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"))
+    grade_entry.insert(0, selection[3])
+    def grade_select(event):
+        grade_entry.select_range(0, END)
+    grade_entry.bind("<FocusIn>", grade_select)
     grade_entry.place(relx= 0.5, rely= 0.6, anchor= "center")
 
     def get_submit():

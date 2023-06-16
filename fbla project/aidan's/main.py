@@ -9,6 +9,7 @@ from PIL import ImageTk, Image
 import pymongo
 from pymongo import MongoClient
 import pyglet
+import datetime
 
 
 pyglet.font.add_file("./assets/Quicksand-Bold.ttf")
@@ -41,8 +42,8 @@ large_font = ctk.CTkFont(size= 25, family= 'Roboto')
 
 style = ttk.Style()
 style.theme_use("clam")
-style.configure("Treeview", fieldbackground= "#1c1c1c", background = "#1c1c1c", foreground= "#9b9a92", font= ("none", 10), rowheight= 40, highlightbackground = "#1c1c1c", highlightcolor= "#1c1c1c")
-style.configure("Treeview.Heading", background = "#1c1c1c", foreground= "#9b9a92", borderwidth= 0)
+style.configure("Treeview", fieldbackground= "#1c1c1c", background = "#1c1c1c", foreground= "white", font= ("none", 10), rowheight= 40, highlightbackground = "#1c1c1c", highlightcolor= "#1c1c1c")
+style.configure("Treeview.Heading", background = "#1c1c1c", foreground= "white", borderwidth= 0)
 
 root1 = tk.Toplevel()
 root1.geometry("1000x500")
@@ -124,15 +125,23 @@ def edit_student():
     submit_button = tk.Button(edit_student_window, text= "submit", command= get_submit)
     submit_button.place(relx= 0.5, rely= 0.8, anchor= "center")
 
+edit_student_image = Image.open("./assets/edit_student.png")
+edit_student_image = edit_student_image.resize((150, 45))
+edit_student_image = ImageTk.PhotoImage(edit_student_image)
+edit_button = tk.Button(root1, command= edit_student, image= edit_student_image, borderwidth= 0)
+edit_button.place(relx= 0.15, rely= 0.875, anchor= "nw")
 
-edit_button = tk.Button(root1, text= "edit ", command= edit_student)
-edit_button.place(relx= 0.3, rely= 0.9)
+remove_student_image = Image.open("./assets/remove_student.png")
+remove_student_image = remove_student_image.resize((150, 45))
+remove_student_image = ImageTk.PhotoImage(remove_student_image)
+remove_button = tk.Button(root1, command= remove_student, image= remove_student_image, borderwidth= 0)
+remove_button.place(relx= 0.44, rely= 0.875, anchor= "nw")
 
-remove_button = tk.Button(root1, text= "remove", command= remove_student)
-remove_button.place(relx= 0.5, rely= 0.9)
-
-quit_button = tk.Button(root1, text= "must use quit", command= root1.withdraw)
-quit_button.place(relx= 0.8, rely= 0.9)
+save_exit_image = Image.open("./assets/save_exit.png")
+save_exit_image = save_exit_image.resize((150, 45))
+save_exit_image = ImageTk.PhotoImage(save_exit_image)
+quit_button = tk.Button(root1, command= root1.withdraw, borderwidth= 0, image= save_exit_image)
+quit_button.place(relx= 0.85, rely= 0.875, anchor= "ne")
 
 root1.withdraw()
 
@@ -274,6 +283,13 @@ username_entry.place(relx= .5, rely= .5, anchor= CENTER)
 password_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"), placeholder_text= "password", show= '*')
 password_entry.place(relx= .5, rely= .65, anchor= CENTER)
 
+box_image = Image.open("./assets/box.png")
+box_image = box_image.resize((250, 250))
+box_image = ImageTk.PhotoImage(box_image)
+
+first_box = tk.Label(image= box_image, borderwidth= 0)
+second_box = tk.Label(image= box_image, borderwidth= 0)
+third_box = tk.Label(image= box_image, borderwidth= 0)
 
 def login():
     temp = student_info.find()
@@ -293,7 +309,13 @@ def login():
                 sign_out.place(relx=0.15, rely=0.8, anchor="center")
                 help_button.place(relx= 0.5, rely= 0.8, anchor= "center")
                 about_button.place(relx= 0.85, rely= 0.8, anchor= "center")
-                upcoming_event.place(relx= .5, rely= .1, anchor= CENTER)
+                upcoming_event.place(relx= .5, rely= .08, anchor= CENTER)
+
+                first_box.place(relx= 0.2, rely= 0.4, anchor= "center")
+
+                second_box.place(relx= 0.5, rely= 0.4, anchor= "center")
+
+                third_box.place(relx= 0.8, rely= 0.4, anchor= "center")
 
     if logged_in == False:
         for item2 in temp2:

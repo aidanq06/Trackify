@@ -131,6 +131,12 @@ remove_student_image = ImageTk.PhotoImage(remove_student_image)
 remove_button = tk.Button(root1, command= remove_student, image= remove_student_image, borderwidth= 0)
 remove_button.place(relx= 0.44, rely= 0.875, anchor= "nw")
 
+create_report_image = Image.open("./assets/create_report.png")
+create_report_image = create_report_image.resize((150, 45))
+create_report_image = ImageTk.PhotoImage(create_report_image)
+create_report_button = tk.Button(root1, command= remove_student, image= create_report_image, borderwidth= 0)
+remove_button.place(relx= 0.15, rely= 0.2, anchor= "nw")
+
 save_exit_image = Image.open("./assets/save_exit.png")
 save_exit_image = save_exit_image.resize((150, 45))
 save_exit_image = ImageTk.PhotoImage(save_exit_image)
@@ -161,79 +167,19 @@ label = tk.Label(root, image=img)
 # Position the label in the center of the window
 label.place(relx=0.5, rely=0.5, anchor="center")
 
-
-"""
-# Add a "Edit Student" button to the dialog box
-edit_button = ctk.CTkButton(root, text="Edit Student", command=edit_student)
-edit_button.place(relx= .225, rely= .8, height= 35, width = 200)"""
-"""
-# Add a "remove student" button to the dialog box
-remove_button = ctk.CTkButton(root, text="Remove student", command= remove_student)
-remove_button.place(relx= .425, rely= .8, height= 35, width = 200)"""
-"""
-# Add a "Edit student points" button to the dialog box
-add_points_button = ctk.CTkButton(root, text= "Edit student points", command= add_points)
-add_points_button.place(relx= .625, rely= .8, height= 35, width = 200)"""
-"""
-# Add a "remove all" button to the dialog box
-remove_all = ctk.CTkButton(root, text="Remove all", command= remove_everyone)
-remove_all.place(relx= .825, rely= .8, height= 35, width = 200)"""
-
-"""
-enter = ctk.CTkButton(root, text= "Enter", command= get_entry)
-enter.place(relx = .775, rely= .65, height= 25, width= 120, anchor= CENTER)"""
-"""
-clear = ctk.CTkButton(root, text= "Clear", command= clear)
-clear.place(relx = .375, rely= .65, height= 25, width= 120, anchor= CENTER)"""
-
-"""
-help_button = tk.Button(root, image= help_image,command=open_help_window, bg="#1c1c1c", fg= "#9b9a92", font= large_font, bd = 0, anchor = "w")
-help_button.place(x= 1800, y= 25, anchor=NW)
-help_frame = Frame(root, width = 500, height = 900, bg= '#242424')"""
-"""
-# Allows you to add new students to the database
-add_student = tk.Button(root, text="Add new student",command=inputStudent, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor = "w")
-add_student.place(x= 30, y= 50, anchor=NW)
-"""
-"""
-# Creates a report of the entire database
-winner_button = tk.Button(root, text="Pick Winner", command=pickWinner, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-winner_button.place(x= 30, y= 150, anchor=NW)"""
-"""
-# Creates a report of the entire database
-report_button = tk.Button(root, text="Create Report", command=report, width=22, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-report_button.place(x= 30, y= 250, anchor=NW)
-"""
-
-""" 
-LEFT SIDE 
-"""
-
-
-"""
-RIGHT SIDE
-
-button = tk.Button(root, text="     About Us", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-button.place(relx=0.85,rely=0.1, anchor="center")
-
-button = tk.Button(root, text="     Placeholder", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-button.place(relx=0.85,rely=0.25, anchor="center")
-
-button = tk.Button(root, text="     Placeholder", command=root.destroy, width=25, bg="#242424", fg= "#9b9a92", font= default_font, bd = 0, anchor= "w")
-button.place(relx=0.85,rely=0.4, anchor="center")
-"""
-
 ## IMAGE BUTTONS
 
 event_image = Image.open("./assets/event.png")
 event_image = event_image.resize((250, 75))
 event_image = ImageTk.PhotoImage(event_image)
 event_button = tk.Button(root, image=event_image, command= event)
+event_button.place(relx=0.85, rely=0.2, anchor="center")
 
 add_student_image = Image.open("./assets/add_student.png")
 add_student_image = add_student_image.resize((250, 75))
 add_student_image = ImageTk.PhotoImage(add_student_image)
 add_student_button = tk.Button(root, image=add_student_image, command= add_student)
+add_student_button.place(relx=0.15, rely=0.2, anchor="center")
 
 about_image = Image.open("./assets/about.png")
 about_image = about_image.resize((250, 75))
@@ -245,6 +191,7 @@ view_image = Image.open("./assets/view_entries.png")
 view_image = view_image.resize((250, 75))
 view_image = ImageTk.PhotoImage(view_image)
 view_button = tk.Button(root, image=view_image, command= root1.deiconify) # CHANGE THIS
+view_button.place(relx=0.85, rely=0.6, anchor="center")
 
 help_image = Image.open("./assets/help.png")
 help_image = help_image.resize((250, 75))
@@ -285,17 +232,16 @@ third_box = tk.Label(image= box_image, borderwidth= 0)
 def login():
     temp = student_info.find()
     temp2 = login_info.find()
-    events = event_info.find()
     logged_in = False
 
     if logged_in == False:
         for item in temp:
             if str(password_entry.get()) == str(item["_id"]) and str(username_entry.get()) == str(item["last_name"]):
-                event_button.place_forget()
-                add_student_button.place_forget()
-                view_button.place_forget()
+                event_button.destroy()
+                add_student_button.destroy()
+                view_button.destroy()
                 login_screen.place_forget()
-                label.place_forget()
+                label.destroy()
                 logged_in = True
 
                 sign_out.place(relx=0.15, rely=0.8, anchor="center")
@@ -309,22 +255,12 @@ def login():
 
                 third_box.place(relx= 0.8, rely= 0.4, anchor= "center")
 
-                label1top = tk.Label(root, text= events[0]["name"])
-                label1top.place(relx= 0.2, rely= 0.4, anchor= "center")
-
     if logged_in == False:
         for item2 in temp2:
             if str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]):
                 login_screen.place_forget()
                 sign_out.place(relx=0.15, rely=0.4, anchor="center")
                 logged_in = True
-
-                event_button.place(relx=0.85, rely=0.2, anchor="center")
-                add_student_button.place(relx=0.15, rely=0.2, anchor="center")
-                view_button.place(relx=0.85, rely=0.6, anchor="center")
-                help_button.place(relx=0.85, rely=0.8, anchor="center")
-                about_button.place(relx=0.85, rely=0.4, anchor="center")
-                label.place(relx=0.5, rely=0.5, anchor="center")
 
                 upcoming_event.place_forget()
 
@@ -355,9 +291,6 @@ img1 = ImageTk.PhotoImage(img1)
 def place_login_frame():
     login_screen.place(relx= 0, rely= 0, anchor= NW)
     sign_out.place_forget()
-    first_box.place_forget()
-    second_box.place_forget()
-    third_box.place_forget()
     username_entry.delete(0, END)
     password_entry.delete(0, END)
 

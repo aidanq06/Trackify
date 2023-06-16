@@ -8,13 +8,7 @@ import random as rand
 from PIL import ImageTk, Image
 import pymongo
 from pymongo import MongoClient
-import pyglet
 import datetime
-
-
-pyglet.font.add_file("./assets/Quicksand-Bold.ttf")
-
-#uicksand = pyglet.font.load('Quicksand-Bold.ttf', bold=True)
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["RRHSfbla2023"]
@@ -235,13 +229,11 @@ event_image = Image.open("./assets/event.png")
 event_image = event_image.resize((250, 75))
 event_image = ImageTk.PhotoImage(event_image)
 event_button = tk.Button(root, image=event_image, command= event)
-event_button.place(relx=0.85, rely=0.2, anchor="center")
 
 add_student_image = Image.open("./assets/add_student.png")
 add_student_image = add_student_image.resize((250, 75))
 add_student_image = ImageTk.PhotoImage(add_student_image)
 add_student_button = tk.Button(root, image=add_student_image, command= add_student)
-add_student_button.place(relx=0.15, rely=0.2, anchor="center")
 
 about_image = Image.open("./assets/about.png")
 about_image = about_image.resize((250, 75))
@@ -253,7 +245,6 @@ view_image = Image.open("./assets/view_entries.png")
 view_image = view_image.resize((250, 75))
 view_image = ImageTk.PhotoImage(view_image)
 view_button = tk.Button(root, image=view_image, command= root1.deiconify) # CHANGE THIS
-view_button.place(relx=0.85, rely=0.6, anchor="center")
 
 help_image = Image.open("./assets/help.png")
 help_image = help_image.resize((250, 75))
@@ -294,16 +285,17 @@ third_box = tk.Label(image= box_image, borderwidth= 0)
 def login():
     temp = student_info.find()
     temp2 = login_info.find()
+    events = event_info.find()
     logged_in = False
 
     if logged_in == False:
         for item in temp:
             if str(password_entry.get()) == str(item["_id"]) and str(username_entry.get()) == str(item["last_name"]):
-                event_button.destroy()
-                add_student_button.destroy()
-                view_button.destroy()
+                event_button.place_forget()
+                add_student_button.place_forget()
+                view_button.place_forget()
                 login_screen.place_forget()
-                label.destroy()
+                label.place_forget()
                 logged_in = True
 
                 sign_out.place(relx=0.15, rely=0.8, anchor="center")
@@ -317,12 +309,22 @@ def login():
 
                 third_box.place(relx= 0.8, rely= 0.4, anchor= "center")
 
+                label1top = tk.Label(root, text= events[0]["name"])
+                label1top.place(relx= 0.2, rely= 0.4, anchor= "center")
+
     if logged_in == False:
         for item2 in temp2:
             if str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]):
                 login_screen.place_forget()
                 sign_out.place(relx=0.15, rely=0.4, anchor="center")
                 logged_in = True
+
+                event_button.place(relx=0.85, rely=0.2, anchor="center")
+                add_student_button.place(relx=0.15, rely=0.2, anchor="center")
+                view_button.place(relx=0.85, rely=0.6, anchor="center")
+                help_button.place(relx=0.85, rely=0.8, anchor="center")
+                about_button.place(relx=0.85, rely=0.4, anchor="center")
+                label.place(relx=0.5, rely=0.5, anchor="center")
 
                 upcoming_event.place_forget()
 
@@ -353,6 +355,9 @@ img1 = ImageTk.PhotoImage(img1)
 def place_login_frame():
     login_screen.place(relx= 0, rely= 0, anchor= NW)
     sign_out.place_forget()
+    first_box.place_forget()
+    second_box.place_forget()
+    third_box.place_forget()
     username_entry.delete(0, END)
     password_entry.delete(0, END)
 

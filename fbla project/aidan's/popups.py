@@ -1,11 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 from tkinter import ttk
-import pyglet
 from PIL import ImageTk, Image
-
-pyglet.font.add_file("./assets/Quicksand_Bold.otf")
-
 
 def error(error_message):
     root = tk.Toplevel()

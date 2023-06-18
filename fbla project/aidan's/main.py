@@ -129,13 +129,7 @@ remove_student_image = Image.open("./assets/remove_student.png")
 remove_student_image = remove_student_image.resize((150, 45))
 remove_student_image = ImageTk.PhotoImage(remove_student_image)
 remove_button = tk.Button(root1, command= remove_student, image= remove_student_image, borderwidth= 0)
-remove_button.place(relx= 0.44, rely= 0.875, anchor= "nw")
-
-create_report_image = Image.open("./assets/create_report.png")
-create_report_image = create_report_image.resize((150, 45))
-create_report_image = ImageTk.PhotoImage(create_report_image)
-create_report_button = tk.Button(root1, command= remove_student, image= create_report_image, borderwidth= 0)
-remove_button.place(relx= 0.15, rely= 0.2, anchor= "nw")
+remove_button.place(relx= 0.5, rely= 0.88, anchor= "center")
 
 save_exit_image = Image.open("./assets/save_exit.png")
 save_exit_image = save_exit_image.resize((150, 45))
@@ -193,6 +187,12 @@ view_image = ImageTk.PhotoImage(view_image)
 view_button = tk.Button(root, image=view_image, command= root1.deiconify) # CHANGE THIS
 view_button.place(relx=0.85, rely=0.6, anchor="center")
 
+create_report_image = Image.open("./assets/create_report.png")
+create_report_image = create_report_image.resize((250, 75))
+create_report_image = ImageTk.PhotoImage(create_report_image)
+create_report_button = tk.Button(root, command= remove_student, image= create_report_image)
+create_report_button.place(relx=0.15, rely=0.6, anchor="center")
+
 help_image = Image.open("./assets/help.png")
 help_image = help_image.resize((250, 75))
 help_image = ImageTk.PhotoImage(help_image)
@@ -232,6 +232,44 @@ third_box = tk.Label(image= box_image, borderwidth= 0)
 def login():
     temp = student_info.find()
     temp2 = login_info.find()
+    events = event_info.find()
+    dates = list()
+    names = list()
+    points = list()
+    x = 0
+    for event in events:
+        dates.append(event["date"].split("/"))
+
+    for date in dates:
+        date_temp = list(map(int, date))
+        dates[x] = date_temp
+        x+= 1
+    
+    x = 0
+    for date in dates:
+        new_date = datetime.date(date[2], date[0], date[1])
+        dates[x] = new_date
+        x+= 1
+        print(dates)
+
+    dates.sort()
+
+    for date in dates:
+        string = date.strftime('%m/%d/%Y')
+        events = event_info.find()
+        for event in events:
+            print(event['date'])
+            print(string)
+            if string == event['date']:
+                names.append(event['name'])
+                points.append(event['points'])
+    
+    x = 0
+    for i in range(len(names)):
+        name_label = ctk.CTkLabel(root, text= names[i])
+        name_label.place(relx= 0.2, rely= 0.4, anchor= "center")
+
+
     logged_in = False
 
     if logged_in == False:
@@ -242,6 +280,7 @@ def login():
                 view_button.destroy()
                 login_screen.place_forget()
                 label.destroy()
+                create_report_button.destroy()
                 logged_in = True
 
                 sign_out.place(relx=0.15, rely=0.8, anchor="center")
@@ -289,6 +328,9 @@ img1 = ImageTk.PhotoImage(img1)
 
 
 def place_login_frame():
+    first_box.place_forget()
+    second_box.place_forget()
+    third_box.place_forget()
     login_screen.place(relx= 0, rely= 0, anchor= NW)
     sign_out.place_forget()
     username_entry.delete(0, END)

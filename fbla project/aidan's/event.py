@@ -6,6 +6,7 @@ import pymongo
 from pymongo import MongoClient
 from tkcalendar import Calendar
 
+
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["RRHSfbla2023"]
 student_info = db["student_info"]
@@ -30,7 +31,7 @@ def event():
 
     tkc = Calendar(event_window, selectmode= "day", year= 2023, month= 1, date= 1, font= "Quicksand 15", background="#1c1c1c", disabledbackground="#1c1c1c", bordercolor="#1c1c1c", 
                headersbackground="#1c1c1c", normalbackground="#1c1c1c", foreground='white', 
-               normalforeground='white', headersforeground='white')
+               normalforeground='white', headersforeground='white', date_pattern= "mm/dd/yyyy")
     tkc.config(background= '#1c1c1c')
     tkc.place(relx= .5, rely= .35, anchor= "n")
 

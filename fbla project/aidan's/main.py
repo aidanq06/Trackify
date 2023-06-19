@@ -27,6 +27,7 @@ from add_student import add_student
 #from winner import pickWinner
 #from helper import open_help_window
 
+student_id = 0
 #creates the home GUI
 root = tk.Tk()
 root.geometry("1000x500")
@@ -254,9 +255,22 @@ for date in dates:
             names.append(event['name'])
             points.append(event['points'])
 
-name_label1 = ctk.CTkLabel(root, text= "")
+name_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand_bold", 25, "bold"))
 name_label2 = ctk.CTkLabel(root, text= "")
 name_label3 = ctk.CTkLabel(root, text= "")
+
+date_label1 = ctk.CTkLabel(root, text= "")
+date_label2 = ctk.CTkLabel(root, text= "")
+date_label3 = ctk.CTkLabel(root, text= "")
+
+point_label1 = ctk.CTkLabel(root, text= "")
+point_label2 = ctk.CTkLabel(root, text= "")
+point_label3 = ctk.CTkLabel(root, text= "")
+
+status_label1 = ctk.CTkLabel(root, text= "")
+status_label2 = ctk.CTkLabel(root, text= "")
+status_label3 = ctk.CTkLabel(root, text= "")
+
 temp_count = 0
 def refresh_events(count, value, move): 
     global temp_count 
@@ -270,36 +284,92 @@ def refresh_events(count, value, move):
             else:
                 count -= 1
 
-            label1 = tk.StringVar()
-            label1.set(names[count])
-            name_label1.configure(text= label1.get())
-            name_label1.place(relx = 0.2, rely = 0.4, anchor= "center")
+            name_text1 = tk.StringVar()
+            name_text1.set(names[count])
+            name_label1.configure(text= name_text1.get())
+            name_label1.place(relx = 0.2, rely = 0.25, anchor= "center")
 
-            label2 = tk.StringVar()
-            label2.set(names[count+ 1])
-            name_label2.configure(text= label2.get())
+
+            date_text1 = tk.StringVar()
+            date_text1.set(dates[count])
+            date_label1.configure(text= date_text1.get())
+            date_label1.place(relx = 0.2, rely = 0.5, anchor= "center")
+
+            point_text1 = tk.StringVar()
+            point_text1.set(points[count])
+            point_label1.configure(text= point_text1.get())
+            point_label1.place(relx = 0.2, rely = 0.6, anchor= "center")
+
+            participating_button1.place(relx= 0.15, rely= 0.35, anchor= "center")
+            attending_button1.place(relx= 0.25, rely= 0.35, anchor= "center")
+
+
+            name_text2 = tk.StringVar()
+            name_text2.set(names[count+ 1])
+            name_label2.configure(text= name_text2.get())
             name_label2.place(relx = 0.5, rely = 0.4, anchor= "center")
 
-            label3 = tk.StringVar()
-            label3.set(names[count+ 2])
-            name_label3.configure(text= label3.get())
+            date_text2 = tk.StringVar()
+            date_text2.set(dates[count])
+            date_label2.configure(text= date_text2.get())
+            date_label2.place(relx = 0.5, rely = 0.5, anchor= "center")
+
+            point_text2 = tk.StringVar()
+            point_text2.set(points[count])
+            point_label2.configure(text= point_text2.get())
+            point_label2.place(relx = 0.5, rely = 0.6, anchor= "center")
+
+            name_text3 = tk.StringVar()
+            name_text3.set(names[count+ 2])
+            name_label3.configure(text= name_text3.get())
             name_label3.place(relx = 0.8, rely = 0.4, anchor= "center")
+
+            date_text3 = tk.StringVar()
+            date_text3.set(dates[count])
+            date_label3.configure(text= date_text3.get())
+            date_label3.place(relx = 0.8, rely = 0.5, anchor= "center")
+
+            point_text3 = tk.StringVar()
+            point_text3.set(points[count])
+            point_label3.configure(text= point_text3.get())
+            point_label3.place(relx = 0.8, rely = 0.6, anchor= "center")
             
             temp_count = count
 
         else:
-            print("max reached")
+            ...
     else:
         name_label1.place_forget()
         name_label2.place_forget()
         name_label3.place_forget()
         count = 0
-    
-forward = ctk.CTkButton(root, text= "forward", command=lambda: refresh_events(temp_count, True, 1))
-backward = ctk.CTkButton(root, text= "backward", command=lambda: refresh_events(temp_count, True, -1))
 
+forward_image = Image.open("./assets/right_arrow.png")
+forward_image = forward_image.resize((50, 50))
+forward_image = ImageTk.PhotoImage(forward_image)
+forward = tk.Button(root, image= forward_image, command=lambda: refresh_events(temp_count, True, 1), borderwidth= 0, highlightthickness= 0, bd= 0)
+
+backward_image = Image.open("./assets/left_arrow.png")
+backward_image = backward_image.resize((50, 50))
+backward_image = ImageTk.PhotoImage(backward_image)
+backward = tk.Button(root, image= backward_image, command=lambda: refresh_events(temp_count, True, -1), borderwidth= 0, highlightthickness= 0, bd= 0 )
+
+participating_image = Image.open("./assets/participating.png")
+participating_image = participating_image.resize((80, 24))
+participating_image = ImageTk.PhotoImage(participating_image)
+participating_button1 = tk.Button(root, image= participating_image, command= lambda: print(student_id))
+participating_button2 = tk.Button(root, image= participating_image, command= lambda: print(student_id))
+participating_button3 = tk.Button(root, image= participating_image, command= lambda: print(student_id))
+
+attending_image = Image.open("./assets/attending.png")
+attending_image = attending_image.resize((80, 24))
+attending_image = ImageTk.PhotoImage(attending_image)
+attending_button1 = tk.Button(root, image= attending_image, command= lambda: print(student_id))
+attending_button2 = tk.Button(root, image= attending_image, command= lambda: print(student_id))
+attending_button3 = tk.Button(root, image= attending_image, command= lambda: print(student_id))
 
 def login():
+    global student_id
     temp = student_info.find()
     temp2 = login_info.find()
     events = event_info.find()
@@ -309,6 +379,7 @@ def login():
     if logged_in == False:
         for item in temp:
             if str(password_entry.get()) == str(item["_id"]) and str(username_entry.get()) == str(item["last_name"]):
+                student_id = item["_id"]
                 event_button.place_forget()
                 add_student_button.place_forget()
                 view_button.place_forget()
@@ -330,8 +401,8 @@ def login():
 
                 refresh_events(0, True, 0)
 
-                forward.place(relx= 0.9, rely= 0.4, anchor= "center")
-                backward.place(relx= 0.1, rely= 0.4, anchor= "center")
+                forward.place(relx= 0.965, rely= 0.4, anchor= "center")
+                backward.place(relx= 0.035, rely= 0.4, anchor= "center")
 
     if logged_in == False:
         for item2 in temp2:
@@ -379,6 +450,8 @@ def place_login_frame():
     first_box.place_forget()
     second_box.place_forget()
     third_box.place_forget()
+    forward.place_forget()
+    backward.place_forget()
     login_screen.place(relx= 0, rely= 0, anchor= NW)
     sign_out.place_forget()
     username_entry.delete(0, END)

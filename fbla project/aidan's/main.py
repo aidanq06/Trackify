@@ -158,52 +158,46 @@ img = ImageTk.PhotoImage(img)
 # Create a label to display the image
 label = tk.Label(root, image=img)
 
-# Position the label in the center of the window
-label.place(relx=0.5, rely=0.5, anchor="center")
-
 ## IMAGE BUTTONS
 
 event_image = Image.open("./assets/event.png")
 event_image = event_image.resize((250, 75))
 event_image = ImageTk.PhotoImage(event_image)
 event_button = tk.Button(root, image=event_image, command= event)
-event_button.place(relx=0.85, rely=0.2, anchor="center")
 
 add_student_image = Image.open("./assets/add_student.png")
 add_student_image = add_student_image.resize((250, 75))
 add_student_image = ImageTk.PhotoImage(add_student_image)
 add_student_button = tk.Button(root, image=add_student_image, command= add_student)
-add_student_button.place(relx=0.15, rely=0.2, anchor="center")
+
 
 about_image = Image.open("./assets/about.png")
 about_image = about_image.resize((250, 75))
 about_image = ImageTk.PhotoImage(about_image)
 about_button = tk.Button(root, image=about_image, command=about)
-about_button.place(relx=0.85, rely=0.4, anchor="center")
+
 
 view_image = Image.open("./assets/view_entries.png")
 view_image = view_image.resize((250, 75))
 view_image = ImageTk.PhotoImage(view_image)
 view_button = tk.Button(root, image=view_image, command= root1.deiconify) # CHANGE THIS
-view_button.place(relx=0.85, rely=0.6, anchor="center")
+
 
 create_report_image = Image.open("./assets/create_report.png")
 create_report_image = create_report_image.resize((250, 75))
 create_report_image = ImageTk.PhotoImage(create_report_image)
 create_report_button = tk.Button(root, command= remove_student, image= create_report_image)
-create_report_button.place(relx=0.15, rely=0.6, anchor="center")
+
 
 help_image = Image.open("./assets/help.png")
 help_image = help_image.resize((250, 75))
 help_image = ImageTk.PhotoImage(help_image)
 help_button = tk.Button(root, image=help_image, command=about) # CHANGE THIS
-help_button.place(relx=0.85, rely=0.8, anchor="center")
 
 upcoming_event_image = Image.open("./assets/upcoming_events.png")
 upcoming_event_image = upcoming_event_image.resize((270, 75))
 upcoming_event_image = ImageTk.PhotoImage(upcoming_event_image)
 upcoming_event = Label(root, image= upcoming_event_image, bd= 0)
-upcoming_event.place(relx= .5, rely= .1, anchor= CENTER)
 
 
 login_screen = Frame(root, width= 1000, height= 500, bg= '#1c1c1c')
@@ -228,59 +222,99 @@ box_image = ImageTk.PhotoImage(box_image)
 first_box = tk.Label(image= box_image, borderwidth= 0)
 second_box = tk.Label(image= box_image, borderwidth= 0)
 third_box = tk.Label(image= box_image, borderwidth= 0)
+temp = student_info.find()
+temp2 = login_info.find()
+events = event_info.find()
+
+dates = list()
+names = list()
+points = list()
+x = 0
+for event in events:
+    dates.append(event["date"].split("/"))
+
+for date in dates:
+    date_temp = list(map(int, date))
+    dates[x] = date_temp
+    x+= 1
+
+x = 0
+for date in dates:
+    new_date = datetime.date(date[2], date[0], date[1])
+    dates[x] = new_date
+    x+= 1
+
+dates.sort()
+
+for date in dates:
+    string = date.strftime('%m/%d/%Y')
+    events = event_info.find()
+    for event in events:
+        if string == event['date']:
+            names.append(event['name'])
+            points.append(event['points'])
+
+name_label1 = ctk.CTkLabel(root, text= "")
+name_label2 = ctk.CTkLabel(root, text= "")
+name_label3 = ctk.CTkLabel(root, text= "")
+temp_count = 0
+def refresh_events(count, value, move): 
+    global temp_count 
+    if value == True: 
+        if (count+ 2 < len(dates)- 1 and move == 1) or (count -1 >= 0 and move == -1) or (move == 0):
+            print(names)
+            if move == 0:
+                ...
+            elif move == 1:
+                count += 1
+            else:
+                count -= 1
+
+            label1 = tk.StringVar()
+            label1.set(names[count])
+            name_label1.configure(text= label1.get())
+            name_label1.place(relx = 0.2, rely = 0.4, anchor= "center")
+
+            label2 = tk.StringVar()
+            label2.set(names[count+ 1])
+            name_label2.configure(text= label2.get())
+            name_label2.place(relx = 0.5, rely = 0.4, anchor= "center")
+
+            label3 = tk.StringVar()
+            label3.set(names[count+ 2])
+            name_label3.configure(text= label3.get())
+            name_label3.place(relx = 0.8, rely = 0.4, anchor= "center")
+            
+            temp_count = count
+
+        else:
+            print("max reached")
+    else:
+        name_label1.place_forget()
+        name_label2.place_forget()
+        name_label3.place_forget()
+        count = 0
+    
+forward = ctk.CTkButton(root, text= "forward", command=lambda: refresh_events(temp_count, True, 1))
+backward = ctk.CTkButton(root, text= "backward", command=lambda: refresh_events(temp_count, True, -1))
+
 
 def login():
     temp = student_info.find()
     temp2 = login_info.find()
     events = event_info.find()
-    dates = list()
-    names = list()
-    points = list()
-    x = 0
-    for event in events:
-        dates.append(event["date"].split("/"))
-
-    for date in dates:
-        date_temp = list(map(int, date))
-        dates[x] = date_temp
-        x+= 1
-    
-    x = 0
-    for date in dates:
-        new_date = datetime.date(date[2], date[0], date[1])
-        dates[x] = new_date
-        x+= 1
-        print(dates)
-
-    dates.sort()
-
-    for date in dates:
-        string = date.strftime('%m/%d/%Y')
-        events = event_info.find()
-        for event in events:
-            print(event['date'])
-            print(string)
-            if string == event['date']:
-                names.append(event['name'])
-                points.append(event['points'])
-    
-    x = 0
-    for i in range(len(names)):
-        name_label = ctk.CTkLabel(root, text= names[i])
-        name_label.place(relx= 0.2, rely= 0.4, anchor= "center")
-
 
     logged_in = False
 
     if logged_in == False:
         for item in temp:
             if str(password_entry.get()) == str(item["_id"]) and str(username_entry.get()) == str(item["last_name"]):
-                event_button.destroy()
-                add_student_button.destroy()
-                view_button.destroy()
+                event_button.place_forget()
+                add_student_button.place_forget()
+                view_button.place_forget()
                 login_screen.place_forget()
-                label.destroy()
-                create_report_button.destroy()
+                label.place_forget()
+                create_report_button.place_forget()
                 logged_in = True
 
                 sign_out.place(relx=0.15, rely=0.8, anchor="center")
@@ -294,12 +328,26 @@ def login():
 
                 third_box.place(relx= 0.8, rely= 0.4, anchor= "center")
 
+                refresh_events(0, True, 0)
+
+                forward.place(relx= 0.9, rely= 0.4, anchor= "center")
+                backward.place(relx= 0.1, rely= 0.4, anchor= "center")
+
     if logged_in == False:
         for item2 in temp2:
             if str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]):
                 login_screen.place_forget()
                 sign_out.place(relx=0.15, rely=0.4, anchor="center")
                 logged_in = True
+
+                event_button.place(relx=0.85, rely=0.2, anchor="center")
+                add_student_button.place(relx=0.15, rely=0.2, anchor="center")
+                about_button.place(relx=0.85, rely=0.4, anchor="center")
+                view_button.place(relx=0.85, rely=0.6, anchor="center")
+                create_report_button.place(relx=0.15, rely=0.6, anchor="center")
+                help_button.place(relx=0.85, rely=0.8, anchor="center")
+                upcoming_event.place(relx= .5, rely= .1, anchor= CENTER)
+                label.place(relx=0.5, rely=0.5, anchor="center")
 
                 upcoming_event.place_forget()
 
@@ -335,6 +383,7 @@ def place_login_frame():
     sign_out.place_forget()
     username_entry.delete(0, END)
     password_entry.delete(0, END)
+    refresh_events(0, False, 0)
 
 sign_out_image = Image.open("./assets/sign_out.png")
 sign_out_image = sign_out_image.resize((250, 75))

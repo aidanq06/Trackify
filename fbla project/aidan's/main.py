@@ -15,12 +15,14 @@ db = cluster["RRHSfbla2023"]
 student_info = db["student_info"]
 event_info = db["event_info"]
 login_info = db["login_info"]
+request_info = db["request_info"]
 
 from about import about
 from event import event
 from register import register
 from popups import error
 from add_student import add_student
+from view_requests import view_requests
 
 #from newStudent import inputStudent
 #from report import report
@@ -130,7 +132,7 @@ remove_student_image = Image.open("./assets/remove_student.png")
 remove_student_image = remove_student_image.resize((150, 45))
 remove_student_image = ImageTk.PhotoImage(remove_student_image)
 remove_button = tk.Button(root1, command= remove_student, image= remove_student_image, borderwidth= 0)
-remove_button.place(relx= 0.5, rely= 0.88, anchor= "center")
+remove_button.place(relx= 0.5, rely= 0.875, anchor= "n")
 
 save_exit_image = Image.open("./assets/save_exit.png")
 save_exit_image = save_exit_image.resize((150, 45))
@@ -188,6 +190,11 @@ create_report_image = Image.open("./assets/create_report.png")
 create_report_image = create_report_image.resize((250, 75))
 create_report_image = ImageTk.PhotoImage(create_report_image)
 create_report_button = tk.Button(root, command= remove_student, image= create_report_image)
+
+view_requests_image = Image.open("./assets/view_requests.png")
+view_requests_image = view_requests_image.resize((250, 75))
+view_requests_image = ImageTk.PhotoImage(view_requests_image)
+view_requests_button = tk.Button(root, command= view_requests, image= view_requests_image)
 
 
 help_image = Image.open("./assets/help.png")
@@ -272,8 +279,11 @@ status_label2 = ctk.CTkLabel(root, text= "")
 status_label3 = ctk.CTkLabel(root, text= "")
 
 temp_count = 0
-def refresh_events(count, value, move): 
-    global temp_count 
+request = list()
+def refresh_events(count, value, move, type, type2): 
+    global temp_count
+    global request
+    request = []
     if value == True: 
         if (count+ 2 < len(dates)- 1 and move == 1) or (count -1 >= 0 and move == -1) or (move == 0):
             print(names)
@@ -289,7 +299,6 @@ def refresh_events(count, value, move):
             name_label1.configure(text= name_text1.get())
             name_label1.place(relx = 0.2, rely = 0.25, anchor= "center")
 
-
             date_text1 = tk.StringVar()
             date_text1.set(dates[count])
             date_label1.configure(text= date_text1.get())
@@ -300,9 +309,13 @@ def refresh_events(count, value, move):
             point_label1.configure(text= point_text1.get())
             point_label1.place(relx = 0.2, rely = 0.6, anchor= "center")
 
+            if type == 1 and type2 == "attending":
+                request = [name_text1.get(), date_text1.get(), "attending"]
+            elif type == 1 and type2 == "participating":
+                request = [name_text1.get(), date_text1.get(), "participating"]
+
             participating_button1.place(relx= 0.15, rely= 0.35, anchor= "center")
             attending_button1.place(relx= 0.25, rely= 0.35, anchor= "center")
-
 
             name_text2 = tk.StringVar()
             name_text2.set(names[count+ 1])
@@ -319,6 +332,14 @@ def refresh_events(count, value, move):
             point_label2.configure(text= point_text2.get())
             point_label2.place(relx = 0.5, rely = 0.6, anchor= "center")
 
+            if type == 2 and type2 == "attending":
+                request = [name_text2.get(), date_text2.get(), "attending"]
+            elif type == 2 and type2 == "participating":
+                request = [name_text2.get(), date_text2.get(), "participating"]
+
+            participating_button2.place(relx= 0.45, rely= 0.35, anchor= "center")
+            attending_button2.place(relx= 0.55, rely= 0.35, anchor= "center")
+
             name_text3 = tk.StringVar()
             name_text3.set(names[count+ 2])
             name_label3.configure(text= name_text3.get())
@@ -333,8 +354,28 @@ def refresh_events(count, value, move):
             point_text3.set(points[count])
             point_label3.configure(text= point_text3.get())
             point_label3.place(relx = 0.8, rely = 0.6, anchor= "center")
+
+            if type == 3 and type2 == "attending":
+                request = [name_text3.get(), date_text3.get(), "attending"]
+            elif type == 3 and type2 == "participating":
+                request = [name_text3.get(), date_text3.get(), "participating"]
+
+            participating_button3.place(relx= 0.75, rely= 0.35, anchor= "center")
+            attending_button3.place(relx= 0.85, rely= 0.35, anchor= "center")
             
             temp_count = count
+            
+            x = 0
+            requests = request_info.find()
+            if type > 0:
+                for i in requests:
+                    if i.get("student_id") == student_id and i.get("name") == request[0] and i.get("date") == request[1]:
+                        x+= 1
+                if x == 0:
+                    temp_info = {"student_id": student_id, "name": request[0], "date": request[1], "type": request[2], "status": "pending"}
+                    request_info.insert_one(temp_info)
+                else:
+                    print("error message")
 
         else:
             ...
@@ -347,26 +388,26 @@ def refresh_events(count, value, move):
 forward_image = Image.open("./assets/right_arrow.png")
 forward_image = forward_image.resize((50, 50))
 forward_image = ImageTk.PhotoImage(forward_image)
-forward = tk.Button(root, image= forward_image, command=lambda: refresh_events(temp_count, True, 1), borderwidth= 0, highlightthickness= 0, bd= 0)
+forward = tk.Button(root, image= forward_image, command=lambda: refresh_events(temp_count, True, 1, 0, "empty"), borderwidth= 0, highlightthickness= 0, bd= 0)
 
 backward_image = Image.open("./assets/left_arrow.png")
 backward_image = backward_image.resize((50, 50))
 backward_image = ImageTk.PhotoImage(backward_image)
-backward = tk.Button(root, image= backward_image, command=lambda: refresh_events(temp_count, True, -1), borderwidth= 0, highlightthickness= 0, bd= 0 )
+backward = tk.Button(root, image= backward_image, command=lambda: refresh_events(temp_count, True, -1, 0, "empty"), borderwidth= 0, highlightthickness= 0, bd= 0 )
 
 participating_image = Image.open("./assets/participating.png")
 participating_image = participating_image.resize((80, 24))
 participating_image = ImageTk.PhotoImage(participating_image)
-participating_button1 = tk.Button(root, image= participating_image, command= lambda: print(student_id))
-participating_button2 = tk.Button(root, image= participating_image, command= lambda: print(student_id))
-participating_button3 = tk.Button(root, image= participating_image, command= lambda: print(student_id))
+participating_button1 = tk.Button(root, image= participating_image, command=lambda: refresh_events(temp_count, True, 0, 1, "participating"))
+participating_button2 = tk.Button(root, image= participating_image, command=lambda: refresh_events(temp_count, True, 0, 2, "participating"))
+participating_button3 = tk.Button(root, image= participating_image, command=lambda: refresh_events(temp_count, True, 0, 3, "participating"))
 
 attending_image = Image.open("./assets/attending.png")
 attending_image = attending_image.resize((80, 24))
 attending_image = ImageTk.PhotoImage(attending_image)
-attending_button1 = tk.Button(root, image= attending_image, command= lambda: print(student_id))
-attending_button2 = tk.Button(root, image= attending_image, command= lambda: print(student_id))
-attending_button3 = tk.Button(root, image= attending_image, command= lambda: print(student_id))
+attending_button1 = tk.Button(root, image= attending_image, command=lambda: refresh_events(temp_count, True, 0, 1, "attending"))
+attending_button2 = tk.Button(root, image= attending_image, command=lambda: refresh_events(temp_count, True, 0, 2, "attending"))
+attending_button3 = tk.Button(root, image= attending_image, command=lambda: refresh_events(temp_count, True, 0, 3, "attending"))
 
 def login():
     global student_id
@@ -399,7 +440,7 @@ def login():
 
                 third_box.place(relx= 0.8, rely= 0.4, anchor= "center")
 
-                refresh_events(0, True, 0)
+                refresh_events(0, True, 0, 0, "empty")
 
                 forward.place(relx= 0.965, rely= 0.4, anchor= "center")
                 backward.place(relx= 0.035, rely= 0.4, anchor= "center")
@@ -408,7 +449,7 @@ def login():
         for item2 in temp2:
             if str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]):
                 login_screen.place_forget()
-                sign_out.place(relx=0.15, rely=0.4, anchor="center")
+                sign_out.place(relx=0.15, rely=0.6, anchor="center")
                 logged_in = True
 
                 event_button.place(relx=0.85, rely=0.2, anchor="center")
@@ -419,6 +460,7 @@ def login():
                 help_button.place(relx=0.85, rely=0.8, anchor="center")
                 upcoming_event.place(relx= .5, rely= .1, anchor= CENTER)
                 label.place(relx=0.5, rely=0.5, anchor="center")
+                view_requests_button.place(relx= 0.15, rely= 0.4, anchor= "center")
 
                 upcoming_event.place_forget()
 
@@ -456,7 +498,23 @@ def place_login_frame():
     sign_out.place_forget()
     username_entry.delete(0, END)
     password_entry.delete(0, END)
-    refresh_events(0, False, 0)
+    refresh_events(0, False, 0, 0, "empty")
+    attending_button1.place_forget()
+    attending_button2.place_forget()
+    attending_button3.place_forget()
+    participating_button1.place_forget()
+    participating_button2.place_forget()
+    participating_button3.place_forget()
+    name_label1.place_forget()
+    name_label2.place_forget()
+    name_label3.place_forget()
+    date_label1.place_forget()
+    date_label2.place_forget()
+    date_label3.place_forget()
+    point_label1.place_forget()
+    point_label2.place_forget()
+    point_label3.place_forget()
+    view_requests_button.place_forget()
 
 sign_out_image = Image.open("./assets/sign_out.png")
 sign_out_image = sign_out_image.resize((250, 75))

@@ -25,6 +25,7 @@ from register import register
 from popups import error
 from add_student import add_student
 from view_requests import view_requests
+from create_report2 import createReport
 #from prizes import WinnersWindow, ExportNotificationWindow, StudentPrizeApp
 from prize2 import pick_winners
 
@@ -62,6 +63,8 @@ listbox.heading("# 4", text="Grade Level")
 listbox.column("# 5", anchor=CENTER, width = 199)
 listbox.heading("# 5", text="Points")
 
+
+
 def refresh():
     for item in listbox.get_children():
         listbox.delete(item)
@@ -91,7 +94,7 @@ def edit_student():
     edit_student_window.geometry("400x600")
     edit_student_window.configure(bg= '#1c1c1c')
 
-    first_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"))
+    first_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1C1C", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"))
     first_entry.insert(0, selection[1])
     def first_select(event):
         first_entry.select_range(0, END)
@@ -128,17 +131,6 @@ def edit_student():
 
 root1.withdraw()
 
-"""
-#creates a label for the home GUI called Student Involment Tracker
-left_frame = Frame(root, width = 275, height = 1000, bg= '#242424')
-left_frame.place(x = 0, y= 0, anchor = NW)
-
-top_frame = Frame(root, width = 2000, height = 100, bg= '#1c1c1c')
-top_frame.place(x = 275, y= 0, anchor = NW)
-"""
-
-"""help_image = PhotoImage(file = "./assets/help_image.png")
-help2_image = PhotoImage(file = "./assets/help2_image.png")"""
 # Open and resize the image
 img = Image.open("./assets/logo.png")
 img = img.resize((400, 400))
@@ -188,7 +180,7 @@ view_button = tk.Button(root, image=view_image, command= root1.deiconify) # CHAN
 create_report_image = Image.open("./assets/create_report.png")
 create_report_image = create_report_image.resize((250, 75))
 create_report_image = ImageTk.PhotoImage(create_report_image)
-create_report_button = tk.Button(root, command= remove_student, image= create_report_image)
+create_report_button = tk.Button(root, command= createReport, image= create_report_image)
 
 view_requests_image = Image.open("./assets/view_requests.png")
 view_requests_image = view_requests_image.resize((250, 75))
@@ -446,7 +438,7 @@ def login():
         for item2 in temp2:
             if str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]):
                 login_screen.place_forget()
-                sign_out.place(relx=0.15, rely=0.6, anchor="center")
+                sign_out.place(relx=0.15, rely=0.8, anchor="center")
                 logged_in = True
 
                 event_button.place(relx=0.85, rely=0.2, anchor="center")

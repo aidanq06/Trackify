@@ -12,12 +12,11 @@ def about():
     def close():
         root1.destroy()
 
-    aboutText = Image.open("./assets/aboutText.png")
-    aboutText = aboutText.resize((500, 500))
-    aboutText = ImageTk.PhotoImage(aboutText)
-    aboutLabel = tk.Label(root1,image=aboutText, border= 0)
-    aboutLabel.image = aboutText
-    aboutLabel.place(relx=0.55, rely=0.5, anchor="center")
+    aboutLabel = ctk.CTkLabel(root1,text="About Us", font=("Quicksand",32), text_color="white")
+    aboutLabel.place(relx=0.50, rely=0.2, anchor="center")
+
+    aboutText = ctk.CTkLabel(root1,text="Hello", font=("Quicksand",16), text_color="white")
+    aboutText.place(relx=0.50, rely=0.4, anchor="center")
 
     back_image = Image.open("./assets/back.png")
     back_image = back_image.resize((50, 40))
@@ -27,17 +26,4 @@ def about():
     back_button.place(relx=0.075, rely=0.075, anchor="center")
 
     root1.mainloop()
-    """
-    aWin = ctk.CTkToplevel()
-    aWin.title("About us")
-    aWin.geometry("400x100")
-    """
-    """
-    Label = ctk.CTkLabel(aWin, text="HELLO",corner_radius=10)
-    Label.place(relx=0.5,rely=.3, anchor="center")
-    """
-    """
-    close_button = ctk.CTkButton(aWin, text="Close", command=close)
-    close_button.place(relx=0.5,rely=0.7, anchor="center")
-    """
    

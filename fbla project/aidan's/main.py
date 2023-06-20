@@ -10,6 +10,7 @@ import pymongo
 from pymongo import MongoClient
 import datetime
 import random
+from tkextrafont import Font
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["RRHSfbla2023"]
@@ -26,7 +27,7 @@ from add_student import add_student
 from view_requests import view_requests
 #from prizes import WinnersWindow, ExportNotificationWindow, StudentPrizeApp
 from prize2 import pick_winners
-from tkextrafont import Font
+
 #from newStudent import inputStudent
 #from report import report
 #from winner import pickWinner
@@ -41,7 +42,7 @@ font = Font(file="./assets/Quicksand-Bold.ttf", family="Quicksand")
 
 style = ttk.Style()
 style.theme_use("clam")
-style.configure("Treeview", fieldbackground= "#1c1c1c", background = "#1c1c1c", foreground= "white", font= ("none", 10), rowheight= 40, highlightbackground = "#1c1c1c", highlightcolor= "#1c1c1c")
+style.configure("Treeview", fieldbackground= "#1c1c1c", background = "#1c1c1c", foreground= "white", font= ("none", 10), rowheight= 80, highlightbackground = "#1c1c1c", highlightcolor= "#1c1c1c")
 style.configure("Treeview.Heading", background = "#1c1c1c", foreground= "white", borderwidth= 0)
 
 root1 = tk.Toplevel()
@@ -319,12 +320,12 @@ def refresh_events(count, value, move, type, type2):
             name_label2.place(relx = 0.5, rely = 0.4, anchor= "center")
 
             date_text2 = tk.StringVar()
-            date_text2.set(dates[count])
+            date_text2.set(dates[count+ 1])
             date_label2.configure(text= date_text2.get())
             date_label2.place(relx = 0.5, rely = 0.5, anchor= "center")
 
             point_text2 = tk.StringVar()
-            point_text2.set(points[count])
+            point_text2.set(points[count+ 1])
             point_label2.configure(text= point_text2.get())
             point_label2.place(relx = 0.5, rely = 0.6, anchor= "center")
 
@@ -342,12 +343,12 @@ def refresh_events(count, value, move, type, type2):
             name_label3.place(relx = 0.8, rely = 0.4, anchor= "center")
 
             date_text3 = tk.StringVar()
-            date_text3.set(dates[count])
+            date_text3.set(dates[count+ 2])
             date_label3.configure(text= date_text3.get())
             date_label3.place(relx = 0.8, rely = 0.5, anchor= "center")
 
             point_text3 = tk.StringVar()
-            point_text3.set(points[count])
+            point_text3.set(points[count+ 2])
             point_label3.configure(text= point_text3.get())
             point_label3.place(relx = 0.8, rely = 0.6, anchor= "center")
 

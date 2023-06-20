@@ -27,6 +27,7 @@ def view_requests():
     id2 = list()
     first = list()
     last = list()
+    strings = list()
     students = student_info.find()
 
     style = ttk.Style()
@@ -54,10 +55,18 @@ def view_requests():
                 temp.append(last[x])
                 names.append(temp)
     i = 0
+    
+    requests = request_info.find()
     for request in requests:
-        string = names[i][0] + " " + names[i][1] + " is " + request["type"] + " in " + request["name"] + " on " + request["date"]
-        listbox.insert(parent= '', index= 'end', iid= i, values= "string")
+        string = f"{names[i][0]} {names[i][1]} is {request['type']} in {request['name']} on {request['date']}"
+        strings.append(string)
+
+    for string in strings:
+        print(string)
+        listbox.insert(parent= '', index= 'end', iid= i, text= "", value= string)
         i+= 1
 
     listbox.place(relx= 0.5, rely= 0, anchor= "n")
+
+
 

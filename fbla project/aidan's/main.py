@@ -9,6 +9,7 @@ from PIL import ImageTk, Image
 import pymongo
 from pymongo import MongoClient
 import datetime
+import random
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["RRHSfbla2023"]
@@ -23,7 +24,9 @@ from register import register
 from popups import error
 from add_student import add_student
 from view_requests import view_requests
-
+#from prizes import WinnersWindow, ExportNotificationWindow, StudentPrizeApp
+from prize2 import pick_winners
+from tkextrafont import Font
 #from newStudent import inputStudent
 #from report import report
 #from winner import pickWinner
@@ -34,8 +37,7 @@ student_id = 0
 root = tk.Tk()
 root.geometry("1000x500")
 root.configure(bg='#1c1c1c')
-default_font = ctk.CTkFont(size= 18, family= 'Roboto')
-large_font = ctk.CTkFont(size= 25, family= 'Roboto')
+font = Font(file="./assets/Quicksand-Bold.ttf", family="Quicksand")
 
 style = ttk.Style()
 style.theme_use("clam")
@@ -122,23 +124,6 @@ def edit_student():
     submit_button = tk.Button(edit_student_window, text= "submit", command= get_submit)
     submit_button.place(relx= 0.5, rely= 0.8, anchor= "center")
 
-edit_student_image = Image.open("./assets/edit_student.png")
-edit_student_image = edit_student_image.resize((150, 45))
-edit_student_image = ImageTk.PhotoImage(edit_student_image)
-edit_button = tk.Button(root1, command= edit_student, image= edit_student_image, borderwidth= 0)
-edit_button.place(relx= 0.15, rely= 0.875, anchor= "nw")
-
-remove_student_image = Image.open("./assets/remove_student.png")
-remove_student_image = remove_student_image.resize((150, 45))
-remove_student_image = ImageTk.PhotoImage(remove_student_image)
-remove_button = tk.Button(root1, command= remove_student, image= remove_student_image, borderwidth= 0)
-remove_button.place(relx= 0.5, rely= 0.875, anchor= "n")
-
-save_exit_image = Image.open("./assets/save_exit.png")
-save_exit_image = save_exit_image.resize((150, 45))
-save_exit_image = ImageTk.PhotoImage(save_exit_image)
-quit_button = tk.Button(root1, command= root1.withdraw, borderwidth= 0, image= save_exit_image)
-quit_button.place(relx= 0.85, rely= 0.875, anchor= "ne")
 
 root1.withdraw()
 
@@ -157,34 +142,47 @@ help2_image = PhotoImage(file = "./assets/help2_image.png")"""
 img = Image.open("./assets/logo.png")
 img = img.resize((400, 400))
 img = ImageTk.PhotoImage(img)
-
-# Create a label to display the image
 label = tk.Label(root, image=img)
 
 ## IMAGE BUTTONS
 
+edit_student_image = Image.open("./assets/edit_student.png")
+edit_student_image = edit_student_image.resize((150, 45))
+edit_student_image = ImageTk.PhotoImage(edit_student_image)
+edit_button = tk.Button(root1, command= edit_student, image= edit_student_image, borderwidth= 0)
+edit_button.place(relx= 0.15, rely= 0.875, anchor= "nw")
+
+remove_student_image = Image.open("./assets/remove_student.png")
+remove_student_image = remove_student_image.resize((150, 45))
+remove_student_image = ImageTk.PhotoImage(remove_student_image)
+remove_button = tk.Button(root1, command= remove_student, image= remove_student_image, borderwidth= 0)
+remove_button.place(relx= 0.5, rely= 0.875, anchor= "n")
+
+save_exit_image = Image.open("./assets/save_exit.png")
+save_exit_image = save_exit_image.resize((150, 45))
+save_exit_image = ImageTk.PhotoImage(save_exit_image)
+quit_button = tk.Button(root1, command= root1.withdraw, borderwidth= 0, image= save_exit_image)
+quit_button.place(relx= 0.85, rely= 0.875, anchor= "ne")
+
 event_image = Image.open("./assets/event.png")
 event_image = event_image.resize((250, 75))
 event_image = ImageTk.PhotoImage(event_image)
-event_button = tk.Button(root, image=event_image, command= event)
+event_button = tk.Button(root, image=event_image, command=event)
 
 add_student_image = Image.open("./assets/add_student.png")
 add_student_image = add_student_image.resize((250, 75))
 add_student_image = ImageTk.PhotoImage(add_student_image)
-add_student_button = tk.Button(root, image=add_student_image, command= add_student)
-
+add_student_button = tk.Button(root, image=add_student_image, command=add_student)
 
 about_image = Image.open("./assets/about.png")
 about_image = about_image.resize((250, 75))
 about_image = ImageTk.PhotoImage(about_image)
 about_button = tk.Button(root, image=about_image, command=about)
 
-
 view_image = Image.open("./assets/view_entries.png")
 view_image = view_image.resize((250, 75))
 view_image = ImageTk.PhotoImage(view_image)
 view_button = tk.Button(root, image=view_image, command= root1.deiconify) # CHANGE THIS
-
 
 create_report_image = Image.open("./assets/create_report.png")
 create_report_image = create_report_image.resize((250, 75))
@@ -196,17 +194,15 @@ view_requests_image = view_requests_image.resize((250, 75))
 view_requests_image = ImageTk.PhotoImage(view_requests_image)
 view_requests_button = tk.Button(root, command= view_requests, image= view_requests_image)
 
-
-help_image = Image.open("./assets/help.png")
-help_image = help_image.resize((250, 75))
-help_image = ImageTk.PhotoImage(help_image)
-help_button = tk.Button(root, image=help_image, command=about) # CHANGE THIS
+prize_image = Image.open("./assets/prizes.png")
+prize_image = prize_image.resize((250, 75))
+prize_image = ImageTk.PhotoImage(prize_image)
+prize_button = tk.Button(root, image=prize_image, command=pick_winners) # CHANGE THIS
 
 upcoming_event_image = Image.open("./assets/upcoming_events.png")
 upcoming_event_image = upcoming_event_image.resize((270, 75))
 upcoming_event_image = ImageTk.PhotoImage(upcoming_event_image)
 upcoming_event = Label(root, image= upcoming_event_image, bd= 0)
-
 
 login_screen = Frame(root, width= 1000, height= 500, bg= '#1c1c1c')
 login_screen.place(relx= 0, rely= 0, anchor= NW)
@@ -217,10 +213,10 @@ sign_in_image = ImageTk.PhotoImage(sign_in_image)
 sign_in = Label(login_screen, image= sign_in_image, bd= 0)
 sign_in.place(relx= .5, rely= .35, anchor= CENTER)
 
-username_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"), placeholder_text= "username")
+username_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand", 15, "bold"), placeholder_text= "username")
 username_entry.place(relx= .5, rely= .5, anchor= CENTER)
 
-password_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"), placeholder_text= "password", show= '*')
+password_entry = ctk.CTkEntry(login_screen, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand", 15, "bold"), placeholder_text= "password", show= '*')
 password_entry.place(relx= .5, rely= .65, anchor= CENTER)
 
 box_image = Image.open("./assets/box.png")
@@ -430,7 +426,7 @@ def login():
                 logged_in = True
 
                 sign_out.place(relx=0.15, rely=0.8, anchor="center")
-                help_button.place(relx= 0.5, rely= 0.8, anchor= "center")
+                prize_button.place(relx= 0.5, rely= 0.8, anchor= "center")
                 about_button.place(relx= 0.85, rely= 0.8, anchor= "center")
                 upcoming_event.place(relx= .5, rely= .08, anchor= CENTER)
 
@@ -457,7 +453,7 @@ def login():
                 about_button.place(relx=0.85, rely=0.4, anchor="center")
                 view_button.place(relx=0.85, rely=0.6, anchor="center")
                 create_report_button.place(relx=0.15, rely=0.6, anchor="center")
-                help_button.place(relx=0.85, rely=0.8, anchor="center")
+                prize_button.place(relx=0.85, rely=0.8, anchor="center")
                 upcoming_event.place(relx= .5, rely= .1, anchor= CENTER)
                 label.place(relx=0.5, rely=0.5, anchor="center")
                 view_requests_button.place(relx= 0.15, rely= 0.4, anchor= "center")

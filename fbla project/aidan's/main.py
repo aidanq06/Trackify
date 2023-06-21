@@ -144,21 +144,21 @@ for date in dates:
             names.append(event['name'])
             points.append(event['points'])
 
-name_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand_bold", 25, "bold"))
-name_label2 = ctk.CTkLabel(root, text= "")
-name_label3 = ctk.CTkLabel(root, text= "")
+name_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25))
+name_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25))
+name_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25))
 
-date_label1 = ctk.CTkLabel(root, text= "")
-date_label2 = ctk.CTkLabel(root, text= "")
-date_label3 = ctk.CTkLabel(root, text= "")
+date_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
+date_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
+date_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
 
-point_label1 = ctk.CTkLabel(root, text= "")
-point_label2 = ctk.CTkLabel(root, text= "")
-point_label3 = ctk.CTkLabel(root, text= "")
+point_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
+point_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
+point_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
 
-status_label1 = ctk.CTkLabel(root, text= "")
-status_label2 = ctk.CTkLabel(root, text= "")
-status_label3 = ctk.CTkLabel(root, text= "")
+status_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
+status_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
+status_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
 
 temp_count = 0
 request = list()
@@ -168,7 +168,6 @@ def refresh_events(count, value, move, type, type2):
     request = []
     if value == True: 
         if (count+ 2 < len(dates)- 1 and move == 1) or (count -1 >= 0 and move == -1) or (move == 0):
-            print(names)
             if move == 0:
                 ...
             elif move == 1:
@@ -191,6 +190,18 @@ def refresh_events(count, value, move, type, type2):
             point_label1.configure(text= point_text1.get())
             point_label1.place(relx = 0.2, rely = 0.6, anchor= "center")
 
+            status_text1 = tk.StringVar()
+            requests = request_info.find()
+            x = 0
+            for i in requests:
+                if name_text1.get() == i["name"] and int(student_id) == int(i["student_id"]) and date_text1.get() == i["date"]:
+                    x+= 1
+                    status_text1.set(f'status: {i["status"]}')
+            if x == 0:
+                status_text1.set(f'status: N/A')
+            status_label1.configure(text= status_text1.get())
+            status_label1.place(relx = 0.2, rely = 0.425, anchor= "center")
+
             if type == 1 and type2 == "attending":
                 request = [name_text1.get(), date_text1.get(), "attending"]
             elif type == 1 and type2 == "participating":
@@ -202,7 +213,7 @@ def refresh_events(count, value, move, type, type2):
             name_text2 = tk.StringVar()
             name_text2.set(names[count+ 1])
             name_label2.configure(text= name_text2.get())
-            name_label2.place(relx = 0.5, rely = 0.4, anchor= "center")
+            name_label2.place(relx = 0.5, rely = 0.25, anchor= "center")
 
             date_text2 = tk.StringVar()
             date_text2.set(dates[count+ 1])
@@ -213,6 +224,18 @@ def refresh_events(count, value, move, type, type2):
             point_text2.set(points[count+ 1])
             point_label2.configure(text= point_text2.get())
             point_label2.place(relx = 0.5, rely = 0.6, anchor= "center")
+
+            status_text2 = tk.StringVar()
+            requests = request_info.find()
+            x = 0
+            for i in requests:
+                if name_text2.get() == i["name"] and int(student_id) == int(i["student_id"]) and date_text2.get() == i["date"]:
+                    x+= 1
+                    status_text2.set(f'status: {i["status"]}')
+            if x == 0:
+                status_text2.set(f'status: N/A')
+            status_label2.configure(text= status_text2.get())
+            status_label2.place(relx = 0.5, rely = 0.425, anchor= "center")
 
             if type == 2 and type2 == "attending":
                 request = [name_text2.get(), date_text2.get(), "attending"]
@@ -225,7 +248,7 @@ def refresh_events(count, value, move, type, type2):
             name_text3 = tk.StringVar()
             name_text3.set(names[count+ 2])
             name_label3.configure(text= name_text3.get())
-            name_label3.place(relx = 0.8, rely = 0.4, anchor= "center")
+            name_label3.place(relx = 0.8, rely = 0.25, anchor= "center")
 
             date_text3 = tk.StringVar()
             date_text3.set(dates[count+ 2])
@@ -236,6 +259,18 @@ def refresh_events(count, value, move, type, type2):
             point_text3.set(points[count+ 2])
             point_label3.configure(text= point_text3.get())
             point_label3.place(relx = 0.8, rely = 0.6, anchor= "center")
+
+            status_text3 = tk.StringVar()
+            requests = request_info.find()
+            x = 0
+            for i in requests:
+                if name_text3.get() == i["name"] and int(student_id) == int(i["student_id"]) and date_text3.get() == i["date"]:
+                    x+= 1
+                    status_text3.set(f'status: {i["status"]}')
+            if x == 0:
+                status_text3.set(f'status: N/A')
+            status_label3.configure(text= status_text3.get())
+            status_label3.place(relx = 0.8, rely = 0.425, anchor= "center")
 
             if type == 3 and type2 == "attending":
                 request = [name_text3.get(), date_text3.get(), "attending"]

@@ -13,21 +13,9 @@ db = cluster["RRHSfbla2023"]
 student_info = db["student_info"]
 event_info = db["event_info"]
 login_info = db["login_info"]
+request_info = db["request_info"]
 
-root = tk.Tk()
-root.geometry("500x500")
-
-entry = ctk.CTkEntry(root, width= 200)
-entry.insert(0, "hello")
-
-def Entry1_Callback(event):
-    entry.select_range(0, END)
-
-entry.bind('<FocusIn>', Entry1_Callback)
-entry.pack()
-
-if __name__ == "__main__":
-    root.mainloop()
+request_info.update_one({"student_id": 195, "name": "bowling", "date": "2023-06-08"}, {"$set":{"status": "approved"}})
 
 
 

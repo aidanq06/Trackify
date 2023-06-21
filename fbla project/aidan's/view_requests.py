@@ -7,7 +7,6 @@ from PIL import ImageTk, Image
 import pymongo
 from pymongo import MongoClient
 
-
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["RRHSfbla2023"]
 student_info = db["student_info"]
@@ -81,31 +80,37 @@ def view_requests():
 
     count = 0
     for item in final:
-        listbox.insert(parent='', index='end', text= "", iid= count, values= (item[0]["_id"], item[0]["first_name"], item[0]["last_name"], item[0]["grade"], item[1]["name"], item[1]["date"], item[1]["type"], points[count]))
-        count += 1
+        if item[1]["status"] == "pending":
+            listbox.insert(parent='', index='end', text= "", iid= count, values= (item[0]["_id"], item[0]["first_name"], item[0]["last_name"], item[0]["grade"], item[1]["name"], item[1]["date"], item[1]["type"], points[count]))
+            count += 1
 
     def refresh():
         for item in listbox.get_children():
             listbox.delete(item)
-        students= student_info.find()
-        
-        count = 0
+
+        count1 = 0
         for item in final:
-            listbox.insert(parent='', index='end', text= "", iid= count, values= (item[0]["_id"], item[0]["first_name"], item[0]["last_name"], item[0]["grade"], item[1]["name"], item[1]["date"], item[1]["type"], points[count]))
-            count+= 1
+            print(item)
+            if item[1]["status"] == "pending":
+                listbox.insert(parent='', index='end', text= "", iid= count1, values= (item[0]["_id"], item[0]["first_name"], item[0]["last_name"], item[0]["grade"], item[1]["name"], item[1]["date"], item[1]["type"], points[count1]))
+                count1+= 1
         listbox.place(relx= 0, rely= 0, anchor= "nw")
 
     def approve():
         items = listbox.selection()
-
+        
         if len(items) > 0:
             for item in items:
                 selection = listbox.item(item, option="values")
                 students = student_info.find()
                 for student in students:
-                    if student["_id"] == selection[0]:
+                    if int(student["_id"]) == int(selection[0]):
                         point = student["point"]
-                student_info.update_one({"_id": selection[0]}, {"$set":{"points": int(point) + int(selection[7])}})
+                point = int(point) + int(selection[7])
+                student_info.update_one({"_id": int(selection[0])}, {"$set":{"points": int(point)}})
+                request_info.update_one({"student_id": int(selection[0]), "name": str(selection[4]), "date": str(selection[5])}, {"$set":{"status": "approved"}})
+            
+                refresh()
 
 
 

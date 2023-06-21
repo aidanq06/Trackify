@@ -20,8 +20,8 @@ def view_requests():
 
     style = ttk.Style()
     style.theme_use("clam")
-    style.configure("Treeview", fieldbackground= "#1c1c1c", background = "#1c1c1c", foreground= "white", font= ("none", 10), rowheight= 40, highlightbackground = "#1c1c1c", highlightcolor= "#1c1c1c")
-    style.configure("Treeview.Heading", background = "#1c1c1c", foreground= "white", borderwidth= 0)
+    style.configure("Treeview", fieldbackground= "#1c1c1c", background = "#1c1c1c", foreground= "white", font= ("Quicksand", 12), rowheight= 80, highlightbackground = "#1c1c1c", highlightcolor= "#1c1c1c", borderwidth= 1)
+    style.configure("Treeview.Heading", background = "#1c1c1c", foreground= "white", borderwidth= 0, font= ("Quicksand", 12))
     
     root1 = tk.Toplevel()
     root1.geometry("1200x600")
@@ -31,7 +31,7 @@ def view_requests():
     final = list()
     dates = list()
 
-    listbox = ttk.Treeview(root1, selectmode="extended",columns=("c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8"), height= 12, show="headings")
+    listbox = ttk.Treeview(root1, selectmode="extended",columns=("c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8"), height= 6, show="headings")
     listbox.column("# 1", anchor=CENTER, width = 149)
     listbox.heading("# 1", text="id")
 
@@ -84,14 +84,37 @@ def view_requests():
         listbox.insert(parent='', index='end', text= "", iid= count, values= (item[0]["_id"], item[0]["first_name"], item[0]["last_name"], item[0]["grade"], item[1]["name"], item[1]["date"], item[1]["type"], points[count]))
         count += 1
 
-    
+    def refresh():
+        for item in listbox.get_children():
+            listbox.delete(item)
+        students= student_info.find()
+        
+        count = 0
+        for item in final:
+            listbox.insert(parent='', index='end', text= "", iid= count, values= (item[0]["_id"], item[0]["first_name"], item[0]["last_name"], item[0]["grade"], item[1]["name"], item[1]["date"], item[1]["type"], points[count]))
+            count+= 1
+        listbox.place(relx= 0, rely= 0, anchor= "nw")
+
+    def approve():
+        items = listbox.selection()
+
+        if len(items) > 0:
+            for item in items:
+                selection = listbox.item(item, option="values")
+                students = student_info.find()
+                for student in students:
+                    if student["_id"] == selection[0]:
+                        point = student["point"]
+                student_info.update_one({"_id": selection[0]}, {"$set":{"points": int(point) + int(selection[7])}})
+
+
+
 
 
     listbox.place(relx= 0.5, rely= 0, anchor= "n")
 
-
-    approve = ctk.CTkButton(root1, text= "approve", font= ("Quicksand", 20), command= lambda: print("hello"), bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white")
-    approve.place(relx= 0.2, rely= 0.9, anchor="center")
+    approve = ctk.CTkButton(root1, text= "approve", font= ("Quicksand", 25), command= approve, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#1c1c1c")
+    approve.place(relx= 0.2, rely= 0.925, anchor="center")
         
 
 

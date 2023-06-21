@@ -431,6 +431,9 @@ def place_login_frame():
     point_label1.place_forget()
     point_label2.place_forget()
     point_label3.place_forget()
+    status_label1.place_forget()
+    status_label2.place_forget()
+    status_label3.place_forget()
     view_requests_button.place_forget()
 
 sign_out_image = Image.open("./assets/sign_out.png")

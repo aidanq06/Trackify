@@ -144,21 +144,21 @@ for date in dates:
             names.append(event['name'])
             points.append(event['points'])
 
-name_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25))
-name_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25))
-name_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25))
+name_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25), text_color="white")
+name_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25), text_color="white")
+name_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25), text_color="white")
 
-date_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
-date_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
-date_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
+date_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12), text_color="white")
+date_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12), text_color="white")
+date_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12), text_color="white")
 
-point_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
-point_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
-point_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
+point_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12), text_color="white")
+point_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12), text_color="white")
+point_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12), text_color="white")
 
-status_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
-status_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
-status_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12))
+status_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12), text_color="white")
+status_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12), text_color="white")
+status_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12), text_color="white")
 
 temp_count = 0
 request = list()
@@ -434,6 +434,7 @@ def place_login_frame():
     status_label1.place_forget()
     status_label2.place_forget()
     status_label3.place_forget()
+
     view_requests_button.place_forget()
 
 sign_out_image = Image.open("./assets/sign_out.png")

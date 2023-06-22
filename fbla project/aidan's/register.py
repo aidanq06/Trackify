@@ -27,8 +27,8 @@ def register():
             prompt.geometry("400x200")
             prompt.configure(bg="#1c1c1c")
             prompt.grab_set()
-            username_entry = ctk.CTkEntry(prompt, bg_color= "#1C1F1F", border_width= 0, width= 200, font=("Quicksand", 15), placeholder_text= "first name")
-            username_entry.place(relx= .5, rely= .4, anchor= "center")
+
+            label = ctk.CTkLabel(prompt, text= "please enter the confirmation code", font= ("Quicksand", 12))
 
             password_entry = ctk.CTkEntry(prompt, bg_color= "#1C1F1F", border_width= 0, width= 200, font=("Quicksand", 15), placeholder_text= "last name")
             password_entry.place(relx= .5, rely= .6, anchor= "center")
@@ -67,11 +67,6 @@ def register():
             temp = {"username": username, "password": password}
             login_info.insert_one(temp)
             event_window.destroy()
-        
 
-    submit_image = Image.open("./assets/submit.png")
-    submit_image = submit_image.resize((100, 60))
-    submit_image = ImageTk.PhotoImage(submit_image)
-    submit_button = tk.Button(event_window, image=submit_image, command= submit, bd= 0)
-    submit_button.image = submit_image
+    submit_button = ctk.CTkButton(event_window, text= "submit", font= ("Quicksand", 25), command= submit, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color= "#292929")
     submit_button.place(relx=0.5, rely=0.85, anchor="center")

@@ -19,8 +19,6 @@ def register():
     event_window.geometry("400x600")
     event_window.configure(bg='#1c1c1c')
 
-    font = ctk.CTkFont(family= "Quicksand", size= 15, weight= "bold")
-
     def teacher_prompt():
         print(check_var.get())
         if check_var.get() != False:
@@ -36,14 +34,14 @@ def register():
 
                 code = password_entry.get()
                 if code == "":
-                    print("error")
+                    error("Please fill out all the required fields.")
                 else:
                     codes = code_info.find()
                     for i in codes:
                         if int(code) == i["main"]:
                             prompt.destroy()
                         else:
-                            print("error")
+                            error("Password does not match.")
 
             submit_button = ctk.CTkButton(prompt, text= "submit", font= ("Quicksand", 25), command= submit, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color= "#292929")
             submit_button.place(relx=0.5, rely=0.8, anchor="center")
@@ -69,7 +67,7 @@ def register():
 
     grade_level = ctk.IntVar(event_window)
     grade_level.set("select grade")
-    grade_options = ctk.CTkComboBox(master=event_window, values=["9", "10", "11", "12"], variable=grade_level, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font)
+    grade_options = ctk.CTkComboBox(master=event_window, values=["9", "10", "11", "12"], variable=grade_level, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand", 15))
     grade_options.place(relx= .5, rely= .50, anchor= "center")
 
     check_var = ctk.BooleanVar(event_window)

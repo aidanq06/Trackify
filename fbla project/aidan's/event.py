@@ -5,6 +5,7 @@ from PIL import ImageTk, Image
 import pymongo
 from pymongo import MongoClient
 from tkcalendar import Calendar
+from popups import error
 
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
@@ -49,7 +50,7 @@ def event():
         event_date = tkc.get_date()
         point_value = event_points_entry.get()
         if event_type == "" or event_date == "" or point_value == "":
-            ...
+            error("Please fill out all the required fields.")
         else:
             temp = {"name": event_type, "date": event_date, "points": int(point_value)}
             event_info.insert_one(temp)

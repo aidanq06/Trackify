@@ -6,6 +6,7 @@ import random as rand
 from PIL import ImageTk, Image
 import pymongo
 from pymongo import MongoClient
+from popups import error
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["RRHSfbla2023"]
@@ -85,12 +86,38 @@ def view_requests():
             count += 1
 
     def refresh():
+
         for item in listbox.get_children():
             listbox.delete(item)
 
+        final.clear()
+
+        requests = request_info.find()
+        for request in requests:
+            temp = []
+            temp.append(request["date"].split("-"))
+            dates.append(f'{temp[0][1]}/{temp[0][2]}/{temp[0][0]}')
+
+        requests = request_info.find()
+        i = 0
+        for request in requests:
+            events = event_info.find()
+            for event in events:
+                if dates[i] == event['date'] and request['name'] == event['name']:
+                    points.append(event['points'])
+            i+= 1
+
+        requests = request_info.find()
+        for request in requests:
+            students = student_info.find()
+            for student in students:
+                if request["student_id"] == student["_id"]:
+                    temp = []
+                    temp.append(student)
+                    temp.append(request)
+                    final.append(temp)
         count1 = 0
         for item in final:
-            print(item)
             if item[1]["status"] == "pending":
                 listbox.insert(parent='', index='end', text= "", iid= count1, values= (item[0]["_id"], item[0]["first_name"], item[0]["last_name"], item[0]["grade"], item[1]["name"], item[1]["date"], item[1]["type"], points[count1]))
                 count1+= 1
@@ -109,8 +136,54 @@ def view_requests():
                 point = int(point) + int(selection[7])
                 student_info.update_one({"_id": int(selection[0])}, {"$set":{"point": int(point)}})
                 request_info.update_one({"student_id": int(selection[0]), "name": str(selection[4]), "date": str(selection[5])}, {"$set":{"status": "approved"}})
+
+        else:
+            error("Please select one or more requests.")
             
-                refresh()
+        refresh()
+
+    def deny():
+        items = listbox.selection()
+        
+        if len(items) > 0:
+            for item in items:
+                selection = listbox.item(item, option="values")
+                students = student_info.find()
+                for student in students:
+                    if int(student["_id"]) == int(selection[0]):
+                        point = student["point"]
+                point = int(point) + int(selection[7])
+                student_info.update_one({"_id": int(selection[0])}, {"$set":{"point": int(point)}})
+                request_info.update_one({"student_id": int(selection[0]), "name": str(selection[4]), "date": str(selection[5])}, {"$set":{"status": "denied"}})
+            
+        else:
+            error("Please select one or more requests.")
+
+
+    def approve_all():
+
+        confirm = tk.Toplevel()
+        confirm.geometry("400x200")
+        confirm.configure(bg= '#1c1c1c')
+
+        label = ctk.CTkLabel(confirm, text= "are you sure you want to confirm all requests", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
+        label.place(relx= .5, rely= .1, anchor= "center")
+
+        confirm_button = ctk.CTkButton(confirm, text= "confirm", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white", command= confirm, hover_color="#292929")
+        confirm_button.place(relx=0.5, rely=0.4, anchor="center")
+
+
+
+        def confirm():
+            selection = listbox.get_children()
+            students = student_info.find()
+            for item in selection:
+                for student in students:
+                    if int(student["_id"]) == int(item[0]):
+                        point = student["point"]
+                point = int(point) + int(item[7])
+                student_info.update_one({"_id": int(item[0])}, {"$set":{"point": int(point)}})
+                request_info.update_one({"student_id": int(item[0]), "name": str(item[4]), "date": str(item[5])}, {"$set":{"status": "approved"}})
 
 
 
@@ -120,6 +193,14 @@ def view_requests():
 
     approve = ctk.CTkButton(root1, text= "approve", font= ("Quicksand", 25), command= approve, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#1c1c1c")
     approve.place(relx= 0.2, rely= 0.925, anchor="center")
+
+    deny = ctk.CTkButton(root1, text= "deny", font= ("Quicksand", 25), command= deny, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#1c1c1c")
+    deny.place(relx= 0.8, rely= 0.925, anchor="center")
+
+    approve_all = ctk.CTkButton(root1, text= "approve all", font= ("Quicksand", 25), command= approve_all, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#1c1c1c")
+    approve_all.place(relx= 0.5, rely= 0.925, anchor="center")
+
+    
         
 
 

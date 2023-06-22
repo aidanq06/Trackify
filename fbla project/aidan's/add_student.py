@@ -5,6 +5,7 @@ from PIL import ImageTk, Image
 import pymongo
 from pymongo import MongoClient
 import random as rand
+from popups import error
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["RRHSfbla2023"]
@@ -32,11 +33,7 @@ def add_student():
     grade_options = ctk.CTkComboBox(master=add_window, values=["9", "10", "11", "12"], variable=grade_level, bg_color= "#1C1F1F", border_width= 0, width= 200, font= font)
     grade_options.place(relx= .5, rely= .6, anchor= "center")
 
-    sign_in_image = Image.open("./assets/add_new_event.png")
-    sign_in_image = sign_in_image.resize((270, 75))
-    sign_in_image = ImageTk.PhotoImage(sign_in_image)
-    sign_in = tk.Label(add_window, image= sign_in_image, bd= 0)
-    sign_in.image = sign_in_image
+    sign_in = ctk.CTkLabel(add_window, text= "add a new student", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
     sign_in.place(relx= .5, rely= .1, anchor= "center")
 
 
@@ -51,7 +48,7 @@ def add_student():
         check_dup = 0
         
         if student_first == "" or student_last == "" or grade == "":
-            ...
+            error("Please fill out all the required fields.")
         else:
             while check_dup == 0:
                 for students in student_temp:
@@ -65,9 +62,5 @@ def add_student():
                 add_window.destroy()
         
 
-    submit_image = Image.open("./assets/submit.png")
-    submit_image = submit_image.resize((100, 60))
-    submit_image = ImageTk.PhotoImage(submit_image)
-    submit_button = tk.Button(add_window, image= submit_image, command= submit, bd= 0)
-    submit_button.image = submit_image
+    submit_button = ctk.CTkButton(add_window, text= "submit", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white", command= submit, hover_color="#292929")
     submit_button.place(relx=0.5, rely=0.85, anchor="center")

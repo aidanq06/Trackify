@@ -49,8 +49,14 @@ def event():
         event_type = event_type_entry.get()
         event_date = tkc.get_date()
         point_value = event_points_entry.get()
+
+        try:
+            int(point_value)
+        except:
+            error("points must be an integer")
+
         if event_type == "" or event_date == "" or point_value == "":
-            error("Please fill out all the required fields.")
+            error("Please fill out all the required fields.")    
         else:
             temp = {"name": event_type, "date": event_date, "points": int(point_value)}
             event_info.insert_one(temp)

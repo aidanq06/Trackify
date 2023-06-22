@@ -42,7 +42,10 @@ def add_student():
         student_first = student_first_entry.get()
         student_last = student_last_entry.get()
         student_temp = student_info.find()
-        grade = grade_level.get()
+        try:
+            grade = grade_level.get()
+        except:
+            error("Please fill out all required fields.")
         studentId = 0
         studentId = rand.randint(0,100000)
         check_dup = 0

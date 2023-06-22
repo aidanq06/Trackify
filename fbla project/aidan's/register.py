@@ -11,6 +11,7 @@ cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023proje
 db = cluster["RRHSfbla2023"]
 student_info = db["student_info"]
 login_info = db["login_info"]
+code_info = db["code"]
 
 def register():
 
@@ -28,10 +29,36 @@ def register():
             prompt.configure(bg="#1c1c1c")
             prompt.grab_set()
 
-            label = ctk.CTkLabel(prompt, text= "please enter the confirmation code", font= ("Quicksand", 12))
+            password_entry = ctk.CTkEntry(prompt, bg_color= "#1C1F1F", border_width= 0, width= 200, font=("Quicksand", 15), placeholder_text= "enter code here")
+            password_entry.place(relx= .5, rely= .5, anchor= "center")
 
-            password_entry = ctk.CTkEntry(prompt, bg_color= "#1C1F1F", border_width= 0, width= 200, font=("Quicksand", 15), placeholder_text= "last name")
-            password_entry.place(relx= .5, rely= .6, anchor= "center")
+            def submit():
+
+                code = password_entry.get()
+                if code == "":
+                    print("error")
+                else:
+                    codes = code_info.find()
+                    for i in codes:
+                        if int(code) == i["main"]:
+                            prompt.destroy()
+                        else:
+                            print("error")
+
+            submit_button = ctk.CTkButton(prompt, text= "submit", font= ("Quicksand", 25), command= submit, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color= "#292929")
+            submit_button.place(relx=0.5, rely=0.8, anchor="center")
+
+            def closed():
+                check_var.set(False)
+                prompt.destroy()
+            
+            prompt.protocol("WM_DELETE_WINDOW", closed)
+
+
+
+            
+
+            
 
 
     username_entry = ctk.CTkEntry(event_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font=("Quicksand", 15), placeholder_text= "first name")

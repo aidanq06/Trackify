@@ -73,21 +73,24 @@ def view_entries():
         edit_student_window.geometry("400x600")
         edit_student_window.configure(bg= '#1c1c1c')
 
-        first_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1C1C", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"))
+        label = ctk.CTkLabel(edit_student_window, text= "edit student", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
+        label.place(relx= 0.5, rely= 0.1, anchor= "center")
+
+        first_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1C1C", border_width= 0, width= 200, font= ("Quicksand", 15))
         first_entry.insert(0, selection[1])
         def first_select(event):
             first_entry.select_range(0, END)
         first_entry.bind("<FocusIn>", first_select)
         first_entry.place(relx= 0.5, rely= 0.2, anchor= "center")
 
-        last_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"))
+        last_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand", 15))
         last_entry.insert(0, selection[2])
         def last_select(event):
             last_entry.select_range(0, END)
         last_entry.bind("<FocusIn>", last_select)
         last_entry.place(relx= 0.5, rely= 0.4, anchor= "center")
 
-        grade_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand_bold", 15, "bold"))
+        grade_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand", 15))
         grade_entry.insert(0, selection[3])
         def grade_select(event):
             grade_entry.select_range(0, END)
@@ -104,7 +107,7 @@ def view_entries():
             refresh()
             edit_student_window.destroy()
 
-        submit_button = ctk.CTkButton(edit_student_window, text= "submit", font= ("Quicksand", 20), command= lambda: print("hello"), bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#1c1c1c")
+        submit_button = ctk.CTkButton(edit_student_window, text= "submit", font= ("Quicksand", 20), command= get_submit, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#292929")
         submit_button.place(relx= 0.5, rely= 0.8, anchor= "center")
 
     edit_student_image = Image.open("./assets/edit_student.png")

@@ -107,7 +107,7 @@ def view_requests():
                     if int(student["_id"]) == int(selection[0]):
                         point = student["point"]
                 point = int(point) + int(selection[7])
-                student_info.update_one({"_id": int(selection[0])}, {"$set":{"points": int(point)}})
+                student_info.update_one({"_id": int(selection[0])}, {"$set":{"point": int(point)}})
                 request_info.update_one({"student_id": int(selection[0]), "name": str(selection[4]), "date": str(selection[5])}, {"$set":{"status": "approved"}})
             
                 refresh()

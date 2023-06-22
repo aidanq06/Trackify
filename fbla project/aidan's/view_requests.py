@@ -166,17 +166,24 @@ def view_requests():
         confirm.geometry("400x200")
         confirm.configure(bg= '#1c1c1c')
 
-        label = ctk.CTkLabel(confirm, text= "are you sure you want to confirm all requests", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
-        label.place(relx= .5, rely= .1, anchor= "center")
+        label = ctk.CTkLabel(confirm, text= "are you sure you want \n to confirm all requests", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
+        label.place(relx= .5, rely= .3, anchor= "center")
 
-        confirm_button = ctk.CTkButton(confirm, text= "confirm", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white", command= confirm, hover_color="#292929")
-        confirm_button.place(relx=0.5, rely=0.4, anchor="center")
+        def confirm_command():
+            selection = list()
+            temp = listbox.get_children()
+            for i in temp:
+                selection.append(listbox.item(i, option="values"))
+            
+            requests = request_info.find()
+            for i in range(len(dates)):
+                events = event_info.find()
+                for event in events:
+                    if dates[i] == event['date'] and requests[i]['name'] == event['name']:
+                        points.append(event['points'])
 
-
-
-        def confirm():
-            selection = listbox.get_children()
             students = student_info.find()
+            print(selection)
             for item in selection:
                 for student in students:
                     if int(student["_id"]) == int(item[0]):
@@ -185,19 +192,29 @@ def view_requests():
                 student_info.update_one({"_id": int(item[0])}, {"$set":{"point": int(point)}})
                 request_info.update_one({"student_id": int(item[0]), "name": str(item[4]), "date": str(item[5])}, {"$set":{"status": "approved"}})
 
+                confirm.destroy()
+                refresh()
+
+        confirm_button = ctk.CTkButton(confirm, text= "confirm", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white", command= confirm_command, hover_color="#292929")
+        confirm_button.place(relx=0.5, rely=0.8, anchor="center")
+
+
+
+        
+
 
 
 
 
     listbox.place(relx= 0.5, rely= 0, anchor= "n")
 
-    approve = ctk.CTkButton(root1, text= "approve", font= ("Quicksand", 25), command= approve, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#1c1c1c")
+    approve = ctk.CTkButton(root1, text= "approve", font= ("Quicksand", 25), command= approve, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#292929")
     approve.place(relx= 0.2, rely= 0.925, anchor="center")
 
-    deny = ctk.CTkButton(root1, text= "deny", font= ("Quicksand", 25), command= deny, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#1c1c1c")
+    deny = ctk.CTkButton(root1, text= "deny", font= ("Quicksand", 25), command= deny, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#292929")
     deny.place(relx= 0.8, rely= 0.925, anchor="center")
 
-    approve_all = ctk.CTkButton(root1, text= "approve all", font= ("Quicksand", 25), command= approve_all, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#1c1c1c")
+    approve_all = ctk.CTkButton(root1, text= "approve all", font= ("Quicksand", 25), command= approve_all, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#292929")
     approve_all.place(relx= 0.5, rely= 0.925, anchor="center")
 
     

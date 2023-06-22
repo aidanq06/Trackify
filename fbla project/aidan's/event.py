@@ -57,10 +57,6 @@ def event():
             event_window.destroy()
         
 
-    submit_image = Image.open("./assets/submit.png")
-    submit_image = submit_image.resize((100, 60))
-    submit_image = ImageTk.PhotoImage(submit_image)
-    submit_button = tk.Button(event_window, image=submit_image, command= submit, bd= 0)
-    submit_button.image = submit_image
-    submit_button.place(relx=0.5, rely=0.85, anchor="center")
+    submit_button = ctk.CTkButton(event_window, text= "submit", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white", command= submit, hover_color="#292929")
+    submit_button.place(relx=0.5, rely=0.925, anchor="center")
 

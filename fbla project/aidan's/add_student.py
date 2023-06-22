@@ -14,7 +14,7 @@ student_info = db["student_info"]
 
 def add_student():
     add_window = tk.Toplevel()
-    add_window.geometry("600x600")
+    add_window.geometry("400x400")
     add_window.configure(bg='#1c1c1c')
 
     style = ttk.Style(add_window)

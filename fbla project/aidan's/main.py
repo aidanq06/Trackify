@@ -160,6 +160,8 @@ status_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12), text_color
 status_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12), text_color="white")
 status_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 12), text_color="white")
 
+points_label = ctk.CTkLabel(root, text= "", font= ("Quicksand", 20), text_color="white")
+
 temp_count = 0
 request = list()
 def refresh_events(count, value, move, type, type2): 
@@ -346,6 +348,15 @@ def login():
                 create_report_button.place_forget()
                 logged_in = True
 
+                students = student_info.find()
+
+                for student in students:
+                    if student["_id"] == int(student_id):
+                        points = student["point"]
+
+                points_label.configure(text= f'points: {points}')
+                points_label.place(relx = 0.9, rely= 0.075, anchor= "center")
+
                 sign_out.place(relx=0.15, rely=0.8, anchor="center")
                 prize_button.place(relx= 0.5, rely= 0.8, anchor= "center")
                 about_button.place(relx= 0.85, rely= 0.8, anchor= "center")
@@ -434,6 +445,7 @@ def place_login_frame():
     status_label1.place_forget()
     status_label2.place_forget()
     status_label3.place_forget()
+    points.place_forget()
 
     view_requests_button.place_forget()
 

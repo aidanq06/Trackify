@@ -25,6 +25,7 @@ def view_entries():
     style.theme_use("clam")
     style.configure("Treeview", fieldbackground= "#1c1c1c", background = "#1c1c1c", foreground= "white", font= ("Quicksand", 12), rowheight= 80, highlightbackground = "#1c1c1c", highlightcolor= "#1c1c1c")
     style.configure("Treeview.Heading", background = "#1c1c1c", foreground= "white", borderwidth= 0, font= ("Quicksand", 12))
+    style.map('Treeview', background=[('selected', '#292929')])
 
     root1 = tk.Toplevel()
     root1.geometry("1000x500")
@@ -134,13 +135,13 @@ def view_entries():
 
 
     edit_button = ctk.CTkButton(root1, command=edit_student, width=200, height=50, text="edit student",
-                                font=("Quicksand", 25), fg_color="#1c1c1c", text_color="white")
-    edit_button.place(relx= 0.2, rely= 0.925, anchor= "center")
+                                font=("Quicksand", 25), fg_color="#1c1c1c", text_color="white", hover_color="#292929")
+    edit_button.place(relx= 0.3, rely= 0.93, anchor= "e")
 
     remove_button = ctk.CTkButton(root1, command=remove_student, width=200, height=50, text="remove student",
-                                font=("Quicksand", 25), fg_color="#1c1c1c", text_color="white")
-    remove_button.place(relx= 0.5, rely= 0.925, anchor= "center")
+                                font=("Quicksand", 25), fg_color="#1c1c1c", text_color="white", hover_color="#292929")
+    remove_button.place(relx= 0.5, rely= 0.93, anchor= "center")
 
     quit_button = ctk.CTkButton(root1, command=root1.destroy, width=200, height=50, text="save and exit",
-                                font=("Quicksand", 25), fg_color="#1c1c1c", text_color="white")
-    quit_button.place(relx= 0.8, rely= 0.925, anchor= "center")
+                                font=("Quicksand", 25), fg_color="#1c1c1c", text_color="white", hover_color="#292929")
+    quit_button.place(relx= 0.7, rely= 0.93, anchor= "w")

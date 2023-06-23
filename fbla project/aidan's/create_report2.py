@@ -89,16 +89,21 @@ def export_to_pdf(figures, root):
             pdf.savefig(fig)
             plt.close(fig)
 
-    success_window = tk.Toplevel(root)
-    success_label = tk.Label(success_window, text="PDF exported successfully.")
-    success_label.pack()
-    success_window.resizable(False,False)
+    new_window = tk.Toplevel()
+    new_window.geometry("+750+500")
+    new_window.title("PDF Export Successful")
+    new_window.configure(bg='#1c1c1c')
+    new_window.grab_set()
+    new_window.resizable(False,False)
+
+    label = tk.Label(new_window, text="PDF", font=("Quicksand", 25), bg='#1c1c1c', fg='white',padx=20,pady=20)
+    label.pack(pady=10)
 
     def close_all_windows():
         root.destroy()
-        success_window.destroy()
+        new_window.destroy()
 
-    success_window.protocol("WM_DELETE_WINDOW", close_all_windows)
+    new_window.protocol("WM_DELETE_WINDOW", close_all_windows)
 
 
 def createReport():

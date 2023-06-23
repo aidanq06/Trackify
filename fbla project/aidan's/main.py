@@ -6,10 +6,8 @@ from tkinter import ttk
 import customtkinter as ctk
 import random as rand
 from PIL import ImageTk, Image
-import pymongo
 from pymongo import MongoClient
 import datetime
-import random
 from tkextrafont import Font
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
@@ -145,9 +143,9 @@ for date in dates:
             names.append(event['name'])
             points.append(event['points'])
 
-name_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25)) 
-name_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25))
-name_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25))
+name_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25), text_color="white") 
+name_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25), text_color="white")
+name_label3 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 25), text_color="white")
 
 date_label1 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 15), text_color="white")
 date_label2 = ctk.CTkLabel(root, text= "", font= ("Quicksand", 15), text_color="white")
@@ -340,7 +338,6 @@ def login():
     global student_id
     temp = student_info.find()
     temp2 = login_info.find()
-    events = event_info.find()
 
     logged_in = False
 

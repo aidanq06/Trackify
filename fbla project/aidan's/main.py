@@ -299,9 +299,9 @@ def refresh_events(count, value, move, type, type2):
                 if x == 0:
                     temp_info = {"student_id": student_id, "name": request[0], "date": request[1], "type": request[2], "status": "pending"}
                     request_info.insert_one(temp_info)
+                    refresh_events(temp_count, True, 0, 0, "empty")
                 else:
                    error("You have already selected an option for this event.")
-
         else:
             ...
     else:

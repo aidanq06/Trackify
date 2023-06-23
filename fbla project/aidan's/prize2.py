@@ -66,17 +66,20 @@ def pick_winners():
     # For each grade, create a frame and place it in the appropriate position in the grid
     grid_positions = [(0, 0), (0, 1), (1, 0), (1, 1)]
     for i, grade in enumerate(range(9, 13), start=0):
-        winner_frame = tk.Frame(root, bg='#1c1c1c')  # set frame background to #1c1c1c
-        winner_frame.grid(row=grid_positions[i][0], column=grid_positions[i][1], padx=10, pady=10)
+        # Set frame background to #1c1c1c and add a white border
+        winner_frame = tk.Frame(root, bg='#1c1c1c', highlightthickness=2, highlightbackground='white')
+        winner_frame.grid(row=grid_positions[i][0], column=grid_positions[i][1], padx=20, pady=20, sticky='nsew')
+        winner_frame.grid_columnconfigure(0, weight=1)
 
-        ctk.CTkLabel(winner_frame, text=f"Grade {grade}:", font=("Quicksand", 18), text_color='#1c1c1c', fg_color='white', corner_radius=5).grid(row=0, column=0)  # set text color to white, background to #1c1c1c
+
+        ctk.CTkLabel(winner_frame, text=f"Grade {grade}", font=("Quicksand", 20), text_color='#1c1c1c', fg_color='white', bg_color="white", corner_radius=5,justify="center").grid(row=0, column=0, sticky='we')
 
         random_winner_info = winners[grade]['random_winner']
         top_scorer_info = winners[grade]['top_scorer']
-        ctk.CTkLabel(winner_frame, text=f"Random winner: {random_winner_info[0]}\nID: {random_winner_info[2]}\nPoints: {random_winner_info[1]}\nPrize: {random_winner_info[3]}\n\nTop scorer: {top_scorer_info[0]}\nID: {top_scorer_info[2]}\nPoints: {top_scorer_info[1]}\nPrize: {top_scorer_info[3]}", font=("Quicksand", 15), padx=50,pady=5,text_color="white",fg_color="#1c1c1c",justify="left").grid(row=1, column=0)
+        ctk.CTkLabel(winner_frame, text=f"Random winner: {random_winner_info[0]}\nID: {random_winner_info[2]}\nPoints: {random_winner_info[1]}\nPrize: {random_winner_info[3]}\n\nTop scorer: {top_scorer_info[0]}\nID: {top_scorer_info[2]}\nPoints: {top_scorer_info[1]}\nPrize: {top_scorer_info[3]}", font=("Quicksand", 15), padx=10, pady=5, text_color="white", fg_color="#1c1c1c", justify="left").grid(row=1, column=0, sticky="w")
 
     global export_button
-    export_button = ctk.CTkButton(root, height=50, width=300, text='Export Winners', font=("Quicksand",20), fg_color="white", text_color="#1c1c1c", command=export_winners)
+    export_button = ctk.CTkButton(root, height=50, width=300, text='Export Winners', font=("Quicksand", 20), fg_color="white", text_color="#1c1c1c", command=export_winners)
     export_button.grid(row=2, column=0, columnspan=2, pady=10)
     export_button.root = root  # Store root as an attribute of the export_button
 

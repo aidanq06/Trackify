@@ -198,6 +198,14 @@ def view_requests():
         confirm_button = ctk.CTkButton(confirm, text= "confirm", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white", command= confirm_command, hover_color="#292929")
         confirm_button.place(relx=0.5, rely=0.8, anchor="center")
 
+
+
+        
+
+
+
+
+
     listbox.place(relx= 0.5, rely= 0, anchor= "n")
 
     approve = ctk.CTkButton(root1, text= "approve", font= ("Quicksand", 25), command= approve, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#292929")

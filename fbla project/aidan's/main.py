@@ -192,7 +192,7 @@ def refresh_events(count, value, move, type, type2):
 
             point_text1 = tk.StringVar()
             point_text1.set(points[count])
-            point_label1.configure(text= f'points: {point_text1.get()}/{int(point_text1.get())+10}')
+            point_label1.configure(text= f'points: {point_text1.get()}')
             point_label1.place(relx = 0.2, rely = 0.36, anchor= "center")
 
             status_text1 = tk.StringVar()
@@ -229,7 +229,7 @@ def refresh_events(count, value, move, type, type2):
 
             point_text2 = tk.StringVar()
             point_text2.set(points[count+ 1])
-            point_label2.configure(text= f'points: {point_text2.get()}/{int(point_text2.get())+10}')
+            point_label2.configure(text= f'points: {point_text2.get()}')
             point_label2.place(relx = 0.5, rely = 0.36, anchor= "center")
 
             status_text2 = tk.StringVar()
@@ -266,7 +266,7 @@ def refresh_events(count, value, move, type, type2):
 
             point_text3 = tk.StringVar()
             point_text3.set(points[count+ 2])
-            point_label3.configure(text= f'points: {point_text3.get()}/{int(point_text3.get())+10}')
+            point_label3.configure(text= f'points: {point_text3.get()}')
             point_label3.place(relx = 0.8, rely = 0.36, anchor= "center")
 
             status_text3 = tk.StringVar()
@@ -300,9 +300,8 @@ def refresh_events(count, value, move, type, type2):
                 if x == 0:
                     temp_info = {"student_id": student_id, "name": request[0], "date": request[1], "type": request[2], "status": "pending"}
                     request_info.insert_one(temp_info)
-                    refresh_events(temp_count, True, 0, 0, "empty")
                 else:
-                   error("You have already selected an \n option for this event.")
+                   error("You have already selected an option for this event.")
 
         else:
             ...
@@ -459,8 +458,7 @@ def place_login_frame():
     status_label1.place_forget()
     status_label2.place_forget()
     status_label3.place_forget()
-    points_label.place_forget()
-    login_label.place_forget()
+    points.place_forget()
 
     view_requests_button.place_forget()
 

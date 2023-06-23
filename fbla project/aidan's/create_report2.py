@@ -24,7 +24,7 @@ def get_student_data(student_info):
     return students
 
 
-def create_report_all_grades(student_data):
+def create_report_all_grades(student_data,show_plot=True):
     # Plot data for all grades combined
     sorted_data = sorted(student_data, key=lambda k: (k['grade'], -k['points']))
     grades = ['Grade 9', 'Grade 10', 'Grade 11', 'Grade 12']
@@ -48,12 +48,13 @@ def create_report_all_grades(student_data):
     plt.title('All Grades')
 
     plt.tight_layout()
-    plt.show()
+    if show_plot:
+        plt.show()
 
     return fig_all
 
 
-def create_report_per_grade(student_data, grade):
+def create_report_per_grade(student_data, grade, show_plot=True):
     # Filter the students belonging to the selected grade
     filtered_data = [student for student in student_data if student['grade'] == grade]
     
@@ -75,7 +76,9 @@ def create_report_per_grade(student_data, grade):
     plt.title(f'Grade {grade}')
 
     plt.tight_layout()
-    plt.show()
+
+    if show_plot:
+        plt.show()
 
     return fig
 
@@ -103,24 +106,38 @@ def createReport():
     student_info = db["student_info"]
 
     root = tk.Tk()
-    root.geometry('800x600')
+    root.geometry('500x550')
+    root.configure(bg="#1c1c1c")  # Change the background color
 
     student_data = get_student_data(student_info)
 
+    # Add a title label
+    title_label = tk.Label(root, text="create report", font=("Quicksand", 30), bg="#1c1c1c", fg="white")
+    title_label.pack(pady=10)
+
     # Create a button for each grade
     for grade in range(9, 13):
-        ctk.CTkButton(root, text=f"Show Grade {grade}", command=lambda grade=grade: create_report_per_grade(student_data, grade)).pack()
+        ctk.CTkButton(root, height=50, width=300, text=f"show grade {grade}", font=("Quicksand", 20), fg_color="white", text_color="#1c1c1c", 
+                      command=lambda grade=grade: create_report_per_grade(student_data, grade)).pack(pady=10)
 
     # Create "Show All Grades" button
-    ctk.CTkButton(root, text="Show All Grades", command=lambda: create_report_all_grades(student_data)).pack()
+    ctk.CTkButton(root, height=50, width=300, text="show all grades", font=("Quicksand", 20), fg_color="white", text_color="#1c1c1c",
+                  command=lambda: create_report_all_grades(student_data)).pack(pady=10)
 
     # Create "Export All" button
-    ctk.CTkButton(root, text="Export All to PDF", 
+    ctk.CTkButton(root, height=50, width=300, text="export all to pdf", font=("Quicksand", 20), fg_color="white", text_color="#1c1c1c", 
                   command=lambda: export_to_pdf(
-                      [create_report_all_grades(student_data)] 
-                      + [create_report_per_grade(student_data, grade) for grade in range(9, 13)],
+                      [create_report_all_grades(student_data, show_plot=False)] 
+                      + [create_report_per_grade(student_data, grade, show_plot=False) for grade in range(9, 13)],
                       root
-                  )).pack()
+                  )).pack(pady=10)
+
+    # gracefully handle window closing
+    def on_closing():
+        if root.winfo_exists():
+            root.destroy()
+ 
+    root.protocol("WM_DELETE_WINDOW", on_closing)
 
     root.mainloop()
 

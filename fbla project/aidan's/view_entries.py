@@ -49,12 +49,8 @@ def view_entries():
         for item in listbox.get_children():
             listbox.delete(item)
         students= student_info.find()
-        student_list = list()
         count = 0
         for student in students:
-            student_list.append(student)
-        student_list.reverse()
-        for student in student_list:
             listbox.insert(parent='', index='end', text= "", iid= count, values= (student["_id"], student["first_name"], student["last_name"], student["grade"], student["point"]) )
             count+= 1
         listbox.place(relx= 0, rely= 0, anchor= "nw")
@@ -117,21 +113,10 @@ def view_entries():
                     first= first_entry.get()
                     last= last_entry.get()
                     grade= grade_entry.get()
+                    student_info.update_one({"_id": int(selection[0])}, {"$set":{"first_name": str(first).capitalize(), "last_name": (str(last).capitalize()), "grade": int(grade)}})
 
-                    if first == "" or last == "" or grade == "":
-                        error("Please fill out all the required fields.")
-
-                    try:
-                        grade = int(grade)
-                    except:
-                        error("Grade must be an integer value.")
-
-                    if grade > 12 or grade < 9:
-                        error("Grade must be in between 9 and 12.")
-                    else:
-                        student_info.update_one({"_id": int(selection[0])}, {"$set":{"first_name": str(first).capitalize(), "last_name": (str(last).capitalize()), "grade": int(grade)}})
-                        refresh()
-                        edit_student_window.destroy()
+                    refresh()
+                    edit_student_window.destroy()
 
                 submit_button = ctk.CTkButton(edit_student_window, text= "submit", font= ("Quicksand", 20), command= get_submit, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#292929")
                 submit_button.place(relx= 0.5, rely= 0.8, anchor= "center")
@@ -139,14 +124,25 @@ def view_entries():
         except:
             error("You can only edit one student at a time.")
 
-    
-    edit_button = ctk.CTkButton(root1, text= "edit student", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white", command= edit_student, hover_color="#292929")
+    edit_student_image = Image.open("./assets/edit_student.png")
+    edit_student_image = edit_student_image.resize((150, 45))
+    edit_student_image = ImageTk.PhotoImage(edit_student_image)
+    edit_button = tk.Button(root1, command= edit_student, image= edit_student_image, borderwidth= 0)
+    edit_button.image = edit_student_image
     edit_button.place(relx= 0.15, rely= 0.885, anchor= "nw")
 
-    remove_button = ctk.CTkButton(root1, text= "remove student", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white", command= remove_student, hover_color="#292929")
+    remove_student_image = Image.open("./assets/remove_student.png")
+    remove_student_image = remove_student_image.resize((150, 45))
+    remove_student_image = ImageTk.PhotoImage(remove_student_image)
+    remove_button = tk.Button(root1, command= remove_student, image= remove_student_image, borderwidth= 0)
+    remove_button.image = remove_student_image
     remove_button.place(relx= 0.5, rely= 0.885, anchor= "n")
 
-    quit_button = ctk.CTkButton(root1, text= "close", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white", command= root1.destroy, hover_color="#292929")
+    save_exit_image = Image.open("./assets/save_exit.png")
+    save_exit_image = save_exit_image.resize((150, 45))
+    save_exit_image = ImageTk.PhotoImage(save_exit_image)
+    quit_button = tk.Button(root1, command= root1.destroy, borderwidth= 0, image= save_exit_image)
+    quit_button.image = save_exit_image
     quit_button.place(relx= 0.85, rely= 0.885, anchor= "ne")
 
         

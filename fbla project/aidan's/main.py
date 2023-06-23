@@ -25,6 +25,7 @@ from add_student import add_student
 from view_requests import view_requests
 from create_report2 import createReport
 from view_entries import view_entries
+from leaderboard import leaderboard
 #from prizes import WinnersWindow, ExportNotificationWindow, StudentPrizeApp
 from prize2 import pick_winners
 
@@ -34,6 +35,7 @@ from prize2 import pick_winners
 #from helper import open_help_window
 
 student_id = 0
+grade = 9
 #creates the home GUI
 root = tk.Tk()
 root.geometry("1000x500")
@@ -49,6 +51,14 @@ img = ImageTk.PhotoImage(img)
 label = tk.Label(root, image=img)
 
 ## IMAGE BUTTONS
+
+def leaderboard_open(grade=9):
+    leaderboard(grade)
+leaderboard_image = Image.open("./assets/leaderboard.png")
+leaderboard_image = leaderboard_image.resize((250,75))
+leaderboard_image = ImageTk.PhotoImage(leaderboard_image)
+leaderboard_button = tk.Button(root, image=leaderboard_image, command=lambda: leaderboard_open(grade))
+
 event_image = Image.open("./assets/event.png")
 event_image = event_image.resize((250, 75))
 event_image = ImageTk.PhotoImage(event_image)
@@ -301,7 +311,7 @@ def refresh_events(count, value, move, type, type2):
                     request_info.insert_one(temp_info)
                     refresh_events(temp_count, True, 0, 0, "empty")
                 else:
-                   error("You have already selected an option for this event.")
+                   error("You have already selected an\n option for this event.")
         else:
             ...
     else:
@@ -345,6 +355,7 @@ def login():
                 login_screen.place_forget()
                 label.place_forget()
                 create_report_button.place_forget()
+            
                 logged_in = True
 
                 students = student_info.find()
@@ -359,11 +370,15 @@ def login():
                 students = student_info.find()
                 for student in students:
                     if int(student_id) == student["_id"]:
+                        global grade
                         login_label.configure(text= f'logged in as: {student["first_name"]} {student["last_name"]}')
                         login_label.place(relx = 0.05, rely= 0.075, anchor= "w")
 
+                        grade = student["grade"]
+
+
                 sign_out.place(relx=0.15, rely=0.8, anchor="center")
-                prize_button.place(relx= 0.5, rely= 0.8, anchor= "center")
+                leaderboard_button.place(relx= 0.5, rely= 0.8, anchor= "center")
                 about_button.place(relx= 0.85, rely= 0.8, anchor= "center")
                 upcoming_event.place(relx= .5, rely= .08, anchor= CENTER)
 
@@ -382,6 +397,7 @@ def login():
         for item2 in temp2:
             if str(password_entry.get()) == str(item2["password"]) and str(username_entry.get()) == str(item2["username"]):
                 login_screen.place_forget()
+                leaderboard_button.place_forget()
                 sign_out.place(relx=0.15, rely=0.8, anchor="center")
                 logged_in = True
 
@@ -422,6 +438,7 @@ img1 = ImageTk.PhotoImage(img1)
 
 
 def place_login_frame():
+    leaderboard_button.place_forget()
     first_box.place_forget()
     second_box.place_forget()
     third_box.place_forget()

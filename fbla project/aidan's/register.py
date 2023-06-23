@@ -76,10 +76,10 @@ def register():
     username_entry.place(relx= 0.5, rely= 0.3, anchor= "center")
 
     second_label = ctk.CTkLabel(event_window, text= "last name:", font= ("Quicksand", 15), text_color="white", fg_color="#1c1c1c", bg_color= "#1c1c1c")
-    second_label.place(relx= 0.5, rely= 0.45, anchor= "center")
+    second_label.place(relx= 0.5, rely= 0.4, anchor= "center")
 
     password_entry = ctk.CTkEntry(event_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font=("Quicksand", 15))
-    password_entry.place(relx= 0.5, rely= 0.5, anchor= "center")
+    password_entry.place(relx= 0.5, rely= 0.45, anchor= "center")
 
     grade_level = ctk.IntVar(event_window)
     grade_level.set("select grade")
@@ -126,10 +126,20 @@ def register():
                 student_info.insert_one(temp)
 
                 root = tk.Toplevel()
-                root.geometry("400x200")
+                root.geometry("400x100")
                 root.configure(bg= "#1c1c1c")
                 label= ctk.CTkLabel(root, text= f'your student id and password is: {studentId}', font= ("Quicksand", 18), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
                 label.place(relx= 0.5, rely= 0.5, anchor= "center")
+
+            # Define a function to close both windows
+        def close_both_windows():
+            event_window.destroy()
+            root.destroy()
+
+        # Call close_both_windows when the new_window's close button is clicked
+        root.protocol("WM_DELETE_WINDOW", close_both_windows)
+
+            
 
     submit_button = ctk.CTkButton(event_window, text= "submit", font= ("Quicksand", 25), command= submit, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color= "#292929")
     submit_button.place(relx=0.5, rely=0.9, anchor="center")

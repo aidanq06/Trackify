@@ -49,8 +49,12 @@ def view_entries():
         for item in listbox.get_children():
             listbox.delete(item)
         students= student_info.find()
+        student_list = list()
         count = 0
         for student in students:
+            student_list.append(student)
+        student_list.reverse()
+        for student in student_list:
             listbox.insert(parent='', index='end', text= "", iid= count, values= (student["_id"], student["first_name"], student["last_name"], student["grade"], student["point"]) )
             count+= 1
         listbox.place(relx= 0, rely= 0, anchor= "nw")

@@ -16,6 +16,8 @@ def add_student():
     add_window = tk.Toplevel()
     add_window.geometry("400x400")
     add_window.configure(bg='#1c1c1c')
+    add_window.grab_set()
+    add_window.resizable(False,False)
 
     style = ttk.Style(add_window)
     style.theme_use('clam')
@@ -55,14 +57,14 @@ def add_student():
         else:
             while check_dup == 0:
                 for students in student_temp:
-                    if int(students.get('_id')) == int(studentId):
+                    if int(students["_id"]) == int(studentId):
                         studentId = rand.randint(0,100000)
                         break
                         
-                check_dup == 1
-                temp = {"first_name": student_first, "last_name": student_last, "grade": int(grade), "_id": studentId, "point": 0}
-                student_info.insert_one(temp)
-                add_window.destroy()
+                check_dup = 1
+            temp = {"_id": studentId, "first_name": student_first, "last_name": student_last, "grade": int(grade), "point": 0}
+            student_info.insert_one(temp)
+            add_window.destroy()
         
 
     submit_button = ctk.CTkButton(add_window, text= "submit", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white", command= submit, hover_color="#292929")

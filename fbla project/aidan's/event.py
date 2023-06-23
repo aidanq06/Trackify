@@ -18,6 +18,8 @@ def event():
     event_window = tk.Toplevel()
     event_window.geometry("600x600")
     event_window.configure(bg='#1c1c1c')
+    event_window.grab_set()
+    event_window.resizable(False,False)
 
     style = ttk.Style(event_window)
     style.theme_use('clam')

@@ -40,6 +40,7 @@ student_id = 0
 root = tk.Tk()
 root.geometry("1000x500")
 root.configure(bg='#1c1c1c')
+root.resizable(False,False)
 font = Font(file="./assets/Quicksand-Bold.ttf", family="Quicksand")
 
 
@@ -458,8 +459,8 @@ def place_login_frame():
     status_label1.place_forget()
     status_label2.place_forget()
     status_label3.place_forget()
-    points.place_forget()
-
+    points_label.place_forget()
+    login_label.place_forget()
     view_requests_button.place_forget()
 
 sign_out_image = Image.open("./assets/sign_out.png")

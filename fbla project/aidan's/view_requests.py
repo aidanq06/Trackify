@@ -26,6 +26,8 @@ def view_requests():
     root1 = tk.Toplevel()
     root1.geometry("1200x600")
     root1.configure(bg= '#1c1c1c')
+    root1.resizable(False,False)
+    root1.grab_set()
     temp = list()
     points = list()
     final = list()
@@ -165,6 +167,7 @@ def view_requests():
         confirm = tk.Toplevel()
         confirm.geometry("400x200")
         confirm.configure(bg= '#1c1c1c')
+        confirm.resizable(False,False)
 
         label = ctk.CTkLabel(confirm, text= "are you sure you want \n to confirm all requests", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
         label.place(relx= .5, rely= .3, anchor= "center")
@@ -183,7 +186,6 @@ def view_requests():
                         points.append(event['points'])
 
             students = student_info.find()
-            print(selection)
             for item in selection:
                 for student in students:
                     if int(student["_id"]) == int(item[0]):

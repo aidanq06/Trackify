@@ -71,6 +71,7 @@ class ExportNotificationWindow(tk.Toplevel):
         
 class StudentPrizeApp(tk.Toplevel):
     root = tk.Toplevel()
+    root.resizable(False,False)
     
     def __init__(self):
         super().__init__()

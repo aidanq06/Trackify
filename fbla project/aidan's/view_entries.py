@@ -29,6 +29,8 @@ def view_entries():
     root1 = tk.Toplevel()
     root1.geometry("1000x500")
     root1.configure(bg= '#1c1c1c')
+    root1.grab_set()
+    root1.resizable(False,False)
     students = student_info.find()
 
     listbox = ttk.Treeview(root1, selectmode="extended",columns=("c1", "c2", "c3", "c4", "c5"),show="headings", height= 5)
@@ -49,8 +51,12 @@ def view_entries():
         for item in listbox.get_children():
             listbox.delete(item)
         students= student_info.find()
-        count = 0
+        student_list = list()
         for student in students:
+            student_list.append(student)
+        student_list.reverse()
+        count = 0
+        for student in student_list:
             listbox.insert(parent='', index='end', text= "", iid= count, values= (student["_id"], student["first_name"], student["last_name"], student["grade"], student["point"]) )
             count+= 1
         listbox.place(relx= 0, rely= 0, anchor= "nw")
@@ -84,6 +90,8 @@ def view_entries():
                 edit_student_window = tk.Toplevel()
                 edit_student_window.geometry("400x600")
                 edit_student_window.configure(bg= '#1c1c1c')
+                edit_student_window.grab_set()
+                edit_student.resizable(False,False)
 
                 label = ctk.CTkLabel(edit_student_window, text= "edit student", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
                 label.place(relx= 0.5, rely= 0.1, anchor= "center")

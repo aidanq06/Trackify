@@ -22,7 +22,6 @@ def report():
             for i in range(len(fetch)):
                 points.append(fetch[i][3])
                 name.append(f"{fetch[i][0]} {(fetch[i][1][0]).title()}.")
-                #print(fetch[i][3],fetch[i][0])
             name2=list()
             for i in range(len(name)):
                 name2.append(f"{name[i]} ({points[i]} points)")
@@ -48,6 +47,7 @@ def report():
     dialog_box = ctk.CTkToplevel()
     dialog_box.title("Dialog Box")
     dialog_box.geometry("400x100")
+    dialog_box.resizable(False,False)
 
     #dropdown menu for grade selection
     dropdown = ctk.CTkLabel(dialog_box, text="Select which grade level's quarterly report you would like to view.")

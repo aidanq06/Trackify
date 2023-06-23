@@ -36,6 +36,7 @@ def pick_winners():
     root.geometry("+750+50")
     root.title("Prize Winners")
     root.configure(bg='#1c1c1c')
+    root.grab_set()
 
     try:
         for grade in range(9, 13):
@@ -70,6 +71,7 @@ def pick_winners():
         winner_frame = tk.Frame(root, bg='#1c1c1c', highlightthickness=2, highlightbackground='white')
         winner_frame.grid(row=grid_positions[i][0], column=grid_positions[i][1], padx=20, pady=20, sticky='nsew')
         winner_frame.grid_columnconfigure(0, weight=1)
+        winner_frame.grab_set()
 
 
         ctk.CTkLabel(winner_frame, text=f"Grade {grade}", font=("Quicksand", 20), text_color='#1c1c1c', fg_color='white', bg_color="white", corner_radius=5,justify="center").grid(row=0, column=0, sticky='we')
@@ -109,6 +111,8 @@ def export_winners():
     new_window.geometry("+750+500")
     new_window.title("PDF Export Successful")
     new_window.configure(bg='#1c1c1c')
+    new_window.grab_set()
+    new_window.resizable(False,False)
 
     label = tk.Label(new_window, text="PDF Export Successful!", font=("Quicksand", 25), bg='#1c1c1c', fg='white',padx=20,pady=20)
     label.pack(pady=10)

@@ -92,6 +92,7 @@ def export_to_pdf(figures, root):
     success_window = tk.Toplevel(root)
     success_label = tk.Label(success_window, text="PDF exported successfully.")
     success_label.pack()
+    success_window.resizable(False,False)
 
     def close_all_windows():
         root.destroy()

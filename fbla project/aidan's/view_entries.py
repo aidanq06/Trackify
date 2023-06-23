@@ -132,25 +132,15 @@ def view_entries():
         except:
             error("You can only edit one student at a time.")
 
-    edit_student_image = Image.open("./assets/edit_student.png")
-    edit_student_image = edit_student_image.resize((150, 45))
-    edit_student_image = ImageTk.PhotoImage(edit_student_image)
-    edit_button = tk.Button(root1, command= edit_student, image= edit_student_image, borderwidth= 0)
-    edit_button.image = edit_student_image
-    edit_button.place(relx= 0.15, rely= 0.885, anchor= "nw")
 
-    remove_student_image = Image.open("./assets/remove_student.png")
-    remove_student_image = remove_student_image.resize((150, 45))
-    remove_student_image = ImageTk.PhotoImage(remove_student_image)
-    remove_button = tk.Button(root1, command= remove_student, image= remove_student_image, borderwidth= 0)
-    remove_button.image = remove_student_image
-    remove_button.place(relx= 0.5, rely= 0.885, anchor= "n")
+    edit_button = ctk.CTkButton(root1, command=edit_student, width=200, height=50, text="edit student",
+                                font=("Quicksand", 25), fg_color="#1c1c1c", text_color="white")
+    edit_button.place(relx= 0.2, rely= 0.925, anchor= "center")
 
-    save_exit_image = Image.open("./assets/save_exit.png")
-    save_exit_image = save_exit_image.resize((150, 45))
-    save_exit_image = ImageTk.PhotoImage(save_exit_image)
-    quit_button = tk.Button(root1, command= root1.destroy, borderwidth= 0, image= save_exit_image)
-    quit_button.image = save_exit_image
-    quit_button.place(relx= 0.85, rely= 0.885, anchor= "ne")
+    remove_button = ctk.CTkButton(root1, command=remove_student, width=200, height=50, text="remove student",
+                                font=("Quicksand", 25), fg_color="#1c1c1c", text_color="white")
+    remove_button.place(relx= 0.5, rely= 0.925, anchor= "center")
 
-        
+    quit_button = ctk.CTkButton(root1, command=root1.destroy, width=200, height=50, text="save and exit",
+                                font=("Quicksand", 25), fg_color="#1c1c1c", text_color="white")
+    quit_button.place(relx= 0.8, rely= 0.925, anchor= "center")

@@ -6,6 +6,8 @@ import pymongo
 from pymongo import MongoClient
 from tkcalendar import Calendar
 from popups import error
+from add_student import add_student
+import random as rand
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["RRHSfbla2023"]
@@ -40,6 +42,9 @@ def register():
                     for i in codes:
                         if int(code) == i["main"]:
                             prompt.destroy()
+                            username_entry.configure(placeholder_text= "username")
+                            password_entry.configure(placeholder_text= "password")
+                            grade_options.destroy()
                         else:
                             error("Password does not match.")
 
@@ -89,9 +94,24 @@ def register():
         if username == "" or password == "":
             error("please fill out all the required fields")
         else:
-            temp = {"username": username, "password": password}
-            login_info.insert_one(temp)
-            event_window.destroy()
+            if check_var == True:
+                temp = {"username": username, "password": password}
+                login_info.insert_one(temp)
+                event_window.destroy()
+
+            else:
+                students = student_info.find()
+                studentId = 0
+                studentId = rand.randint(0,100000)
+                check_dup = 0
+                while check_dup == 0:
+                    for student in students:
+                        if int(student.get('_id')) == int(studentId):
+                            studentId = rand.randint(0,100000)
+                        break
+                    check_dup == 1
+                grade = int(grade_options.get())
+                temp = {"_id": studentId, "first_name": username, "last_name": password, "grade":grade, "point": 0}
 
     submit_button = ctk.CTkButton(event_window, text= "submit", font= ("Quicksand", 25), command= submit, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color= "#292929")
     submit_button.place(relx=0.5, rely=0.85, anchor="center")

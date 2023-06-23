@@ -150,14 +150,8 @@ def view_requests():
         if len(items) > 0:
             for item in items:
                 selection = listbox.item(item, option="values")
-                students = student_info.find()
-                for student in students:
-                    if int(student["_id"]) == int(selection[0]):
-                        point = student["point"]
-                point = int(point) + int(selection[7])
-                student_info.update_one({"_id": int(selection[0])}, {"$set":{"point": int(point)}})
                 request_info.update_one({"student_id": int(selection[0]), "name": str(selection[4]), "date": str(selection[5])}, {"$set":{"status": "denied"}})
-            
+            refresh()
         else:
             error("Please select one or more requests.")
 
@@ -168,11 +162,11 @@ def view_requests():
         confirm.geometry("400x200")
         confirm.configure(bg= '#1c1c1c')
         confirm.resizable(False,False)
-
-        label = ctk.CTkLabel(confirm, text= "are you sure you want \n to confirm all requests", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
-        label.place(relx= .5, rely= .3, anchor= "center")
+        confirm.grab_set()
 
         def confirm_command():
+
+            confirm.destroy()
             selection = list()
             temp = listbox.get_children()
             for i in temp:
@@ -194,18 +188,13 @@ def view_requests():
                 student_info.update_one({"_id": int(item[0])}, {"$set":{"point": int(point)}})
                 request_info.update_one({"student_id": int(item[0]), "name": str(item[4]), "date": str(item[5])}, {"$set":{"status": "approved"}})
 
-                confirm.destroy()
-                refresh()
+            refresh()
+
+        label = ctk.CTkLabel(confirm, text= "are you sure you want \n to confirm all requests", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
+        label.place(relx= .5, rely= .3, anchor= "center")
 
         confirm_button = ctk.CTkButton(confirm, text= "confirm", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white", command= confirm_command, hover_color="#292929")
         confirm_button.place(relx=0.5, rely=0.8, anchor="center")
-
-
-
-        
-
-
-
 
 
     listbox.place(relx= 0.5, rely= 0, anchor= "n")

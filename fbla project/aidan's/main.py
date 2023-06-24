@@ -72,12 +72,12 @@ add_student_button = tk.Button(root, image=add_student_image, command=add_studen
 about_image = Image.open("./assets/about.png")
 about_image = about_image.resize((250, 75))
 about_image = ImageTk.PhotoImage(about_image)
-about_button = tk.Button(root, image=about_image, command=about)
+about_button = tk.Button(root, image=about_image, command=lambda: about(root))
 
 view_image = Image.open("./assets/view_entries.png")
 view_image = view_image.resize((250, 75))
 view_image = ImageTk.PhotoImage(view_image)
-view_button = tk.Button(root, image=view_image, command= view_entries) # CHANGE THIS
+view_button = tk.Button(root, image=view_image, command=lambda: view_entries(root)) # CHANGE THIS
 
 create_report_image = Image.open("./assets/create_report.png")
 create_report_image = create_report_image.resize((250, 75))
@@ -87,12 +87,12 @@ create_report_button = tk.Button(root, command= createReport, image= create_repo
 view_requests_image = Image.open("./assets/view_requests.png")
 view_requests_image = view_requests_image.resize((250, 75))
 view_requests_image = ImageTk.PhotoImage(view_requests_image)
-view_requests_button = tk.Button(root, command= view_requests, image= view_requests_image)
+view_requests_button = tk.Button(root, command=lambda: view_requests(root), image= view_requests_image)
 
 prize_image = Image.open("./assets/prizes.png")
 prize_image = prize_image.resize((250, 75))
 prize_image = ImageTk.PhotoImage(prize_image)
-prize_button = tk.Button(root, image=prize_image, command=pick_winners) # CHANGE THIS
+prize_button = tk.Button(root, image=prize_image, command=lambda: pick_winners(root)) # CHANGE THIS
 
 upcoming_event_image = Image.open("./assets/upcoming_events.png")
 upcoming_event_image = upcoming_event_image.resize((270, 75))

@@ -19,7 +19,7 @@ event_info = db["event_info"]
 login_info = db["login_info"]
 request_info = db["request_info"]
 
-def view_entries():
+def view_entries(root):
 
     style = ttk.Style()
     style.theme_use("clam")
@@ -27,11 +27,8 @@ def view_entries():
     style.configure("Treeview.Heading", background = "#1c1c1c", foreground= "white", borderwidth= 0, font= ("Quicksand", 12))
     style.map('Treeview', background=[('selected', '#292929')])
 
-    root1 = tk.Toplevel()
-    root1.geometry("1000x500")
-    root1.configure(bg= '#1c1c1c')
-    root1.grab_set()
-    root1.resizable(False,False)
+    root1 = tk.Frame(root, height= 500, width= 1000, bg= "#1c1c1c")
+    root1.place(relx= 0, rely= 0, anchor= "nw")
     students = student_info.find()
 
     listbox = ttk.Treeview(root1, selectmode="extended",columns=("c1", "c2", "c3", "c4", "c5"),show="headings", height= 5)

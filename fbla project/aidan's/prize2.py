@@ -22,7 +22,7 @@ request_info = db["request_info"]
 winners = {}
 global export_button
 
-def pick_winners():
+def pick_winners(root):
     # Fetch all students from the database
     students = list(student_info.find())
 
@@ -32,11 +32,8 @@ def pick_winners():
         for student in students
     ]
 
-    root = tk.Toplevel()
-    root.geometry("+750+50")
-    root.title("Prize Winners")
-    root.configure(bg='#1c1c1c')
-    root.grab_set()
+    root1 = tk.Frame(root, height= 500, width= 1000, bg= "#1c1c1c")
+    root1.place(relx= 0, rely= 0, anchor= "nw")
 
     try:
         for grade in range(9, 13):
@@ -74,11 +71,11 @@ def pick_winners():
         winner_frame.grab_set()
 
 
-        ctk.CTkLabel(winner_frame, text=f"Grade {grade}", font=("Quicksand", 20), text_color='#1c1c1c', fg_color='white', bg_color="white", corner_radius=5,justify="center").grid(row=0, column=0, sticky='we')
+        ctk.CTkLabel(winner_frame, text=f"Grade {grade}", font=("Quicksand", 10), text_color='#1c1c1c', fg_color='white', bg_color="white", corner_radius=5,justify="center").grid(row=0, column=0, sticky='we')
 
         random_winner_info = winners[grade]['random_winner']
         top_scorer_info = winners[grade]['top_scorer']
-        ctk.CTkLabel(winner_frame, text=f"Random winner: {random_winner_info[0]}\nID: {random_winner_info[2]}\nPoints: {random_winner_info[1]}\nPrize: {random_winner_info[3]}\n\nTop scorer: {top_scorer_info[0]}\nID: {top_scorer_info[2]}\nPoints: {top_scorer_info[1]}\nPrize: {top_scorer_info[3]}", font=("Quicksand", 15), padx=10, pady=5, text_color="white", fg_color="#1c1c1c", justify="left").grid(row=1, column=0, sticky="w")
+        ctk.CTkLabel(winner_frame, text=f"Random winner: {random_winner_info[0]}\nID: {random_winner_info[2]}\nPoints: {random_winner_info[1]}\nPrize: {random_winner_info[3]}\n\nTop scorer: {top_scorer_info[0]}\nID: {top_scorer_info[2]}\nPoints: {top_scorer_info[1]}\nPrize: {top_scorer_info[3]}", font=("Quicksand", 10), padx=10, pady=5, text_color="white", fg_color="#1c1c1c", justify="left").grid(row=1, column=0, sticky="w")
 
     global export_button
     export_button = ctk.CTkButton(root, height=50, width=300, text='Export Winners', font=("Quicksand", 20), fg_color="white", text_color="#1c1c1c", command=export_winners)
@@ -99,7 +96,7 @@ def export_winners():
         c.drawString(100, 800 - 100 * i, f"Grade {grade}:")
 
         random_winner_info = winners[grade]['random_winner']
-        c.drawString(100, 800 - 100 * i - 15, f"Random winner: {random_winner_info[0]}, ID: {random_winner_info[2]}, Points: {random_winner_info[1]}, Prize: {random_winner_info[3]}")
+        c.drawString(100, 800 - 100 * i - 10, f"Random winner: {random_winner_info[0]}, ID: {random_winner_info[2]}, Points: {random_winner_info[1]}, Prize: {random_winner_info[3]}")
 
         top_scorer_info = winners[grade]['top_scorer']
         c.drawString(100, 800 - 100 * i - 30, f"Top scorer: {top_scorer_info[0]}, ID: {top_scorer_info[2]}, Points: {top_scorer_info[1]}, Prize: {top_scorer_info[3]}")
@@ -137,7 +134,7 @@ def assign_prize(points):
         (75, 'Free homework pass'),
         (100, 'Free lunch and free snack'),
         (125, 'Free entry to next school-related event'),
-        (150, 'Choice of any school-spirited apparel (hoodie, shirt, etc.)'),
+        (100, 'Choice of any school-spirited apparel (hoodie, shirt, etc.)'),
     ]
     # Assign the highest prize the student's points qualify for
     for threshold, prize in reversed(prizes):

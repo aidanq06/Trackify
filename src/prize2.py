@@ -1,12 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_pdf import PdfPages
 import random
-import json
 import customtkinter as ctk
+import subprocess
 
-import pymongo
 from pymongo import MongoClient
 
 from reportlab.pdfgen import canvas
@@ -96,22 +94,49 @@ def pick_winners(root):
 
 
 
-def export_winners():
+from reportlab.lib.pagesizes import letter
 
+def export_winners():
     global winners 
     root1 = export_button.root1
-    c = canvas.Canvas('winners.pdf')
+    filename = 'winners.pdf'
+
+    c = canvas.Canvas(filename, pagesize=letter)
+
+    # Set up the font and font size
+    c.setFont("Helvetica", 12)
 
     for i, grade in enumerate(range(9, 13), start=1):
-        c.drawString(100, 800 - 100 * i, f"Grade {grade}:")
+        y = (700 - (i - 1) * 175)
+
+        
 
         random_winner_info = winners[grade]['random_winner']
-        c.drawString(100, 800 - 100 * i - 15, f"Random winner: {random_winner_info[0]}, ID: {random_winner_info[2]}, Points: {random_winner_info[1]}, Prize: {random_winner_info[3]}")
+        c.drawString(100, y, f"Grade {grade}:")
+        c.drawString(140, y - 15, f"Random winner:")
+        c.drawString(160, y - 30, f"Name: {random_winner_info[0]}")
+        c.drawString(160, y - 45, f"ID: {random_winner_info[2]}")
+        c.drawString(160, y - 60, f"Points: {random_winner_info[1]}")
+        c.drawString(160, y - 75, f"Prize: {random_winner_info[3]}")
 
         top_scorer_info = winners[grade]['top_scorer']
-        c.drawString(100, 800 - 100 * i - 30, f"Top scorer: {top_scorer_info[0]}, ID: {top_scorer_info[2]}, Points: {top_scorer_info[1]}, Prize: {top_scorer_info[3]}")
+        c.drawString(140, y - 90, f"Top scorer:")
+        c.drawString(160, y - 105, f"Name: {top_scorer_info[0]}")
+        c.drawString(160, y - 120, f"ID: {top_scorer_info[2]}")
+        c.drawString(160, y - 135, f"Points: {top_scorer_info[1]}")
+        c.drawString(160, y - 150, f"Prize: {top_scorer_info[3]}")
 
     c.save()
+
+    # Open the file location in the file explorer
+    try:
+        subprocess.run(['explorer', '/select,', filename])  # For Windows
+    except FileNotFoundError:
+        try:
+            subprocess.run(['xdg-open', '--reveal', filename])  # For Linux
+        except FileNotFoundError:
+            error("Could not open file location.", root=root1)
+            return
 
     # create a new window after successfully exported the PDF
     new_window = tk.Toplevel()

@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 import customtkinter as ctk
 from PIL import ImageTk, Image
-import pymongo
 from pymongo import MongoClient
 import random as rand
 from popups import error

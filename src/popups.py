@@ -1,8 +1,5 @@
 import tkinter as tk
 import customtkinter as ctk
-from tkinter import ttk
-from PIL import ImageTk, Image
-from tkextrafont import Font
 
 def error(error_message):
     root = tk.Toplevel()

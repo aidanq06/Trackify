@@ -1,0 +1,7 @@
+numpy
+matplotlib
+customtkinter
+pillow
+pymongo
+tkextrafont
+tkcalendar

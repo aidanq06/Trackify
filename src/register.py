@@ -2,11 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 import customtkinter as ctk
 from PIL import ImageTk, Image
-import pymongo
 from pymongo import MongoClient
-from tkcalendar import Calendar
 from popups import error
-from add_student import add_student
 import random as rand
 
 cluster = MongoClient("mongodb+srv://RRHSfbla2023:IheBcYm1ZbOEephx@fbla2023project.wdozi9i.mongodb.net/?retryWrites=true&w=majority")

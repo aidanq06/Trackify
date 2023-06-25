@@ -2,7 +2,7 @@ import customtkinter as ctk
 import matplotlib.pyplot as plt
 from tkinter import *
 
-from popups import success, error
+from popups import error
 from main import connect_to_db
 
 cursor = connect_to_db()

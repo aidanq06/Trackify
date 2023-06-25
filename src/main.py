@@ -1,5 +1,4 @@
 # Import the required modules
-import sqlite3
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk

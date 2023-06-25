@@ -1,11 +1,12 @@
 import tkinter as tk
 import matplotlib.pyplot as plt
 import numpy as np
-import pymongo
 from pymongo import MongoClient
 from matplotlib.backends.backend_pdf import PdfPages
 import customtkinter as ctk
 
+import subprocess
+from popups import error
 
 
 def get_student_data(student_info):
@@ -90,10 +91,23 @@ def create_report_per_grade(student_data, grade, show_plot=True):
 
 
 def export_to_pdf(figures, root1):
-    with PdfPages('student_report.pdf') as pdf:
+    filename='student_report.pdf'
+    with PdfPages(filename) as pdf:
         for fig in figures:
             pdf.savefig(fig)
             plt.close(fig)
+
+
+    # Open the file location in the file explorer
+    try:
+        subprocess.run(['explorer', '/select,', filename])  # For Windows
+    except FileNotFoundError:
+        try:
+            subprocess.run(['xdg-open', '--reveal', filename])  # For Linux
+        except FileNotFoundError:
+            error("Could not open file location.", root=root1)
+            return
+
 
     new_window = tk.Toplevel()
     new_window.geometry("+750+500")

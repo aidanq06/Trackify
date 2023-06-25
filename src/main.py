@@ -145,6 +145,7 @@ for date in dates:
 
 dates.sort()
 
+
 for date in dates:
     string = date.strftime('%m/%d/%Y')
     events = event_info.find()
@@ -179,7 +180,7 @@ def refresh_events(count, value, move, type, type2):
     global request
     request = []
     if value == True: 
-        if (count+ 2 < len(dates)- 1 and move == 1) or (count -1 >= 0 and move == -1) or (move == 0):
+        if (count + 2 < len(dates)- 1 and move == 1) or (count -1 >= 0 and move == -1) or (move == 0):
             if move == 0:
                 ...
             elif move == 1:

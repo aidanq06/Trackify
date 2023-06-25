@@ -19,7 +19,7 @@ event_info = db["event_info"]
 login_info = db["login_info"]
 request_info = db["request_info"]
 
-def view_entries():
+def view_entries(root):
 
     style = ttk.Style()
     style.theme_use("clam")
@@ -27,11 +27,8 @@ def view_entries():
     style.configure("Treeview.Heading", background = "#1c1c1c", foreground= "white", borderwidth= 0, font= ("Quicksand", 12))
     style.map('Treeview', background=[('selected', '#292929')])
 
-    root1 = tk.Toplevel()
-    root1.geometry("1000x500")
-    root1.configure(bg= '#1c1c1c')
-    root1.grab_set()
-    root1.resizable(False,False)
+    root1 = tk.Frame(root, height= 500, width= 1000, bg= "#1c1c1c")
+    root1.place(relx= 0, rely= 0, anchor= "nw")
     students = student_info.find()
 
     listbox = ttk.Treeview(root1, selectmode="extended",columns=("c1", "c2", "c3", "c4", "c5"),show="headings", height= 5)
@@ -89,53 +86,34 @@ def view_entries():
                 error("Please select a student to edit.")
             else:
                 edit_student_window = tk.Toplevel()
-                edit_student_window.geometry("400x500")
+                edit_student_window.geometry("400x600")
                 edit_student_window.configure(bg= '#1c1c1c')
                 edit_student_window.grab_set()
-                edit_student_window.resizable(False,False)
+                edit_student.resizable(False,False)
 
-                label = ctk.CTkLabel(edit_student_window, text= "edit student", font= ("Quicksand", 30), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
+                label = ctk.CTkLabel(edit_student_window, text= "edit student", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
                 label.place(relx= 0.5, rely= 0.1, anchor= "center")
 
                 first_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1C1C", border_width= 0, width= 200, font= ("Quicksand", 15))
                 first_entry.insert(0, selection[1])
-
-                first_label = ctk.CTkLabel(edit_student_window, text= "first name:", font= ("Quicksand", 15), text_color="white", fg_color="#1c1c1c", bg_color= "#1c1c1c")
-                first_label.place(relx= 0.5, rely= 0.25, anchor="center")
-
-                second_label = ctk.CTkLabel(edit_student_window, text= "last name:", font= ("Quicksand", 15), text_color="white", fg_color="#1c1c1c", bg_color= "#1c1c1c")
-                second_label.place(relx= 0.5, rely= 0.45, anchor="center")
-
-                third_label = ctk.CTkLabel(edit_student_window, text= "last name:", font= ("Quicksand", 15), text_color="white", fg_color="#1c1c1c", bg_color= "#1c1c1c")
-                third_label.place(relx= 0.5, rely= 0.65, anchor="center")
-
-                first_label.configure(text= "first name:")
-                second_label.configure(text= "last name:")
-                third_label.configure(text= "grade:")
-
                 def first_select(event):
                     first_entry.select_range(0, END)
-
                 first_entry.bind("<FocusIn>", first_select)
-                first_entry.place(relx= 0.5, rely= 0.325, anchor= "center")
+                first_entry.place(relx= 0.5, rely= 0.2, anchor= "center")
 
                 last_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand", 15))
                 last_entry.insert(0, selection[2])
-
                 def last_select(event):
                     last_entry.select_range(0, END)
-
                 last_entry.bind("<FocusIn>", last_select)
-                last_entry.place(relx= 0.5, rely= 0.525, anchor= "center")
+                last_entry.place(relx= 0.5, rely= 0.4, anchor= "center")
 
                 grade_entry = ctk.CTkEntry(edit_student_window, bg_color= "#1C1F1F", border_width= 0, width= 200, font= ("Quicksand", 15))
                 grade_entry.insert(0, selection[3])
-
                 def grade_select(event):
                     grade_entry.select_range(0, END)
-
                 grade_entry.bind("<FocusIn>", grade_select)
-                grade_entry.place(relx= 0.5, rely= 0.725, anchor= "center")
+                grade_entry.place(relx= 0.5, rely= 0.6, anchor= "center")
 
                 def get_submit():
                     first= first_entry.get()
@@ -146,8 +124,8 @@ def view_entries():
                     refresh()
                     edit_student_window.destroy()
 
-                submit_button = ctk.CTkButton(edit_student_window, text= "submit", font= ("Quicksand", 35), command= get_submit, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#292929")
-                submit_button.place(relx= 0.5, rely= 0.875, anchor= "center")
+                submit_button = ctk.CTkButton(edit_student_window, text= "submit", font= ("Quicksand", 20), command= get_submit, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#292929")
+                submit_button.place(relx= 0.5, rely= 0.8, anchor= "center")
 
         except:
             error("You can only edit one student at a time.")

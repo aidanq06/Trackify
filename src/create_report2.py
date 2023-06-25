@@ -96,7 +96,7 @@ def export_to_pdf(figures, root):
     new_window.grab_set()
     new_window.resizable(False,False)
 
-    label = tk.Label(new_window, text="PDF Export Successful", font=("Quicksand", 25), bg='#1c1c1c', fg='white',padx=20,pady=20)
+    label = tk.Label(new_window, text="PDF", font=("Quicksand", 25), bg='#1c1c1c', fg='white',padx=20,pady=20)
     label.pack(pady=10)
 
     def close_all_windows():

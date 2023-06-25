@@ -19,10 +19,12 @@ event_info = db["event_info"]
 login_info = db["login_info"]
 request_info = db["request_info"]
 
+
+extra_space="                                                                                                                               "
 winners = {}
 global export_button
 
-def pick_winners():
+def pick_winners(root):
     # Fetch all students from the database
     students = list(student_info.find())
 
@@ -31,12 +33,10 @@ def pick_winners():
         {'name': f'{student["first_name"]} {student["last_name"]}', 'points': student['point'], 'grade': student['grade'], 'id': student['_id']}
         for student in students
     ]
+    
+    root1 = tk.Frame(root, height= 500, width= 1000, bg= "#1c1c1c")
+    root1.place(relx= 0, rely= 0, anchor= "nw")
 
-    root = tk.Toplevel()
-    root.geometry("1000x650")
-    root.geometry("+750+50")
-    root.title("Prize Winners")
-    root.configure(bg='#1c1c1c')
 
     try:
         for grade in range(9, 13):
@@ -65,14 +65,14 @@ def pick_winners():
         ...
 
     # Configure uniform size for rows and columns
-    root.grid_rowconfigure((0, 1), weight=1, uniform='equal')
-    root.grid_columnconfigure((0, 1), weight=1, uniform='equal')
+    root1.grid_rowconfigure((0, 1), weight=1, uniform='equal')
+    root1.grid_columnconfigure((0, 1), weight=1, uniform='equal')
 
     # For each grade, create a frame and place it in the appropriate position in the grid
     grid_positions = [(0, 0), (0, 1), (1, 0), (1, 1)]
     for i, grade in enumerate(range(9, 13), start=0):
         # Set frame background to #1c1c1c and add a white border
-        winner_frame = tk.Frame(root, bg='#1c1c1c', highlightthickness=2, highlightbackground='white')
+        winner_frame = tk.Frame(root1, bg='#1c1c1c', highlightthickness=2, highlightbackground='white')
         winner_frame.grid(row=grid_positions[i][0], column=grid_positions[i][1], padx=20, pady=20, sticky='nsew')
         winner_frame.grid_columnconfigure(0, weight=1)
         winner_frame.grid_rowconfigure(1, weight=1)
@@ -81,14 +81,17 @@ def pick_winners():
 
         random_winner_info = winners[grade]['random_winner']
         top_scorer_info = winners[grade]['top_scorer']
-        ctk.CTkLabel(winner_frame, text=f"Random winner: {random_winner_info[0]}\nID: {random_winner_info[2]}\nPoints: {random_winner_info[1]}\nPrize: {random_winner_info[3]}\n\nTop scorer: {top_scorer_info[0]}\nID: {top_scorer_info[2]}\nPoints: {top_scorer_info[1]}\nPrize: {top_scorer_info[3]}", font=("Quicksand", 15), padx=10, pady=5, text_color="white", fg_color="#1c1c1c", justify="left").grid(row=1, column=0, sticky="w")
+        ctk.CTkLabel(winner_frame, text=f"Random winner: {random_winner_info[0]}\nID: {random_winner_info[2]}\nPoints: {random_winner_info[1]}{extra_space}\nPrize: {random_winner_info[3]}\n\nTop scorer: {top_scorer_info[0]}\nID: {top_scorer_info[2]}\nPoints: {top_scorer_info[1]}\nPrize: {top_scorer_info[3]}", font=("Quicksand", 10), padx=10, pady=5, text_color="white", fg_color="#1c1c1c", justify="left").grid(row=1, column=0, sticky="w")
 
     global export_button
-    export_button = ctk.CTkButton(root, height=50, width=300, text='Export Winners', font=("Quicksand", 20), fg_color="white", text_color="#1c1c1c", command=export_winners)
+    export_button = ctk.CTkButton(root1, height=40, width=300, text='Export Winners', font=("Quicksand", 25), fg_color="white", text_color="#1c1c1c", command=export_winners)
     export_button.grid(row=2, column=0, columnspan=2, pady=10)
-    export_button.root = root  # Store root as an attribute of the export_button
 
-    root.mainloop()
+    exit_button = ctk.CTkButton(root1, height=40, width=300, text='Exit', font=("Quicksand", 25), fg_color="white", text_color="#1c1c1c", command=root1.destroy)
+    exit_button.grade(row=2, column=1, columnspan=0, pady=10)
+    export_button.root1 = root1  # Store root1 as an attribute of the export_button
+
+    root1.mainloop()
 
 
 
@@ -96,7 +99,7 @@ def pick_winners():
 def export_winners():
 
     global winners 
-    root = export_button.root
+    root1 = export_button.root1
     c = canvas.Canvas('winners.pdf')
 
     for i, grade in enumerate(range(9, 13), start=1):
@@ -122,7 +125,7 @@ def export_winners():
     # Define a function to close both windows
     def close_both_windows():
         new_window.destroy()
-        root.destroy()
+        root1.destroy()
 
     # Call close_both_windows when the new_window's close button is clicked
     new_window.protocol("WM_DELETE_WINDOW", close_both_windows)
@@ -145,4 +148,3 @@ def assign_prize(points):
     for threshold, prize in reversed(prizes):
         if points >= threshold:
             return prize
-

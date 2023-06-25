@@ -16,46 +16,43 @@ login_info = db["login_info"]
 request_info = db["request_info"]
 
 
-def view_requests():
+def view_requests(root):
 
     style = ttk.Style()
     style.theme_use("clam")
     style.configure("Treeview", fieldbackground= "#1c1c1c", background = "#1c1c1c", foreground= "white", font= ("Quicksand", 12), rowheight= 80, highlightbackground = "#1c1c1c", highlightcolor= "#1c1c1c", borderwidth= 1)
     style.configure("Treeview.Heading", background = "#1c1c1c", foreground= "white", borderwidth= 0, font= ("Quicksand", 12))
     
-    root1 = tk.Toplevel()
-    root1.geometry("1200x600")
-    root1.configure(bg= '#1c1c1c')
-    root1.resizable(False,False)
-    root1.grab_set()
+    root1 = tk.Frame(root, height= 500, width= 1000, bg= "#1c1c1c")
+    root1.place(relx= 0, rely= 0, anchor= "nw")
     temp = list()
     points = list()
     final = list()
     dates = list()
 
     listbox = ttk.Treeview(root1, selectmode="extended",columns=("c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8"), height= 6, show="headings")
-    listbox.column("# 1", anchor=CENTER, width = 149)
+    listbox.column("# 1", anchor=CENTER, width = 150)
     listbox.heading("# 1", text="id")
 
-    listbox.column("# 2", anchor=CENTER, width = 149)
+    listbox.column("# 2", anchor=CENTER, width = 150)
     listbox.heading("# 2", text="first name")
 
-    listbox.column("# 3", anchor=CENTER, width = 149)
+    listbox.column("# 3", anchor=CENTER, width = 150)
     listbox.heading("# 3", text="last name")
 
-    listbox.column("# 4", anchor=CENTER, width = 149)
+    listbox.column("# 4", anchor=CENTER, width = 150)
     listbox.heading("# 4", text="grade")
 
-    listbox.column("# 5", anchor=CENTER, width = 149)
+    listbox.column("# 5", anchor=CENTER, width = 150)
     listbox.heading("# 5", text="event")
 
-    listbox.column("# 6", anchor=CENTER, width = 149)
+    listbox.column("# 6", anchor=CENTER, width = 150)
     listbox.heading("# 6", text="date")
 
-    listbox.column("# 7", anchor=CENTER, width = 149)
+    listbox.column("# 7", anchor=CENTER, width = 150)
     listbox.heading("# 7", text="involvement")
 
-    listbox.column("# 8", anchor=CENTER, width = 149)
+    listbox.column("# 8", anchor=CENTER, width = 150)
     listbox.heading("# 8", text="points")
 
     requests = request_info.find()
@@ -200,13 +197,16 @@ def view_requests():
     listbox.place(relx= 0.5, rely= 0, anchor= "n")
 
     approve = ctk.CTkButton(root1, text= "approve", font= ("Quicksand", 25), command= approve, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#292929")
-    approve.place(relx= 0.2, rely= 0.925, anchor="center")
+    approve.place(relx= 0.1, rely= 0.925, anchor="center")
 
     deny = ctk.CTkButton(root1, text= "deny", font= ("Quicksand", 25), command= deny, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#292929")
-    deny.place(relx= 0.8, rely= 0.925, anchor="center")
+    deny.place(relx= 0.365, rely= 0.925, anchor="center")
 
     approve_all = ctk.CTkButton(root1, text= "approve all", font= ("Quicksand", 25), command= approve_all, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#292929")
-    approve_all.place(relx= 0.5, rely= 0.925, anchor="center")
+    approve_all.place(relx= 0.625, rely= 0.925, anchor="center")
+
+    quit_button = ctk.CTkButton(root1, text= "quit", font= ("Quicksand", 25), command= root1.destroy, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#292929")
+    quit_button.place(relx= 0.9, rely= 0.925, anchor="center")
 
     
         

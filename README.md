@@ -1,4 +1,4 @@
-# Trackify
+﻿# Trackify
 
 Trackify is a student involvement tracking system designed for schools. It allows educators to monitor and manage student participation in various school activities. This README provides an overview of Trackify, its features, and installation instructions.
 

@@ -84,11 +84,11 @@ def pick_winners(root):
         ctk.CTkLabel(winner_frame, text=f"Random winner: {random_winner_info[0]}\nID: {random_winner_info[2]}\nPoints: {random_winner_info[1]}{extra_space}\nPrize: {random_winner_info[3]}\n\nTop scorer: {top_scorer_info[0]}\nID: {top_scorer_info[2]}\nPoints: {top_scorer_info[1]}\nPrize: {top_scorer_info[3]}", font=("Quicksand", 10), padx=10, pady=5, text_color="white", fg_color="#1c1c1c", justify="left").grid(row=1, column=0, sticky="w")
 
     global export_button
-    export_button = ctk.CTkButton(root1, height=40, width=300, text='Export Winners', font=("Quicksand", 25), fg_color="white", text_color="#1c1c1c", command=export_winners)
-    export_button.grid(row=2, column=0, columnspan=2, pady=10)
+    export_button = ctk.CTkButton(root1, height=40, width=300, text='export winners', font=("Quicksand", 25), fg_color="white", text_color="#1c1c1c", command=export_winners)
+    export_button.grid(row=2, column=0, columnspan=1, pady=10)
 
-    exit_button = ctk.CTkButton(root1, height=40, width=300, text='Exit', font=("Quicksand", 25), fg_color="white", text_color="#1c1c1c", command=root1.destroy)
-    exit_button.grade(row=2, column=1, columnspan=0, pady=10)
+    exit_button = ctk.CTkButton(root1, height=40, width=300, text='exit', font=("Quicksand", 25), fg_color="white", text_color="#1c1c1c", command=root1.destroy)
+    exit_button.grid(row=2, column=1, columnspan=1, pady=10)
     export_button.root1 = root1  # Store root1 as an attribute of the export_button
 
     root1.mainloop()

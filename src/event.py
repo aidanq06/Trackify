@@ -17,7 +17,7 @@ event_info = db["event_info"]
 def combobox_callback(choice):
     print("combobox dropdown clicked:", choice)
 
-def add_event(root):
+def eventWindow(root):
 
     event_window = tk.Frame(root, height= 500, width= 1000, bg= "#1c1c1c")
     event_window.place(relx= 0, rely= 0, anchor= "nw")
@@ -65,4 +65,7 @@ def add_event(root):
         
 
     submit_button = ctk.CTkButton(event_window, text= "submit", font= ("Quicksand", 20), bg_color= '#1c1c1c', fg_color= 'white', text_color= "#1c1c1c", command= submit, hover_color="#292929", height=40, width=250)
-    submit_button.place(relx=0.5, rely=0.94, anchor="center")
+    submit_button.place(relx=0.3, rely=0.94, anchor="center")
+
+    submit_button = ctk.CTkButton(event_window, text= "exit", font= ("Quicksand", 20), bg_color= '#1c1c1c', fg_color= 'white', text_color= "#1c1c1c", command= event_window.destroy, hover_color="#292929", height=40, width=250)
+    submit_button.place(relx=0.7, rely=0.94, anchor="center")

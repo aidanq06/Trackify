@@ -25,6 +25,6 @@ def about(root):
     back_image = ImageTk.PhotoImage(back_image)   
     back_button = tk.Button(root1, image=back_image, border = 0, highlightthickness = 0, command= close)
     back_button.image = back_image
-    back_button.place(relx=0.075, rely=0.075, anchor="center")
+    back_button.place(relx=0.05, rely=0.075, anchor="center")
 
     root1.mainloop()

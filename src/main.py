@@ -430,7 +430,7 @@ login_button.place(relx=0.425, rely=0.8, anchor="center")
 register_image = Image.open("./assets/register.png")
 register_image = register_image.resize((60, 60))
 register_image = ImageTk.PhotoImage(register_image)
-register_button = tk.Button(login_screen, image=register_image, command=register) # CHANGE THIS
+register_button = tk.Button(login_screen, image=register_image, command=lambda: register(login_screen)) # CHANGE THIS
 register_button.place(relx=0.575, rely=0.8, anchor="center")
 
 img1 = Image.open("./assets/logo.png")

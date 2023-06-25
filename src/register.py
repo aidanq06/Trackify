@@ -15,18 +15,15 @@ student_info = db["student_info"]
 login_info = db["login_info"]
 code_info = db["code"]
 
-def register():
+def register(root):
 
-    event_window = tk.Toplevel()
-    event_window.geometry("400x600")
-    event_window.configure(bg='#1c1c1c')
+    event_window = tk.Frame(root, height= 500, width= 1000, bg= "#1c1c1c")
+    event_window.place(relx= 0, rely= 0, anchor= "nw")
 
     def teacher_prompt():
         if check_var.get() != False:
-            prompt = tk.Toplevel()
-            prompt.geometry("400x200")
-            prompt.configure(bg="#1c1c1c")
-            prompt.grab_set()
+            prompt = tk.Frame(event_window, height= 500, width= 1000, bg= "#1c1c1c")
+            prompt.place(relx= 0, rely= 0, anchor= "nw")
 
             label = ctk.CTkLabel(prompt, text= "enter the administration code", font= ("Quicksand", 20), text_color="white", fg_color="#1c1c1c", bg_color= "#1c1c1c")
             label.place(relx= 0.5, rely= 0.25, anchor= "center")
@@ -62,6 +59,13 @@ def register():
                 prompt.destroy()
             
             prompt.protocol("WM_DELETE_WINDOW", closed)
+
+        back_image = Image.open("./assets/back.png")
+        back_image = back_image.resize((50, 40))
+        back_image = ImageTk.PhotoImage(back_image)   
+        back_button = tk.Button(prompt, image=back_image, border = 0, highlightthickness = 0, command= prompt.destroy)
+        back_button.image = back_image
+        back_button.place(relx=0.05, rely=0.075, anchor="center")
 
     first_label = ctk.CTkLabel(event_window, text= "first name:", font= ("Quicksand", 15), text_color="white", fg_color="#1c1c1c", bg_color= "#1c1c1c")
     first_label.place(relx= 0.5, rely= 0.25, anchor= "center")
@@ -118,22 +122,27 @@ def register():
                 grade = int(grade_options.get())
                 temp = {"_id": studentId, "first_name": username, "last_name": password, "grade":grade, "point": 0}
                 student_info.insert_one(temp)
+                event_window.destroy()
 
-                root = tk.Toplevel()
-                root.geometry("400x100")
-                root.configure(bg= "#1c1c1c")
-                label= ctk.CTkLabel(root, text= f'your student id and password is: {studentId}', font= ("Quicksand", 18), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
+                code_window = tk.Frame(root, height= 500, width= 1000, bg= "#1c1c1c")
+                code_window.place(relx= 0, rely= 0, anchor= "nw")
+                label= ctk.CTkLabel(code_window, text= f'your student id and password is: {studentId}', font= ("Quicksand", 18), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
                 label.place(relx= 0.5, rely= 0.5, anchor= "center")
 
-            # Define a function to close both windows
-        def close_both_windows():
-            event_window.destroy()
-            root.destroy()
-
-        # Call close_both_windows when the new_window's close button is clicked
-        root.protocol("WM_DELETE_WINDOW", close_both_windows)
-
-            
+                back_image = Image.open("./assets/back.png")
+                back_image = back_image.resize((50, 40))
+                back_image = ImageTk.PhotoImage(back_image)   
+                back_button = tk.Button(code_window, image=back_image, border = 0, highlightthickness = 0, command= code_window.destroy)
+                back_button.image = back_image
+                back_button.place(relx=0.05, rely=0.075, anchor="center")  
 
     submit_button = ctk.CTkButton(event_window, text= "submit", font= ("Quicksand", 25), command= submit, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color= "#292929")
     submit_button.place(relx=0.5, rely=0.9, anchor="center")
+
+    back_image = Image.open("./assets/back.png")
+    back_image = back_image.resize((50, 40))
+    back_image = ImageTk.PhotoImage(back_image)   
+    back_button = tk.Button(event_window, image=back_image, border = 0, highlightthickness = 0, command= event_window.destroy)
+    back_button.image = back_image
+    back_button.place(relx=0.05, rely=0.075, anchor="center")
+

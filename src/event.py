@@ -33,7 +33,7 @@ def eventWindow(root):
                 disabledbackground="#1c1c1c", bordercolor="#1c1c1c", headersbackground="#1c1c1c",
                 normalbackground="#1c1c1c", foreground='#1c1c1c', normalforeground='white', headersforeground='white',
                 showweeknumbers=False, weekendbackground="#1c1c1c", weekendforeground='white', showothermonthdays=True,
-                othermonthforeground='gray', othermonthbackground='#1c1c1c', othermonthwebackground='#1c1c1c',year=today.year,month=today.month)
+                othermonthforeground='gray', othermonthbackground='#1c1c1c', othermonthwebackground='#1c1c1c',year=today.year,month=today.month, date_pattern= "mm/dd/yyyy")
     tkc.config(background='white')
     tkc.place(relx=.5, rely=.3, anchor="n")
 

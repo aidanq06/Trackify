@@ -79,17 +79,16 @@ def view_entries(root):
 
     def edit_student():
         item = listbox.selection()
-        try:
+        if len(item) > 1:
+            error("You can only edit one student at a time.")
+        else:
             selection = listbox.item(item, option="values")
 
             if len(selection) == 0:
                 error("Please select a student to edit.")
             else:
-                edit_student_window = tk.Toplevel()
-                edit_student_window.geometry("400x600")
-                edit_student_window.configure(bg= '#1c1c1c')
-                edit_student_window.grab_set()
-                edit_student.resizable(False,False)
+                edit_student_window = tk.Frame(root1, height= 500, width= 1000, bg= "#1c1c1c")
+                edit_student_window.place(relx= 0, rely= 0, anchor= "nw")
 
                 label = ctk.CTkLabel(edit_student_window, text= "edit student", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white")
                 label.place(relx= 0.5, rely= 0.1, anchor= "center")
@@ -126,9 +125,13 @@ def view_entries(root):
 
                 submit_button = ctk.CTkButton(edit_student_window, text= "submit", font= ("Quicksand", 20), command= get_submit, bg_color= "#1c1c1c", fg_color= "#1c1c1c", text_color= "white", hover_color="#292929")
                 submit_button.place(relx= 0.5, rely= 0.8, anchor= "center")
-
-        except:
-            error("You can only edit one student at a time.")
+        
+        back_image = Image.open("./assets/back.png")
+        back_image = back_image.resize((50, 40))
+        back_image = ImageTk.PhotoImage(back_image)   
+        back_button = tk.Button(edit_student_window, image=back_image, border = 0, highlightthickness = 0, command= edit_student_window.destroy)
+        back_button.image = back_image
+        back_button.place(relx=0.05, rely=0.075, anchor="center")
 
 
     edit_button = ctk.CTkButton(root1, command=edit_student, width=200, height=50, text="edit student",

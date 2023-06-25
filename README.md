@@ -22,8 +22,9 @@ To install and run Trackify on your computer, please follow these steps:
 2. Download the Trackify source code ZIP package from the latest release.
 3. Extract the ZIP package to a desired location on your computer.
 4. Ensure that the extracted folder contains all the necessary files as seen in the [GitHub repository](https://github.com/xIntensity9/FBLA-22-23/).
-5. Run the `run.bat` file. 
-6. Once the setup is complete, you can start using Trackify to track student involvement in your school.
+5. Run the `run.bat` file.
+6. All necessary packages will be installed.
+7. Once the setup is complete, you can start using Trackify to track student involvement in your school.
 
 **Note:**
 - It is essential to have a stable internet connection for Trackify to function properly.

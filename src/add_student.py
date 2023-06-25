@@ -12,12 +12,10 @@ db = cluster["RRHSfbla2023"]
 student_info = db["student_info"]
 
 
-def add_student():
-    add_window = tk.Toplevel()
-    add_window.geometry("400x400")
-    add_window.configure(bg='#1c1c1c')
-    add_window.grab_set()
-    add_window.resizable(False,False)
+def add_student(root):
+
+    add_window = tk.Frame(root, height= 500, width= 1000, bg= "#1c1c1c")
+    add_window.place(relx= 0, rely= 0, anchor= "nw")
 
     style = ttk.Style(add_window)
     style.theme_use('clam')
@@ -69,3 +67,10 @@ def add_student():
 
     submit_button = ctk.CTkButton(add_window, text= "submit", font= ("Quicksand", 25), bg_color= '#1c1c1c', fg_color= '#1c1c1c', text_color= "white", command= submit, hover_color="#292929")
     submit_button.place(relx=0.5, rely=0.85, anchor="center")
+
+    back_image = Image.open("./assets/back.png")
+    back_image = back_image.resize((50, 40))
+    back_image = ImageTk.PhotoImage(back_image)   
+    back_button = tk.Button(add_window, image=back_image, border = 0, highlightthickness = 0, command= add_window.destroy)
+    back_button.image = back_image
+    back_button.place(relx=0.075, rely=0.075, anchor="center")

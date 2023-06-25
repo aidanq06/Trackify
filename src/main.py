@@ -18,7 +18,7 @@ login_info = db["login_info"]
 request_info = db["request_info"]
 
 from about import about
-from event import event
+from event import add_event
 from register import register
 from popups import error
 from add_student import add_student
@@ -62,12 +62,12 @@ leaderboard_button = tk.Button(root, image=leaderboard_image, command=lambda: le
 event_image = Image.open("./assets/event.png")
 event_image = event_image.resize((250, 75))
 event_image = ImageTk.PhotoImage(event_image)
-event_button = tk.Button(root, image=event_image, command=event)
+event_button = tk.Button(root, image=event_image, command=lambda: add_event(root))
 
 add_student_image = Image.open("./assets/add_student.png")
 add_student_image = add_student_image.resize((250, 75))
 add_student_image = ImageTk.PhotoImage(add_student_image)
-add_student_button = tk.Button(root, image=add_student_image, command=add_student)
+add_student_button = tk.Button(root, image=add_student_image, command=lambda: add_student(root))
 
 about_image = Image.open("./assets/about.png")
 about_image = about_image.resize((250, 75))
@@ -82,7 +82,7 @@ view_button = tk.Button(root, image=view_image, command=lambda: view_entries(roo
 create_report_image = Image.open("./assets/create_report.png")
 create_report_image = create_report_image.resize((250, 75))
 create_report_image = ImageTk.PhotoImage(create_report_image)
-create_report_button = tk.Button(root, command= createReport, image= create_report_image)
+create_report_button = tk.Button(root, command=lambda: createReport(root), image= create_report_image)
 
 view_requests_image = Image.open("./assets/view_requests.png")
 view_requests_image = view_requests_image.resize((250, 75))

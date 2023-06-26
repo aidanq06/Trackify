@@ -18,7 +18,7 @@ Trackify is a student involvement tracking system designed for schools. It allow
 ## Installation
 To install and run Trackify on your computer, please follow these steps:
 
-1. Download the latest version of Python from [Python.org](https://www.python.org/downloads/)
+1. Download the latest version of Python from the [Microsoft Store](https://www.microsoft.com/store/productId/9NRWMJP3717K)
 2. Navigate to the [GitHub repository](https://github.com/xIntensity9/FBLA-22-23/)
 3. Download the Trackify source code ZIP package from the latest release.
 4. Extract the ZIP package to a desired location on your computer.

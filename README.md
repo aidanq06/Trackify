@@ -18,13 +18,14 @@ Trackify is a student involvement tracking system designed for schools. It allow
 ## Installation
 To install and run Trackify on your computer, please follow these steps:
 
-1. Navigate to the [GitHub repository](https://github.com/xIntensity9/FBLA-22-23/)
-2. Download the Trackify source code ZIP package from the latest release.
-3. Extract the ZIP package to a desired location on your computer.
-4. Ensure that the extracted folder contains all the necessary files as seen in the [GitHub repository](https://github.com/xIntensity9/FBLA-22-23/).
-5. Run the `run.bat` file.
-6. All necessary packages will be installed.
-7. Once the setup is complete, you can start using Trackify to track student involvement in your school.
+1. Download the latest version of Python from [Python.org](https://www.python.org/downloads/)
+2. Navigate to the [GitHub repository](https://github.com/xIntensity9/FBLA-22-23/)
+3. Download the Trackify source code ZIP package from the latest release.
+4. Extract the ZIP package to a desired location on your computer.
+5. Ensure that the extracted folder contains all the necessary files as seen in the [GitHub repository](https://github.com/xIntensity9/FBLA-22-23/).
+6. Run the `run.bat` file.
+7. All necessary packages will be installed.
+8. Once the setup is complete, you can start using Trackify to track student involvement in your school.
 
 **Note:**
 - It is essential to have a stable internet connection for Trackify to function properly.

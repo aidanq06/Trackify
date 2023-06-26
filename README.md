@@ -46,4 +46,4 @@ We appreciate your interest in Trackify and look forward to hearing from you!
 
 ---
 
-*Please note that Trackify is a fictional project created for the purpose of this exercise. The information provided above is for demonstration purposes only and does not represent a real software application.*
+*Disclaimer: This is a pre-production release of Trackify, an innovative student involvement tracking system developed for educational institutions. The information presented below is for illustrative purposes and does not reflect an actual deployed software application.*
